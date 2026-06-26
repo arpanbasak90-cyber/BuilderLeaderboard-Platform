@@ -1,0 +1,129 @@
+'use client';
+
+import { builders, quests, getTotalStats, getTop5ByXP } from '@/lib/mockData';
+import BuilderCard from '@/components/BuilderCard';
+import LeaderboardTable from '@/components/LeaderboardTable';
+import StatsBar from '@/components/StatsBar';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
+
+export default function Home() {
+  const stats = getTotalStats();
+  const top3 = builders.slice(0, 3);
+  const top5ByXP = getTop5ByXP();
+
+  const chartData = top5ByXP.map((b) => ({
+    name: b.name.split(' ')[0],
+    xp: b.xp,
+  }));
+
+  return (
+    <div className="space-y-8">
+      {/* Hero Banner */}
+      <section className="rounded-xl bg-gradient-to-r from-[#0f0f1a] to-[#1a1a2e] p-8 text-center">
+        <h1 className="mb-2 text-4xl font-bold text-[#f1f5f9] md:text-5xl">
+          Stellar Builder Leaderboard
+        </h1>
+        <p className="mb-6 text-lg text-[#94a3b8]">
+          Compete. Build. Earn XLM on the Stellar Network.
+        </p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <div className="rounded-full border border-[#2a2a4a] bg-[#1a1a2e] px-6 py-2">
+            <span className="text-sm text-[#94a3b8]">Total Builders: </span>
+            <span className="font-semibold text-[#f1f5f9]">{stats.totalBuilders}</span>
+          </div>
+          <div className="rounded-full border border-[#2a2a4a] bg-[#1a1a2e] px-6 py-2">
+            <span className="text-sm text-[#94a3b8]">Total XLM Distributed: </span>
+            <span className="font-semibold text-[#06b6d4]">{stats.totalXLM} ✦</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Top 3 Podium */}
+      <section>
+        <h2 className="mb-6 text-center text-2xl font-semibold text-[#f1f5f9]">Top Builders</h2>
+        <div className="flex flex-col items-end justify-center gap-4 md:flex-row md:items-end">
+          {/* Rank 2 - Left */}
+          <div className="order-2 w-full md:order-1 md:w-1/3">
+            <BuilderCard builder={top3[1]} rank={2} isPodium />
+          </div>
+          {/* Rank 1 - Center (Taller) */}
+          <div className="order-1 w-full md:order-2 md:w-1/3">
+            <BuilderCard builder={top3[0]} rank={1} isPodium />
+          </div>
+          {/* Rank 3 - Right */}
+          <div className="order-3 w-full md:order-3 md:w-1/3">
+            <BuilderCard builder={top3[2]} rank={3} isPodium />
+          </div>
+        </div>
+      </section>
+
+      {/* Full Leaderboard Table */}
+      <section>
+        <h2 className="mb-6 text-2xl font-semibold text-[#f1f5f9]">Full Leaderboard</h2>
+        <LeaderboardTable builders={builders} />
+      </section>
+
+      {/* Platform Stats Bar */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold text-[#f1f5f9]">Platform Statistics</h2>
+        <StatsBar
+          totalXP={stats.totalXP}
+          totalQuests={stats.totalQuestsCompleted}
+          activeBuilders={stats.activeBuilders}
+          totalXLM={stats.totalXLM}
+        />
+
+        {/* Top 5 Builders Chart */}
+        <div className="rounded-xl border border-[#2a2a4a] bg-[#1a1a2e] p-6">
+          <h3 className="mb-4 text-lg font-semibold text-[#f1f5f9]">Top 5 Builders by XP</h3>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="#2a2a4a" />
+                <XAxis type="number" stroke="#94a3b8" />
+                <YAxis dataKey="name" type="category" stroke="#94a3b8" width={80} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#1a1a2e',
+                    border: '1px solid #2a2a4a',
+                    borderRadius: '8px',
+                  }}
+                  labelStyle={{ color: '#f1f5f9' }}
+                  itemStyle={{ color: '#7c3aed' }}
+                />
+                <Bar dataKey="xp" fill="#7c3aed" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </section>
+
+      {/* Active Quests Preview */}
+      <section>
+        <h2 className="mb-4 text-2xl font-semibold text-[#f1f5f9]">Active Quests</h2>
+        <p className="mb-6 text-[#94a3b8]">
+          {quests.filter((q) => q.isActive).length} quests available to complete
+        </p>
+        <div className="rounded-xl border border-[#2a2a4a] bg-[#1a1a2e] p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-[#f1f5f9]">View all available quests</span>
+            <a
+              href="/quests"
+              className="rounded-lg bg-[#7c3aed] px-4 py-2 text-sm font-medium text-white transition-all hover:bg-[#9d4edd]"
+            >
+              Go to Quests
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
