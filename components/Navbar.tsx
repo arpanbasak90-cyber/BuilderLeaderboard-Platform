@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Zap, Trophy, Target, BarChart3 } from 'lucide-react';
+import WalletConnect from '@/components/wallet-connect';
+
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -41,13 +43,13 @@ export default function Navbar() {
             );
           })}
         </div>
-
-        <div className="flex items-center gap-3">
-          <div className="rounded-full border border-[#2a2a4a] bg-[#1a1a2e] px-3 py-1 text-xs font-medium text-[#06b6d4]">
+<div className="flex items-center gap-3">
+         <div className="rounded-full border border-[#2a2a4a] bg-[#1a1a2e] px-3 py-1 text-xs font-medium text-[#06b6d4]">
             Stellar Network: Testnet
-          </div>
+         </div>
+         <WalletConnect />
+</div>
         </div>
-      </div>
     </nav>
   );
 }
