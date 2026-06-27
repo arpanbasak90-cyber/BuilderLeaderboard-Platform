@@ -1,7 +1,5 @@
 # BuilderLeaderboard-Platform
 
-# BuilderLeaderboard-Platform
-
 A gamified builder leaderboard for the Stellar ecosystem. Builders connect their Stellar wallet (via Freighter), track XP and quest progress, and send real XLM transactions on the Stellar Testnet directly from the app.
 
 **Live demo:** https://builder-leaderboard-platform.vercel.app
