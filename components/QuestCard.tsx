@@ -3,12 +3,15 @@
 import { Quest } from '@/types';
 import { Zap, Coins } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { useWallet } from '@/hooks/useWallet';
 
 interface QuestCardProps {
   quest: Quest;
 }
 
 export default function QuestCard({ quest }: QuestCardProps) {
+  const { isConnected, connect } = useWallet();
+
   const difficultyColors = {
     Beginner: 'bg-green-500/20 text-green-400 border-green-500/30',
     Intermediate: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
@@ -23,10 +26,26 @@ export default function QuestCard({ quest }: QuestCardProps) {
     Community: 'text-green-400',
   };
 
-  const handleStartQuest = () => {
+  const handleStartQuest = async () => {
+    if (!isConnected) {
+      try {
+        await connect();
+        toast({
+          title: 'Wallet Connected',
+          description: 'You can now start this quest.',
+        });
+      } catch (err: any) {
+        toast({
+          title: 'Connection Failed',
+          description: err.message || 'Could not connect wallet.',
+        });
+      }
+      return;
+    }
+
     toast({
-      title: 'Connect Wallet Required',
-      description: 'Connect your Stellar wallet to begin this quest.',
+      title: 'Quest Started',
+      description: `You've started "${quest.title}".`,
     });
   };
 
@@ -78,7 +97,7 @@ export default function QuestCard({ quest }: QuestCardProps) {
         onClick={handleStartQuest}
         className="w-full rounded-lg bg-[#7c3aed] py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#9d4edd] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Connect Stellar Wallet to Begin
+        {isConnected ? 'Start Quest' : 'Connect Stellar Wallet to Begin'}
       </button>
     </div>
   );
