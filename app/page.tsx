@@ -4,6 +4,7 @@ import { builders, quests, getTotalStats, getTop5ByXP } from '@/lib/mockData';
 import BuilderCard from '@/components/BuilderCard';
 import LeaderboardTable from '@/components/LeaderboardTable';
 import StatsBar from '@/components/StatsBar';
+import CounterDemo from '@/components/CounterDemo';
 import {
   BarChart,
   Bar,
@@ -104,6 +105,12 @@ export default function Home() {
             </ResponsiveContainer>
           </div>
         </div>
+      </section>
+
+      {/* Soroban Smart Contract Demo */}
+      <section>
+        <h2 className="mb-6 text-2xl font-semibold text-[#f1f5f9]">Smart Contract Demo</h2>
+        <CounterDemo />
       </section>
 
       {/* Active Quests Preview */}
