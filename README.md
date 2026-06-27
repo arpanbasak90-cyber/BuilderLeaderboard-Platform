@@ -89,10 +89,12 @@ lib/mockData.ts       Mock leaderboard/quest data
 - [View on Stellar Expert](https://stellar.expert/explorer/testnet/tx/3888c2fe67f8c4dac0641aa57ad747c66aaf77b02abbc176acd597e23e97c45b)
 
 ### Multi-Wallet Support
-Wallet picker modal supporting 3 wallets:
+Wallet picker modal supporting 3 wallets (visible on live demo):
 - 🟣 Freighter
-- 🔵 xBull  
+- 🔵 xBull
 - 🟠 LOBSTR
+
+> 👉 **See live wallet picker:** https://builder-leaderboard-platform.vercel.app
 
 ### Error Handling (3 Types)
 | Error Type | Description |
@@ -101,15 +103,9 @@ Wallet picker modal supporting 3 wallets:
 | `USER_REJECTED` | User cancelled the signing request |
 | `INSUFFICIENT_BALANCE` | Not enough XLM for transaction fee |
 
-### Screenshot — Wallet Options
-<img width="1325" height="678" alt="screenchot no 4" src="https://github.com/user-attachments/assets/1cafa8aa-b352-4416-927f-088410e8ab1b" />
-
-
-
-### Screenshot — Contract Demo Success
-<img width="1321" height="595" alt="Screenshot no 5" src="https://github.com/user-attachments/assets/c6c69609-7352-4488-8645-24a0369cb3ef" />
-
-
+### Contract Demo
+> 👉 **Try it live:** https://builder-leaderboard-platform.vercel.app
+> Scroll to "Smart Contract Demo" → Connect Wallet → Increment Counter
 ```
 
 ## License
