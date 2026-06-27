@@ -53,17 +53,20 @@ The app will be running at `http://localhost:3000`. No environment variables or 
 ### Wallet Connected State & Balance Displayed
 Shows the connected wallet (public key, green "connected" indicator) and the live XLM Testnet balance fetched from Horizon.
 
-![Wallet connected and balance displayed](./screenshots/wallet-connected-balance.png)
+<img width="1331" height="639" alt="screenshot no 2" src="https://github.com/user-attachments/assets/66dc8758-f0c2-4ab2-9ae2-4875372a0716" />
+
 
 ### Successful Testnet Transaction
 A transaction being sent through the app's Send XLM form, with a green confirmation once submitted successfully.
 
-![Successful testnet transaction](./screenshots/transaction-sent.png)
+<img width="1331" height="639" alt="screenshot no 2" src="https://github.com/user-attachments/assets/0e6b4eec-e2a0-4dbb-91f7-dd84a2ad1732" />
+
 
 ### Transaction Result Shown to User
 The transaction confirmed on-chain, verified via Stellar Expert (Testnet) — showing status, ledger, source/destination accounts, and signature.
 
-![Transaction confirmed on Stellar Expert](./screenshots/transaction-confirmed-explorer.png)
+<img width="1341" height="641" alt="Scrrenshot no 3" src="https://github.com/user-attachments/assets/342a6b17-0a5a-4087-8427-8c677a352019" />
+
 
 ## Project Structure
 
