@@ -76,8 +76,37 @@ components/           UI components (WalletConnect, QuestCard, LeaderboardTable,
 hooks/useWallet.ts    Wallet state management hook (connect, disconnect, balance, send)
 lib/stellar.ts        Stellar SDK + Freighter integration (connect, balance, send, fund)
 lib/mockData.ts       Mock leaderboard/quest data
+
+## 🥋 Yellow Belt — Smart Contract Integration
+
+### Deployed Contract
+- **Contract Address:** `CBVM5XWQ4P37XJXODWBMYDD4LXLZZGX4SN3VK3JKSLYBCUT3K7GVI2VH`
+- **Network:** Stellar Testnet
+- **Contract Functions:** `increment()`, `get_count()`
+
+### Verified Transaction (Contract Call from Frontend)
+- **Transaction Hash:** `3888c2fe67f8c4dac0641aa57ad747c66aaf77b02abbc176acd597e23e97c45b`
+- [View on Stellar Expert](https://stellar.expert/explorer/testnet/tx/3888c2fe67f8c4dac0641aa57ad747c66aaf77b02abbc176acd597e23e97c45b)
+
+### Multi-Wallet Support
+Wallet picker modal supporting 3 wallets:
+- 🟣 Freighter
+- 🔵 xBull  
+- 🟠 LOBSTR
+
+### Error Handling (3 Types)
+| Error Type | Description |
+|---|---|
+| `WALLET_NOT_FOUND` | Wallet extension not installed |
+| `USER_REJECTED` | User cancelled the signing request |
+| `INSUFFICIENT_BALANCE` | Not enough XLM for transaction fee |
+
+### Screenshot — Wallet Options
+> Add screenshot of wallet picker modal here
+
+### Screenshot — Contract Demo Success
+> Add screenshot of confirmed transaction here
 ```
 
 ## License
-
-This project was built as a submission for the Stellar Journey to Mastery program (White Belt level).
+This project was built as a submission for the Stellar Journey to Mastery program (White Belt + Yellow Belt levels).
