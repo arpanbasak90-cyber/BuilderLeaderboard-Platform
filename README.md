@@ -112,6 +112,11 @@ Wallet picker modal supporting 3 wallets (visible on live demo):
 
 <img width="1325" height="678" alt="screenchot no 4" src="https://github.com/user-attachments/assets/0b25b855-9567-4f89-8200-4663efcc2b23" />
 
+### Screenshot — Contract Demo Success
+
+<img width="1321" height="595" alt="Screenshot no 5" src="https://github.com/user-attachments/assets/78891169-910d-40e8-8b58-7ca9f942794d" />
+
+
 
 ## License
 This project was built as a submission for the Stellar Journey to Mastery program (White Belt + Yellow Belt levels).
