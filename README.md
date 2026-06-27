@@ -108,5 +108,10 @@ Wallet picker modal supporting 3 wallets (visible on live demo):
 > Scroll to "Smart Contract Demo" → Connect Wallet → Increment Counter
 ```
 
+### Screenshot — Wallet Options
+
+<img width="1325" height="678" alt="screenchot no 4" src="https://github.com/user-attachments/assets/0b25b855-9567-4f89-8200-4663efcc2b23" />
+
+
 ## License
 This project was built as a submission for the Stellar Journey to Mastery program (White Belt + Yellow Belt levels).
