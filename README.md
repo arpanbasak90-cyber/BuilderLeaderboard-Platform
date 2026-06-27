@@ -102,11 +102,13 @@ Wallet picker modal supporting 3 wallets:
 | `INSUFFICIENT_BALANCE` | Not enough XLM for transaction fee |
 
 ### Screenshot — Wallet Options
-<img width="1325" height="678" alt="screenchot no 4" src="https://github.com/user-attachments/assets/15ed874e-cdd7-4e26-9f48-9a88f4026252" />
+<img width="1325" height="678" alt="screenchot no 4" src="https://github.com/user-attachments/assets/1cafa8aa-b352-4416-927f-088410e8ab1b" />
+
 
 
 ### Screenshot — Contract Demo Success
-<img width="1321" height="595" alt="Screenshot no 5" src="https://github.com/user-attachments/assets/bc5ce23b-e455-48c3-933f-8ab1d4527b5d" />
+<img width="1321" height="595" alt="Screenshot no 5" src="https://github.com/user-attachments/assets/c6c69609-7352-4488-8645-24a0369cb3ef" />
+
 
 ```
 
