@@ -124,6 +124,11 @@ Wallet picker modal supporting 3 wallets (visible on live demo):
 
 <img width="763" height="423" alt="screenshot no 6" src="https://github.com/user-attachments/assets/6aec6e6f-ab19-42f1-96fa-58fc86a407c1" />
 
+## Screenshot- CI/CD Pipeline
+
+<img width="1339" height="581" alt="Screenshot no 7" src="https://github.com/user-attachments/assets/0ce6a9f8-e2b7-4e1d-a1be-7de0405a1eed" />
+
+
 
 
 ## License
