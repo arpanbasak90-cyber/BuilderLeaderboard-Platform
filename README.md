@@ -76,8 +76,55 @@ components/           UI components (WalletConnect, QuestCard, LeaderboardTable,
 hooks/useWallet.ts    Wallet state management hook (connect, disconnect, balance, send)
 lib/stellar.ts        Stellar SDK + Freighter integration (connect, balance, send, fund)
 lib/mockData.ts       Mock leaderboard/quest data
+
+## 🥋 Yellow Belt — Smart Contract Integration
+
+### Deployed Contract
+- **Contract Address:** `CBVM5XWQ4P37XJXODWBMYDD4LXLZZGX4SN3VK3JKSLYBCUT3K7GVI2VH`
+- **Network:** Stellar Testnet
+- **Contract Functions:** `increment()`, `get_count()`
+
+### Verified Transaction (Contract Call from Frontend)
+- **Transaction Hash:** `3888c2fe67f8c4dac0641aa57ad747c66aaf77b02abbc176acd597e23e97c45b`
+- [View on Stellar Expert](https://stellar.expert/explorer/testnet/tx/3888c2fe67f8c4dac0641aa57ad747c66aaf77b02abbc176acd597e23e97c45b)
+
+### Multi-Wallet Support
+Wallet picker modal supporting 3 wallets (visible on live demo):
+- 🟣 Freighter
+- 🔵 xBull
+- 🟠 LOBSTR
+
+> 👉 **See live wallet picker:** https://builder-leaderboard-platform.vercel.app
+
+### Error Handling (3 Types)
+| Error Type | Description |
+|---|---|
+| `WALLET_NOT_FOUND` | Wallet extension not installed |
+| `USER_REJECTED` | User cancelled the signing request |
+| `INSUFFICIENT_BALANCE` | Not enough XLM for transaction fee |
+
+### Contract Demo
+> 👉 **Try it live:** https://builder-leaderboard-platform.vercel.app
+> Scroll to "Smart Contract Demo" → Connect Wallet → Increment Counter
 ```
 
-## License
+### Screenshot — Wallet Options
 
-This project was built as a submission for the Stellar Journey to Mastery program (White Belt level).
+<img width="1325" height="678" alt="screenchot no 4" src="https://github.com/user-attachments/assets/0b25b855-9567-4f89-8200-4663efcc2b23" />
+
+### Screenshot — Contract Demo Success
+
+<img width="1321" height="595" alt="Screenshot no 5" src="https://github.com/user-attachments/assets/78891169-910d-40e8-8b58-7ca9f942794d" />
+
+## Screenshot- Mobile Responsive UI
+
+<img width="1856" height="10497" alt="mobile-responsive png" src="https://github.com/user-attachments/assets/c71c8fbf-81af-4396-8e6c-fcd897a4326f" />
+
+## Screenshot -Test Output
+
+<img width="763" height="423" alt="screenshot no 6" src="https://github.com/user-attachments/assets/6aec6e6f-ab19-42f1-96fa-58fc86a407c1" />
+
+
+
+## License
+This project was built as a submission for the Stellar Journey to Mastery program (White Belt + Yellow Belt levels).
