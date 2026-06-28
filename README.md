@@ -4,6 +4,9 @@ A gamified builder leaderboard for the Stellar ecosystem. Builders connect their
 
 **Live demo:** https://builder-leaderboard-platform.vercel.app
 
+## Demo Video
+Watch the demo here: https://youtu.be/hJR_3ioguC4?si=IXyKoRVHNwWXttpi
+
 ## Features
 
 - 🏆 Leaderboard ranking builders by XP, level, completed quests, and earned XLM
