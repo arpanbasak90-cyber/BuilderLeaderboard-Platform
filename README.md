@@ -120,6 +120,9 @@ Wallet picker modal supporting 3 wallets (visible on live demo):
 
 <img width="1856" height="10497" alt="mobile-responsive png" src="https://github.com/user-attachments/assets/c71c8fbf-81af-4396-8e6c-fcd897a4326f" />
 
+## Screenshot -Test Output
+
+<img width="763" height="423" alt="screenshot no 6" src="https://github.com/user-attachments/assets/6aec6e6f-ab19-42f1-96fa-58fc86a407c1" />
 
 
 
