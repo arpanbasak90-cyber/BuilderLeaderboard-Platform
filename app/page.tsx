@@ -26,37 +26,37 @@ export default function Home() {
 
   // Load the connected user's profile and inject into leaderboard
   const refreshLeaderboard = useCallback(() => {
-    if (!publicKey) {
-      setAllBuilders(defaultBuilders);
-      return;
-    }
-    const stored = localStorage.getItem(`builder_profile_${publicKey}`);
-    if (!stored) {
-      setAllBuilders(defaultBuilders);
-      return;
-    }
+    const storedBuilders: Builder[] = [];
     try {
-      const profile: Builder = JSON.parse(stored);
-      // Remove old entry for this address if exists, then inject fresh one
-      const filtered = defaultBuilders.filter(
-        (b) => b.stellarAddress !== profile.stellarAddress && b.id !== profile.id
-      );
-      const merged = [...filtered, profile]
-        .sort((a, b) => b.xp - a.xp)
-        .map((b, i) => ({ ...b, rank: i + 1 }));
-      setAllBuilders(merged);
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("builder_profile_")) {
+          const raw = localStorage.getItem(key);
+          if (raw) {
+            storedBuilders.push(JSON.parse(raw));
+          }
+        }
+      }
     } catch (e) {
-      console.error(e);
-      setAllBuilders(defaultBuilders);
+      console.error("Error reading stored builders:", e);
     }
-  }, [publicKey]);
+
+    const sorted = storedBuilders
+      .sort((a, b) => b.xp - a.xp)
+      .map((b, i) => ({ ...b, rank: i + 1 }));
+    setAllBuilders(sorted);
+  }, []);
 
   // Refresh leaderboard when wallet changes
   useEffect(() => {
     refreshLeaderboard();
-  }, [refreshLeaderboard]);
+  }, [refreshLeaderboard, publicKey]);
 
-  const stats = getTotalStats();
+  const totalXP = allBuilders.reduce((sum, b) => sum + b.xp, 0);
+  const totalXLM = allBuilders.reduce((sum, b) => sum + b.xlmEarned, 0);
+  const totalQuests = allBuilders.reduce((sum, b) => sum + b.questsCompleted, 0);
+  const activeBuilders = allBuilders.length;
+
   const top3 = allBuilders.slice(0, 3);
   const top5ByXP = allBuilders.slice(0, 5);
 
@@ -82,7 +82,7 @@ export default function Home() {
           </div>
           <div className="rounded-full border border-[#2a2a4a] bg-[#1a1a2e] px-6 py-2">
             <span className="text-sm text-[#94a3b8]">Total XLM Distributed: </span>
-            <span className="font-semibold text-[#06b6d4]">{stats.totalXLM} ✦</span>
+            <span className="font-semibold text-[#06b6d4]">{totalXLM} ✦</span>
           </div>
         </div>
       </section>
@@ -100,21 +100,29 @@ export default function Home() {
 
       {/* Top 3 Podium */}
       <section>
-        <h2 className="mb-6 text-center text-2xl font-semibold text-[#f1f5f9]">Top Builders</h2>
-        <div className="flex flex-col items-end justify-center gap-4 md:flex-row md:items-end">
-          {/* Rank 2 - Left */}
-          <div className="order-2 w-full md:order-1 md:w-1/3">
-            {top3[1] && <BuilderCard builder={top3[1]} rank={2} isPodium />}
+        {allBuilders.length > 0 ? (
+          <>
+            <h2 className="mb-6 text-center text-2xl font-semibold text-[#f1f5f9]">Top Builders</h2>
+            <div className="flex flex-col items-end justify-center gap-4 md:flex-row md:items-end">
+              {/* Rank 2 - Left */}
+              <div className="order-2 w-full md:order-1 md:w-1/3">
+                {top3[1] && <BuilderCard builder={top3[1]} rank={2} isPodium />}
+              </div>
+              {/* Rank 1 - Center (Taller) */}
+              <div className="order-1 w-full md:order-2 md:w-1/3">
+                {top3[0] && <BuilderCard builder={top3[0]} rank={1} isPodium />}
+              </div>
+              {/* Rank 3 - Right */}
+              <div className="order-3 w-full md:order-3 md:w-1/3">
+                {top3[2] && <BuilderCard builder={top3[2]} rank={3} isPodium />}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-10 rounded-xl border border-dashed border-[#2a2a4a] bg-[#1a1a2e]/30">
+            <p className="text-gray-400 text-sm">No builders registered on this browser yet. Customize and submit your profile above to be the first!</p>
           </div>
-          {/* Rank 1 - Center (Taller) */}
-          <div className="order-1 w-full md:order-2 md:w-1/3">
-            {top3[0] && <BuilderCard builder={top3[0]} rank={1} isPodium />}
-          </div>
-          {/* Rank 3 - Right */}
-          <div className="order-3 w-full md:order-3 md:w-1/3">
-            {top3[2] && <BuilderCard builder={top3[2]} rank={3} isPodium />}
-          </div>
-        </div>
+        )}
       </section>
 
       {/* Full Leaderboard Table */}
@@ -127,10 +135,10 @@ export default function Home() {
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold text-[#f1f5f9]">Platform Statistics</h2>
         <StatsBar
-          totalXP={stats.totalXP}
-          totalQuests={stats.totalQuestsCompleted}
-          activeBuilders={stats.activeBuilders}
-          totalXLM={stats.totalXLM}
+          totalXP={totalXP}
+          totalQuests={totalQuests}
+          activeBuilders={activeBuilders}
+          totalXLM={totalXLM}
         />
 
         {/* Top 5 Builders Chart */}
