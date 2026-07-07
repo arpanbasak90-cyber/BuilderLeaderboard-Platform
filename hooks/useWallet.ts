@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { connectWallet, getXLMBalance, sendXLM, fundWithFriendbot } from "@/lib/stellar";
+import { logWalletInteraction } from "@/lib/telemetry";
 
 interface WalletState {
   publicKey: string | null;
@@ -46,6 +47,8 @@ export function useWallet() {
         isLoading: false,
         error: null,
       });
+      // Log connection telemetry
+      logWalletInteraction(publicKey, "connect", undefined, "Connected wallet from Navigation header");
     } catch (err: any) {
       setState((prev) => ({
         ...prev,
@@ -56,6 +59,7 @@ export function useWallet() {
   }, []);
 
   const disconnect = useCallback(() => {
+    const oldKey = state.publicKey;
     localStorage.removeItem("stellarPublicKey");
     setState({
       publicKey: null,
@@ -64,7 +68,11 @@ export function useWallet() {
       isLoading: false,
       error: null,
     });
-  }, []);
+    if (oldKey) {
+      // Log disconnection telemetry
+      logWalletInteraction(oldKey, "disconnect", undefined, "Disconnected wallet");
+    }
+  }, [state.publicKey]);
 
   const refreshBalance = useCallback(async (key?: string) => {
     const publicKey = key || state.publicKey;
@@ -82,6 +90,15 @@ export function useWallet() {
       if (!state.publicKey) throw new Error("Wallet not connected");
       const hash = await sendXLM(state.publicKey, destination, amount, memo);
       await refreshBalance();
+      
+      // Log send transaction telemetry
+      logWalletInteraction(
+        state.publicKey,
+        "send_xlm",
+        hash,
+        `Sent ${amount} XLM to ${destination.slice(0, 6)}...${destination.slice(-4)}${memo ? ` with memo: ${memo}` : ""}`
+      );
+      
       return hash;
     },
     [state.publicKey, refreshBalance]
@@ -93,6 +110,9 @@ export function useWallet() {
     try {
       await fundWithFriendbot(state.publicKey);
       await refreshBalance();
+      
+      // Log wallet funding telemetry
+      logWalletInteraction(state.publicKey, "fund_wallet", undefined, "Funded wallet with 10,000 XLM via Friendbot");
     } catch (err: any) {
       setState((prev) => ({ ...prev, error: err.message }));
     } finally {

@@ -132,6 +132,26 @@ Wallet picker modal supporting 3 wallets (visible on live demo):
 <img width="1339" height="581" alt="Screenshot no 7" src="https://github.com/user-attachments/assets/0ce6a9f8-e2b7-4e1d-a1be-7de0405a1eed" />
 
 
+## 🏆 Level 4 — Production MVP, Onboarding & Analytics
+
+The project now includes telemetry, onboarding tracking, user feedback loops, and visual analytics dashboards required for Level 4.
+
+### 📊 Telemetry & Monitoring Architecture
+A custom telemetry provider (`lib/telemetry.ts`) has been integrated. It supports connecting directly to a Supabase database cluster (via environment variables) or falling back to a structured `localStorage` persistence layer to handle offline/demo modes seamlessly.
+
+- **Onboarding Tracker**: Stores and tracks onboarding metrics for 10+ real-time builder accounts.
+- **On-Chain Proof**: Registers each transaction hash, method call type, and description.
+- **Feedback Collection**: Captures rating values (1–5 stars) and reviews directly from the home page.
+
+### 📈 Public Analytics Dashboard (`/analytics`)
+Accessible via the new **Analytics** tab in the Navigation Header. It contains:
+1. **System Metrics**: Recharts visualizations of Action Type Distributions (pie chart) and Feedback Ratings (bar chart).
+2. **Onboarded Builders**: A master database showing the 10+ onboarded builders, their public keys, joined dates, and activity levels.
+3. **Wallet Interactions Log**: Complete ledger showing transaction types, details, and direct on-chain verification links to the Stellar Testnet Explorer.
+4. **User Feedback Summary**: A feed display showing the gathered reviews, ratings, and builder keys.
+
+---
+
 ## 📄 License
 
 MIT License

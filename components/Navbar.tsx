@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Zap, Trophy, Target, BarChart3 } from 'lucide-react';
+import { Zap, Trophy, Target, BarChart3, Activity } from 'lucide-react';
 import WalletConnect from '@/components/wallet-connect';
 
 
@@ -13,6 +13,7 @@ export default function Navbar() {
     { href: '/', label: 'Leaderboard', icon: Trophy },
     { href: '/quests', label: 'Quests', icon: Target },
     { href: '/stats', label: 'Stats', icon: BarChart3 },
+    { href: '/analytics', label: 'Analytics', icon: Activity },
   ];
 
   return (

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { callIncrementContract, getContractCount } from "@/lib/contract";
+import { logWalletInteraction } from "@/lib/telemetry";
 
 type WalletError = "WALLET_NOT_FOUND" | "USER_REJECTED" | "INSUFFICIENT_BALANCE";
 
@@ -50,6 +51,9 @@ export default function CounterDemo() {
       setAddress(addr);
       setWalletName("Freighter");
       setShowPicker(false);
+      
+      // Log wallet connection telemetry
+      logWalletInteraction(addr, "connect", undefined, "Connected Counter Demo via Freighter");
     } catch (err) {
       setErrorType(classifyError(err));
       setErrorMsg(String(err));
@@ -88,6 +92,9 @@ export default function CounterDemo() {
       const newCount = await getContractCount();
       setCount(newCount);
       setStatus("success");
+
+      // Log successful contract call telemetry
+      logWalletInteraction(address, "contract_call", hash, "Called Counter Smart Contract: increment()");
     } catch (err) {
       console.error("INCREMENT ERROR:", err);
       setErrorType(classifyError(err));

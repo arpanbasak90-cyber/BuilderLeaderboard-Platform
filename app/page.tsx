@@ -5,6 +5,7 @@ import BuilderCard from '@/components/BuilderCard';
 import LeaderboardTable from '@/components/LeaderboardTable';
 import StatsBar from '@/components/StatsBar';
 import CounterDemo from '@/components/CounterDemo';
+import FeedbackForm from '@/components/FeedbackForm';
 import {
   BarChart,
   Bar,
@@ -130,6 +131,12 @@ export default function Home() {
             </a>
           </div>
         </div>
+      </section>
+
+      {/* User Feedback Collection */}
+      <section>
+        <h2 className="mb-6 text-2xl font-semibold text-[#f1f5f9]">User Feedback</h2>
+        <FeedbackForm />
       </section>
     </div>
   );
