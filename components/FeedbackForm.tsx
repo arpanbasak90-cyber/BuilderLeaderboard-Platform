@@ -124,7 +124,7 @@ export default function FeedbackForm() {
 
           <div className="flex items-center justify-between pt-2">
             <span className="text-xs text-gray-500 font-mono break-all max-w-[60%]">
-              Posting as: {publicKey.slice(0, 10)}...{publicKey.slice(-10)}
+              Posting as: {publicKey ? `${publicKey.slice(0, 10)}...${publicKey.slice(-10)}` : ""}
             </span>
             <button
               type="submit"
