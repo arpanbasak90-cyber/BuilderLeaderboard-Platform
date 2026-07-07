@@ -10,7 +10,7 @@ interface QuestCardProps {
 }
 
 export default function QuestCard({ quest }: QuestCardProps) {
-  const { isConnected, connect } = useWallet();
+  const { isConnected, setShowPicker } = useWallet();
 
   const difficultyColors = {
     Beginner: 'bg-green-500/20 text-green-400 border-green-500/30',
@@ -28,18 +28,11 @@ export default function QuestCard({ quest }: QuestCardProps) {
 
   const handleStartQuest = async () => {
     if (!isConnected) {
-      try {
-        await connect();
-        toast({
-          title: 'Wallet Connected',
-          description: 'You can now start this quest.',
-        });
-      } catch (err: any) {
-        toast({
-          title: 'Connection Failed',
-          description: err.message || 'Could not connect wallet.',
-        });
-      }
+      setShowPicker(true);
+      toast({
+        title: 'Select Wallet',
+        description: 'Please connect your Stellar wallet to start this quest.',
+      });
       return;
     }
 

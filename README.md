@@ -134,7 +134,15 @@ Wallet picker modal supporting 3 wallets (visible on live demo):
 
 ## 🏆 Level 4 — Production MVP, Onboarding & Analytics
 
-The project now includes telemetry, onboarding tracking, user feedback loops, and visual analytics dashboards required for Level 4.
+The project now includes a production-ready entry flow, interactive builder customizability, telemetry, onboarding tracking, user feedback loops, and visual analytics dashboards required for Level 4.
+
+### 🔒 Entry Gate & Wallet Enforcement
+- **Universal Connection Gate**: A beautiful glassmorphic gateway page blocks access to the platform until a wallet is connected. This guarantees 100% wallet authentication for all users before they can browse the leaderboard.
+- **Unified Multi-Wallet Picker**: All connect buttons (including the Entry Gate, Navbar, Quest cards, and Feedback form) trigger the unified multi-wallet picker modal supporting Freighter, xBull, and LOBSTR.
+
+### 🎮 Custom Builder Onboarding & Profiles
+- **Interactive Builder Profile**: Connected users can customize their builder details (name and avatar selection) to instantly register and join the leaderboard.
+- **Dynamic Leaderboard Integration**: Live profile creation registers the builder in local storage, updates leaderboard ranking, and displays their details in the stats cards and chart.
 
 ### 📊 Telemetry & Monitoring Architecture
 A custom telemetry provider (`lib/telemetry.ts`) has been integrated. It supports connecting directly to a Supabase database cluster (via environment variables) or falling back to a structured `localStorage` persistence layer to handle offline/demo modes seamlessly.

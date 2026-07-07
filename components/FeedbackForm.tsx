@@ -6,7 +6,7 @@ import { submitFeedback } from "@/lib/telemetry";
 import { Star, MessageSquare } from "lucide-react";
 
 export default function FeedbackForm() {
-  const { publicKey, isConnected, connect } = useWallet();
+  const { publicKey, isConnected, setShowPicker } = useWallet();
   const [rating, setRating] = useState<number>(5);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [comment, setComment] = useState("");
@@ -63,7 +63,7 @@ export default function FeedbackForm() {
             You must connect your Stellar wallet to leave feedback.
           </p>
           <button
-            onClick={connect}
+            onClick={() => setShowPicker(true)}
             className="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg font-medium text-sm transition-all shadow-md"
           >
             🔗 Connect Wallet

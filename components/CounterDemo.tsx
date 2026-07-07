@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { callIncrementContract, getContractCount } from "@/lib/contract";
+import { useWallet } from "@/hooks/useWallet";
 import { logWalletInteraction } from "@/lib/telemetry";
 
 type WalletError = "WALLET_NOT_FOUND" | "USER_REJECTED" | "INSUFFICIENT_BALANCE";
@@ -22,65 +23,27 @@ const ERROR_MESSAGES: Record<WalletError, string> = {
   INSUFFICIENT_BALANCE: "💸 Insufficient XLM balance for transaction fee.",
 };
 
-const WALLETS = [
-  { id: "freighter", name: "Freighter", icon: "🟣" },
-  { id: "xbull", name: "xBull", icon: "🔵" },
-  { id: "lobstr", name: "LOBSTR", icon: "🟠" },
-];
-
 export default function CounterDemo() {
-  const [address, setAddress] = useState<string | null>(null);
-  const [walletName, setWalletName] = useState<string>("");
+  const { publicKey, isConnected, setShowPicker } = useWallet();
   const [count, setCount] = useState<number | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "pending" | "success" | "error">("idle");
   const [errorType, setErrorType] = useState<WalletError | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const [showPicker, setShowPicker] = useState(false);
 
   useEffect(() => {
     getContractCount().then(setCount).catch(() => setCount(0));
   }, []);
 
-  async function connectFreighter() {
-    try {
-      const freighter = await import("@stellar/freighter-api");
-      const connected = await freighter.isConnected();
-      if (!connected) throw new Error("not installed");
-      const { address: addr } = await freighter.getAddress();
-      setAddress(addr);
-      setWalletName("Freighter");
-      setShowPicker(false);
-      
-      // Log wallet connection telemetry
-      logWalletInteraction(addr, "connect", undefined, "Connected Counter Demo via Freighter");
-    } catch (err) {
-      setErrorType(classifyError(err));
-      setErrorMsg(String(err));
-      setStatus("error");
-      setShowPicker(false);
-    }
-  }
-
-  function selectWallet(id: string) {
-    if (id === "freighter") connectFreighter();
-    else {
-      setErrorType("WALLET_NOT_FOUND");
-      setErrorMsg("Only Freighter is supported for signing. Please install Freighter.");
-      setStatus("error");
-      setShowPicker(false);
-    }
-  }
-
   async function incrementCounter() {
-    if (!address) return;
+    if (!publicKey) return;
     setStatus("pending");
     setTxHash(null);
     setErrorType(null);
     setErrorMsg("");
     try {
       const freighter = await import("@stellar/freighter-api");
-      const hash = await callIncrementContract(address, async (xdr: string) => {
+      const hash = await callIncrementContract(publicKey, async (xdr: string) => {
         const result = await freighter.signTransaction(xdr, {
           networkPassphrase: "Test SDF Network ; September 2015",
         });
@@ -94,22 +57,13 @@ export default function CounterDemo() {
       setStatus("success");
 
       // Log successful contract call telemetry
-      logWalletInteraction(address, "contract_call", hash, "Called Counter Smart Contract: increment()");
+      logWalletInteraction(publicKey, "contract_call", hash, "Called Counter Smart Contract: increment()");
     } catch (err) {
       console.error("INCREMENT ERROR:", err);
       setErrorType(classifyError(err));
       setErrorMsg(String(err));
       setStatus("error");
     }
-  }
-
-  function disconnect() {
-    setAddress(null);
-    setWalletName("");
-    setStatus("idle");
-    setTxHash(null);
-    setErrorType(null);
-    setErrorMsg("");
   }
 
   return (
@@ -129,49 +83,19 @@ export default function CounterDemo() {
         <p className="text-gray-500 text-sm mt-1">on-chain count</p>
       </div>
 
-      {showPicker && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-xl p-6 w-80 space-y-3">
-            <h3 className="text-white font-bold text-lg">Connect a Wallet</h3>
-            {WALLETS.map((w) => (
-              <button
-                key={w.id}
-                onClick={() => selectWallet(w.id)}
-                className="w-full flex items-center gap-3 px-4 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg text-white transition"
-              >
-                <span className="text-xl">{w.icon}</span>
-                <span className="font-medium">{w.name}</span>
-              </button>
-            ))}
-            <button
-              onClick={() => setShowPicker(false)}
-              className="w-full py-2 text-gray-400 hover:text-white text-sm transition"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
-      {!address ? (
+      {!isConnected ? (
         <button
           onClick={() => setShowPicker(true)}
           className="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition"
         >
-          Connect Wallet
+          Connect Wallet to Increment
         </button>
       ) : (
         <div className="space-y-2">
           <div className="flex items-center justify-between bg-gray-800 rounded-lg px-3 py-2">
-            <span className="text-green-400 text-sm">
-              ✅ {walletName} — {address.slice(0, 6)}…{address.slice(-4)}
+            <span className="text-green-400 text-sm font-mono truncate">
+              Connected: {publicKey?.slice(0, 10)}...{publicKey?.slice(-10)}
             </span>
-            <button
-              onClick={disconnect}
-              className="text-gray-400 hover:text-red-400 text-xs underline ml-2"
-            >
-              Disconnect
-            </button>
           </div>
           <button
             onClick={incrementCounter}

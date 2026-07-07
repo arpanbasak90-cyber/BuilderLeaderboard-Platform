@@ -10,7 +10,7 @@ export default function WalletConnect() {
     isConnected,
     isLoading,
     error,
-    connect,
+    setShowPicker,
     disconnect,
     refreshBalance,
     fundAccount,
@@ -47,7 +47,7 @@ export default function WalletConnect() {
     return (
       <div className="flex flex-col items-end gap-2">
         <button
-          onClick={connect}
+          onClick={() => setShowPicker(true)}
           disabled={isLoading}
           className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all disabled:opacity-50"
         >

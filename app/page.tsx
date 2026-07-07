@@ -1,11 +1,15 @@
 'use client';
 
-import { builders, quests, getTotalStats, getTop5ByXP } from '@/lib/mockData';
+import { useState, useCallback, useEffect } from 'react';
+import { Builder } from '@/types';
+import { builders as defaultBuilders, quests, getTotalStats, getTop5ByXP } from '@/lib/mockData';
 import BuilderCard from '@/components/BuilderCard';
 import LeaderboardTable from '@/components/LeaderboardTable';
 import StatsBar from '@/components/StatsBar';
 import CounterDemo from '@/components/CounterDemo';
 import FeedbackForm from '@/components/FeedbackForm';
+import InteractiveBuilder from '@/components/InteractiveBuilder';
+import { useWallet } from '@/hooks/useWallet';
 import {
   BarChart,
   Bar,
@@ -17,9 +21,44 @@ import {
 } from 'recharts';
 
 export default function Home() {
+  const { publicKey } = useWallet();
+  const [allBuilders, setAllBuilders] = useState<Builder[]>(defaultBuilders);
+
+  // Load the connected user's profile and inject into leaderboard
+  const refreshLeaderboard = useCallback(() => {
+    if (!publicKey) {
+      setAllBuilders(defaultBuilders);
+      return;
+    }
+    const stored = localStorage.getItem(`builder_profile_${publicKey}`);
+    if (!stored) {
+      setAllBuilders(defaultBuilders);
+      return;
+    }
+    try {
+      const profile: Builder = JSON.parse(stored);
+      // Remove old entry for this address if exists, then inject fresh one
+      const filtered = defaultBuilders.filter(
+        (b) => b.stellarAddress !== profile.stellarAddress && b.id !== profile.id
+      );
+      const merged = [...filtered, profile]
+        .sort((a, b) => b.xp - a.xp)
+        .map((b, i) => ({ ...b, rank: i + 1 }));
+      setAllBuilders(merged);
+    } catch (e) {
+      console.error(e);
+      setAllBuilders(defaultBuilders);
+    }
+  }, [publicKey]);
+
+  // Refresh leaderboard when wallet changes
+  useEffect(() => {
+    refreshLeaderboard();
+  }, [refreshLeaderboard]);
+
   const stats = getTotalStats();
-  const top3 = builders.slice(0, 3);
-  const top5ByXP = getTop5ByXP();
+  const top3 = allBuilders.slice(0, 3);
+  const top5ByXP = allBuilders.slice(0, 5);
 
   const chartData = top5ByXP.map((b) => ({
     name: b.name.split(' ')[0],
@@ -39,7 +78,7 @@ export default function Home() {
         <div className="flex flex-wrap justify-center gap-4">
           <div className="rounded-full border border-[#2a2a4a] bg-[#1a1a2e] px-6 py-2">
             <span className="text-sm text-[#94a3b8]">Total Builders: </span>
-            <span className="font-semibold text-[#f1f5f9]">{stats.totalBuilders}</span>
+            <span className="font-semibold text-[#f1f5f9]">{allBuilders.length}</span>
           </div>
           <div className="rounded-full border border-[#2a2a4a] bg-[#1a1a2e] px-6 py-2">
             <span className="text-sm text-[#94a3b8]">Total XLM Distributed: </span>
@@ -48,21 +87,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Interactive Builder Profile — Your Leaderboard Spot */}
+      <section>
+        <h2 className="mb-4 text-2xl font-semibold text-[#f1f5f9]">
+          🎮 Your Builder Profile
+        </h2>
+        <p className="mb-4 text-sm text-[#94a3b8]">
+          Register your name and avatar to appear on the leaderboard. Complete quests to earn XP and climb the ranks!
+        </p>
+        <InteractiveBuilder onProfileUpdate={refreshLeaderboard} />
+      </section>
+
       {/* Top 3 Podium */}
       <section>
         <h2 className="mb-6 text-center text-2xl font-semibold text-[#f1f5f9]">Top Builders</h2>
         <div className="flex flex-col items-end justify-center gap-4 md:flex-row md:items-end">
           {/* Rank 2 - Left */}
           <div className="order-2 w-full md:order-1 md:w-1/3">
-            <BuilderCard builder={top3[1]} rank={2} isPodium />
+            {top3[1] && <BuilderCard builder={top3[1]} rank={2} isPodium />}
           </div>
           {/* Rank 1 - Center (Taller) */}
           <div className="order-1 w-full md:order-2 md:w-1/3">
-            <BuilderCard builder={top3[0]} rank={1} isPodium />
+            {top3[0] && <BuilderCard builder={top3[0]} rank={1} isPodium />}
           </div>
           {/* Rank 3 - Right */}
           <div className="order-3 w-full md:order-3 md:w-1/3">
-            <BuilderCard builder={top3[2]} rank={3} isPodium />
+            {top3[2] && <BuilderCard builder={top3[2]} rank={3} isPodium />}
           </div>
         </div>
       </section>
@@ -70,7 +120,7 @@ export default function Home() {
       {/* Full Leaderboard Table */}
       <section>
         <h2 className="mb-6 text-2xl font-semibold text-[#f1f5f9]">Full Leaderboard</h2>
-        <LeaderboardTable builders={builders} />
+        <LeaderboardTable builders={allBuilders} />
       </section>
 
       {/* Platform Stats Bar */}
