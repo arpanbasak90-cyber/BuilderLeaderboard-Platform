@@ -42,7 +42,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-white text-gray-900;
+    background-color: #06060f;
+    @apply text-gray-100;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -67,12 +68,12 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #0f0f1a;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #3b2f6e;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #7c3aed;
 }
