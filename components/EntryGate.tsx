@@ -13,7 +13,7 @@ export default function EntryGate() {
   if (isConnected) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-[#06060f] overflow-hidden">
+    <div className="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-white overflow-hidden">
       {/* ── Ambient background layers ── */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* Grid */}
