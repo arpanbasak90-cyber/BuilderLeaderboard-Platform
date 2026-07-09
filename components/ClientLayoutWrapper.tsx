@@ -15,19 +15,19 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
       <EntryGate />
       <WalletPickerModal />
       {isConnected ? (
-        <div className="flex flex-col min-h-screen animate-fade-in">
+        <div className="flex flex-col min-h-screen bg-gray-50 animate-fade-in">
           <Navbar />
           <main className="flex-grow container mx-auto px-4 py-8">{children}</main>
-          <footer className="border-t border-[#2a2a4a] bg-[#0f0f1a] py-6">
+          <footer className="border-t border-gray-100 bg-white py-6">
             <div className="container mx-auto px-4 text-center">
-              <p className="text-sm text-[#94a3b8]">
-                Powered by Stellar Soroban | {new Date().getFullYear()}
+              <p className="text-sm text-gray-400">
+                Powered by Stellar Soroban · BuilderBoard {new Date().getFullYear()}
               </p>
             </div>
           </footer>
         </div>
       ) : (
-        <div className="min-h-screen bg-[#09090e]"></div>
+        <div className="min-h-screen bg-white"></div>
       )}
       <Toaster />
     </>

@@ -5,17 +5,19 @@ import { Trophy, Target, Users, Coins } from 'lucide-react';
 
 interface StatCardProps {
   icon: React.ReactNode;
+  iconBg: string;
+  iconColor: string;
   label: string;
   value: number;
   suffix?: string;
 }
 
-function StatCard({ icon, label, value, suffix = '' }: StatCardProps) {
+function StatCard({ icon, iconBg, iconColor, label, value, suffix = '' }: StatCardProps) {
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
-    const duration = 1500;
-    const steps = 60;
+    const duration = 1200;
+    const steps = 50;
     const stepValue = value / steps;
     let current = 0;
     let step = 0;
@@ -31,13 +33,13 @@ function StatCard({ icon, label, value, suffix = '' }: StatCardProps) {
   }, [value]);
 
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-[#2a2a4a] bg-[#1a1a2e] p-4 transition-all duration-200 hover:border-[#7c3aed]">
-      <div className="mb-2 rounded-lg bg-[#7c3aed]/20 p-2 text-[#7c3aed]">{icon}</div>
-      <p className="text-2xl font-bold text-[#f1f5f9]">
+    <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+      <div className={`mb-3 rounded-xl p-2.5 ${iconBg} ${iconColor}`}>{icon}</div>
+      <p className="text-2xl font-bold text-gray-900">
         {displayValue.toLocaleString()}
         {suffix}
       </p>
-      <p className="text-sm text-[#94a3b8]">{label}</p>
+      <p className="text-xs text-gray-500 mt-0.5 text-center">{label}</p>
     </div>
   );
 }
@@ -52,10 +54,10 @@ interface StatsBarProps {
 export default function StatsBar({ totalXP, totalQuests, activeBuilders, totalXLM }: StatsBarProps) {
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-      <StatCard icon={<Trophy className="h-5 w-5" />} label="Total XP Distributed" value={totalXP} />
-      <StatCard icon={<Target className="h-5 w-5" />} label="Quests Completed" value={totalQuests} />
-      <StatCard icon={<Users className="h-5 w-5" />} label="Active Builders" value={activeBuilders} />
-      <StatCard icon={<Coins className="h-5 w-5" />} label="XLM Rewarded" value={totalXLM} suffix=" ✦" />
+      <StatCard icon={<Trophy className="h-5 w-5" />} iconBg="bg-purple-50" iconColor="text-purple-600" label="Total XP Distributed" value={totalXP} />
+      <StatCard icon={<Target className="h-5 w-5" />} iconBg="bg-blue-50" iconColor="text-blue-600" label="Quests Completed" value={totalQuests} />
+      <StatCard icon={<Users className="h-5 w-5" />} iconBg="bg-emerald-50" iconColor="text-emerald-600" label="Active Builders" value={activeBuilders} />
+      <StatCard icon={<Coins className="h-5 w-5" />} iconBg="bg-amber-50" iconColor="text-amber-600" label="XLM Rewarded" value={totalXLM} suffix=" ✦" />
     </div>
   );
 }

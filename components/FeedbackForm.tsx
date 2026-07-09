@@ -5,6 +5,14 @@ import { useWallet } from "@/hooks/useWallet";
 import { submitFeedback } from "@/lib/telemetry";
 import { Star, MessageSquare } from "lucide-react";
 
+const RATING_LABELS: Record<number, string> = {
+  1: "Terrible",
+  2: "Disliked",
+  3: "Average",
+  4: "Very Good",
+  5: "Love it!",
+};
+
 export default function FeedbackForm() {
   const { publicKey, isConnected, setShowPicker } = useWallet();
   const [rating, setRating] = useState<number>(5);
@@ -21,7 +29,7 @@ export default function FeedbackForm() {
       return;
     }
     if (!comment.trim()) {
-      setErrorMsg("Please add a short comment about your experience.");
+      setErrorMsg("Please write a short comment about your experience.");
       setStatus("error");
       return;
     }
@@ -34,48 +42,46 @@ export default function FeedbackForm() {
       setStatus("success");
       setComment("");
       setRating(5);
-      // Automatically reset to idle after 4 seconds
       setTimeout(() => setStatus("idle"), 4000);
     } catch (err: any) {
-      console.error(err);
       setErrorMsg(err.message || "Failed to submit feedback. Please try again.");
       setStatus("error");
     }
   };
 
+  const activeRating = hoverRating ?? rating;
+
   return (
-    <div className="rounded-xl border border-[#2a2a4a] bg-[#1a1a2e] p-6 max-w-2xl mx-auto shadow-xl">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-purple-900/40 text-purple-400">
-          <MessageSquare className="h-6 w-6" />
+    <div className="rounded-2xl border border-gray-100 bg-white p-6 max-w-2xl mx-auto shadow-sm">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-5">
+        <div className="w-9 h-9 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
+          <MessageSquare className="h-4 w-4 text-purple-600" />
         </div>
         <div>
-          <h3 className="text-xl font-bold text-white">Share Your Feedback</h3>
-          <p className="text-sm text-gray-400">
-            Tell us about your experience using the BuilderBoard platform.
-          </p>
+          <h3 className="text-base font-bold text-gray-900">Share Your Feedback</h3>
+          <p className="text-xs text-gray-500">Tell us about your experience on BuilderBoard.</p>
         </div>
       </div>
 
       {!isConnected ? (
-        <div className="text-center py-6 border border-dashed border-[#2a2a4a] rounded-lg bg-[#0f0f1a]/50">
-          <p className="text-gray-400 text-sm mb-4">
-            You must connect your Stellar wallet to leave feedback.
-          </p>
+        <div className="text-center py-8 border border-dashed border-gray-200 rounded-xl bg-gray-50">
+          <p className="text-sm text-gray-400 mb-4">Connect your wallet to leave feedback.</p>
           <button
             onClick={() => setShowPicker(true)}
-            className="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg font-medium text-sm transition-all shadow-md"
+            className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-medium text-sm transition-all"
           >
             🔗 Connect Wallet
           </button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Star Rating */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
               Overall Rating
             </label>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
@@ -83,66 +89,60 @@ export default function FeedbackForm() {
                   onClick={() => setRating(star)}
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(null)}
-                  className="transition-colors focus:outline-none"
+                  className="transition-transform hover:scale-110 focus:outline-none"
                 >
                   <Star
-                    className={`h-8 w-8 ${
-                      star <= (hoverRating ?? rating)
-                        ? "fill-yellow-400 text-yellow-400"
-                        : "text-gray-600 hover:text-gray-400"
+                    className={`h-7 w-7 transition-colors ${
+                      star <= activeRating
+                        ? "fill-amber-400 text-amber-400"
+                        : "text-gray-200 hover:text-gray-300"
                     }`}
                   />
                 </button>
               ))}
-              <span className="text-sm text-gray-400 ml-2 font-medium">
-                {rating === 5
-                  ? "Love it! (5/5)"
-                  : rating === 4
-                  ? "Very Good (4/5)"
-                  : rating === 3
-                  ? "Average (3/5)"
-                  : rating === 2
-                  ? "Disliked (2/5)"
-                  : "Terrible (1/5)"}
+              <span className="text-sm text-gray-500 ml-2 font-medium">
+                {RATING_LABELS[activeRating]} ({activeRating}/5)
               </span>
             </div>
           </div>
 
+          {/* Comment */}
           <div>
-            <label htmlFor="comment" className="block text-sm font-medium text-gray-300 mb-2">
-              Your Review / Message
+            <label htmlFor="comment" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+              Your Comment
             </label>
             <textarea
               id="comment"
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="What do you think of our Stellar wallet connection, leaderboard features, and smart contract counter?"
-              className="w-full bg-[#0f0f1a] border border-[#2a2a4a] focus:border-purple-500 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none text-sm transition-colors"
+              placeholder="What do you think of the leaderboard, wallet connection, quests, and smart contract features?"
+              className="w-full border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 rounded-xl p-3 text-gray-900 placeholder-gray-400 focus:outline-none text-sm transition-all resize-none"
             />
           </div>
 
-          <div className="flex items-center justify-between pt-2">
-            <span className="text-xs text-gray-500 font-mono break-all max-w-[60%]">
-              Posting as: {publicKey ? `${publicKey.slice(0, 10)}...${publicKey.slice(-10)}` : ""}
+          {/* Footer */}
+          <div className="flex items-center justify-between pt-1">
+            <span className="text-xs text-gray-400 font-mono">
+              {publicKey ? `${publicKey.slice(0, 6)}...${publicKey.slice(-6)}` : ""}
             </span>
             <button
               type="submit"
               disabled={status === "submitting"}
-              className="px-6 py-2 bg-[#7c3aed] hover:bg-[#9d4edd] disabled:opacity-50 text-white rounded-lg font-medium text-sm transition-all shadow-md"
+              className="px-5 py-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white rounded-xl font-medium text-sm transition-all"
             >
-              {status === "submitting" ? "Sending..." : "Submit Feedback"}
+              {status === "submitting" ? "Sending…" : "Submit Feedback"}
             </button>
           </div>
 
           {status === "success" && (
-            <div className="p-3 bg-green-950/40 border border-green-800 rounded-lg text-sm text-green-400">
-              🎉 Thank you! Your feedback has been saved to our telemetry dashboard.
+            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 flex items-center gap-2">
+              🎉 Thank you! Your feedback has been recorded.
             </div>
           )}
 
           {status === "error" && errorMsg && (
-            <div className="p-3 bg-red-950/40 border border-red-800 rounded-lg text-sm text-red-400">
+            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
               {errorMsg}
             </div>
           )}

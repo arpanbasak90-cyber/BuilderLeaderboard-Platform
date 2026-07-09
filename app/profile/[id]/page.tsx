@@ -24,12 +24,9 @@ export default function ProfilePage() {
   if (!builder) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <h1 className="mb-4 text-2xl font-bold text-[#f1f5f9]">Builder Not Found</h1>
-        <p className="mb-6 text-[#94a3b8]">The builder you're looking for doesn't exist.</p>
-        <Link
-          href="/"
-          className="rounded-lg bg-[#7c3aed] px-4 py-2 text-white transition-all hover:bg-[#9d4edd]"
-        >
+        <h1 className="mb-4 text-2xl font-bold text-gray-900">Builder Not Found</h1>
+        <p className="mb-6 text-gray-500">The builder you're looking for doesn't exist.</p>
+        <Link href="/" className="rounded-xl bg-purple-600 px-5 py-2.5 text-white font-medium transition-all hover:bg-purple-700">
           Back to Leaderboard
         </Link>
       </div>
@@ -40,166 +37,150 @@ export default function ProfilePage() {
   const questCompletions = generateQuestCompletions(builder);
   const weeklyXPData = generateWeeklyXPData(builder);
 
-  const rankColors = {
-    1: 'bg-[#f59e0b] text-white',
-    2: 'bg-[#9ca3af] text-white',
-    3: 'bg-[#b45309] text-white',
+  const rankBadge = (rank: number) => {
+    if (rank === 1) return 'bg-amber-400 text-white';
+    if (rank === 2) return 'bg-gray-400 text-white';
+    if (rank === 3) return 'bg-orange-500 text-white';
+    return 'bg-gray-100 text-gray-600';
+  };
+
+  const tooltipStyle = {
+    backgroundColor: '#fff',
+    border: '1px solid #e2e8f0',
+    borderRadius: '12px',
+    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
   };
 
   return (
     <div className="space-y-8">
       {/* Back Link */}
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 text-sm text-[#94a3b8] transition-colors hover:text-[#f1f5f9]"
-      >
+      <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 transition-colors hover:text-gray-900">
         <ArrowLeft className="h-4 w-4" />
         Back to Leaderboard
       </Link>
 
-      {/* Top Section - Profile Header */}
-      <section className="rounded-xl border border-[#2a2a4a] bg-[#1a1a2e] p-6">
+      {/* Profile Header */}
+      <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
         <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
-          <Avatar className="h-20 w-20 border-4 border-[#7c3aed]">
+          <Avatar className="h-20 w-20 border-4 border-purple-200 shadow-md">
             <AvatarImage src={builder.avatar} alt={builder.name} />
-            <AvatarFallback>{builder.name[0]}</AvatarFallback>
+            <AvatarFallback className="bg-purple-100 text-purple-700 font-bold text-xl">{builder.name[0]}</AvatarFallback>
           </Avatar>
 
           <div className="flex-1 text-center md:text-left">
-            <div className="mb-2 flex flex-col items-center gap-2 md:flex-row">
-              <h1 className="text-3xl font-bold text-[#f1f5f9]">{builder.name}</h1>
-              <span
-                className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                  builder.rank <= 3
-                    ? rankColors[builder.rank as keyof typeof rankColors]
-                    : 'bg-[#2a2a4a] text-[#f1f5f9]'
-                }`}
-              >
+            <div className="mb-2 flex flex-wrap items-center justify-center gap-2 md:justify-start">
+              <h1 className="text-3xl font-bold text-gray-900">{builder.name}</h1>
+              <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${rankBadge(builder.rank)}`}>
                 #{builder.rank}
               </span>
-              <span className="rounded-full bg-[#7c3aed]/20 px-3 py-1 text-sm font-medium text-[#7c3aed]">
+              <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-semibold text-purple-700 border border-purple-200">
                 Level {builder.level}
               </span>
             </div>
-            <p className="mb-4 font-mono text-sm text-[#06b6d4]">
-              {builder.stellarAddress}
-            </p>
+
+            <p className="mb-4 font-mono text-sm text-gray-400">{builder.stellarAddress}</p>
 
             <div className="mb-6 max-w-md mx-auto md:mx-0">
               <XPMeter xp={builder.xp} />
             </div>
 
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-              <div className="rounded-lg border border-[#2a2a4a] bg-[#0f0f1a] p-3 text-center">
-                <Trophy className="mx-auto mb-1 h-5 w-5 text-[#f59e0b]" />
-                <p className="text-lg font-bold text-[#f1f5f9]">{builder.xp.toLocaleString()}</p>
-                <p className="text-xs text-[#94a3b8]">Total XP</p>
-              </div>
-              <div className="rounded-lg border border-[#2a2a4a] bg-[#0f0f1a] p-3 text-center">
-                <Target className="mx-auto mb-1 h-5 w-5 text-[#7c3aed]" />
-                <p className="text-lg font-bold text-[#f1f5f9]">{builder.questsCompleted}</p>
-                <p className="text-xs text-[#94a3b8]">Quests Done</p>
-              </div>
-              <div className="rounded-lg border border-[#2a2a4a] bg-[#0f0f1a] p-3 text-center">
-                <Coins className="mx-auto mb-1 h-5 w-5 text-[#06b6d4]" />
-                <p className="text-lg font-bold text-[#06b6d4]">{builder.xlmEarned} ✦</p>
-                <p className="text-xs text-[#94a3b8]">XLM Earned</p>
-              </div>
-              <div className="rounded-lg border border-[#2a2a4a] bg-[#0f0f1a] p-3 text-center">
-                <Activity className="mx-auto mb-1 h-5 w-5 text-green-400" />
-                <p className="text-lg font-bold text-[#f1f5f9]">{builder.onChainTxCount}</p>
-                <p className="text-xs text-[#94a3b8]">Txns</p>
-              </div>
-              <div className="rounded-lg border border-[#2a2a4a] bg-[#0f0f1a] p-3 text-center">
-                <Medal className="mx-auto mb-1 h-5 w-5 text-[#9ca3af]" />
-                <p className="text-lg font-bold text-[#f1f5f9]">#{builder.rank}</p>
-                <p className="text-xs text-[#94a3b8]">Rank</p>
-              </div>
+            {/* Stats row */}
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+              {[
+                { icon: <Trophy className="mx-auto mb-1 h-4 w-4 text-amber-500" />, val: builder.xp.toLocaleString(), label: 'Total XP', color: 'text-gray-900' },
+                { icon: <Target className="mx-auto mb-1 h-4 w-4 text-purple-500" />, val: builder.questsCompleted, label: 'Quests Done', color: 'text-gray-900' },
+                { icon: <Coins className="mx-auto mb-1 h-4 w-4 text-amber-500" />, val: `${builder.xlmEarned} ✦`, label: 'XLM Earned', color: 'text-amber-600' },
+                { icon: <Activity className="mx-auto mb-1 h-4 w-4 text-emerald-500" />, val: builder.onChainTxCount, label: 'Txns', color: 'text-gray-900' },
+                { icon: <Medal className="mx-auto mb-1 h-4 w-4 text-gray-400" />, val: `#${builder.rank}`, label: 'Rank', color: 'text-gray-900' },
+              ].map((s, i) => (
+                <div key={i} className="rounded-xl border border-gray-100 bg-gray-50 p-3 text-center">
+                  {s.icon}
+                  <p className={`text-base font-bold ${s.color}`}>{s.val}</p>
+                  <p className="text-xs text-gray-500">{s.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Badges Section */}
+      {/* Badges */}
       <section>
-        <h2 className="mb-4 text-xl font-semibold text-[#f1f5f9]">Badges Earned</h2>
+        <h2 className="mb-4 text-xl font-bold text-gray-900">Badges Earned</h2>
         <BadgeDisplay badges={builder.badges} showLocked={true} />
       </section>
 
-      {/* Quest History Section */}
+      {/* Quest History */}
       <section>
-        <h2 className="mb-4 text-xl font-semibold text-[#f1f5f9]">Quest History</h2>
-        <div className="rounded-xl border border-[#2a2a4a] bg-[#1a1a2e] overflow-hidden">
+        <h2 className="mb-4 text-xl font-bold text-gray-900">Quest History</h2>
+        <div className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
           {questCompletions.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-[#2a2a4a]">
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#94a3b8]">Quest</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#94a3b8]">Difficulty</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#94a3b8]">XP Earned</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#94a3b8]">XLM Earned</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#94a3b8]">Date</th>
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    {['Quest', 'Difficulty', 'XP Earned', 'XLM Earned', 'Date'].map((h) => (
+                      <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
+                    ))}
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-gray-50">
                   {questCompletions.map((quest) => (
-                    <tr key={quest.questId} className="border-b border-[#2a2a4a]/50 hover:bg-[#2a2a4a]/30">
-                      <td className="whitespace-nowrap px-4 py-3 font-medium text-[#f1f5f9]">{quest.questTitle}</td>
+                    <tr key={quest.questId} className="hover:bg-gray-50 transition-colors">
+                      <td className="whitespace-nowrap px-4 py-3 font-medium text-gray-900">{quest.questTitle}</td>
                       <td className="whitespace-nowrap px-4 py-3">
-                        <span className={`rounded-full px-2 py-1 text-xs font-medium ${
-                          quest.difficulty === 'Beginner' ? 'bg-green-500/20 text-green-400' :
-                          quest.difficulty === 'Intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
-                          'bg-red-500/20 text-red-400'
+                        <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold border ${
+                          quest.difficulty === 'Beginner' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                          quest.difficulty === 'Intermediate' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                          'bg-red-50 text-red-700 border-red-200'
                         }`}>
                           {quest.difficulty}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-[#7c3aed]">+{quest.xpEarned}</td>
-                      <td className="whitespace-nowrap px-4 py-3 text-[#06b6d4]">+{quest.xlmEarned} ✦</td>
-                      <td className="whitespace-nowrap px-4 py-3 text-[#94a3b8]">{quest.completedAt}</td>
+                      <td className="whitespace-nowrap px-4 py-3 font-semibold text-purple-600">+{quest.xpEarned}</td>
+                      <td className="whitespace-nowrap px-4 py-3 font-semibold text-amber-600">+{quest.xlmEarned} ✦</td>
+                      <td className="whitespace-nowrap px-4 py-3 text-gray-500 text-xs">{quest.completedAt}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           ) : (
-            <div className="p-8 text-center text-[#94a3b8]">No quests completed yet</div>
+            <div className="p-10 text-center text-gray-400 text-sm">No quests completed yet.</div>
           )}
         </div>
       </section>
 
-      {/* On-Chain Activity Section */}
+      {/* On-Chain Activity */}
       <section>
-        <h2 className="mb-4 text-xl font-semibold text-[#f1f5f9]">On-Chain Activity</h2>
-        <div className="rounded-xl border border-[#2a2a4a] bg-[#1a1a2e] overflow-hidden">
+        <h2 className="mb-4 text-xl font-bold text-gray-900">On-Chain Activity</h2>
+        <div className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-[#2a2a4a]">
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#94a3b8]">Tx Hash</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#94a3b8]">Type</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#94a3b8]">XLM Amount</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#94a3b8]">Date</th>
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  {['Tx Hash', 'Type', 'XLM Amount', 'Date'].map((h) => (
+                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
+                  ))}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-gray-50">
                 {transactions.map((tx, i) => (
-                  <tr key={i} className="border-b border-[#2a2a4a]/50 hover:bg-[#2a2a4a]/30">
-                    <td className="whitespace-nowrap px-4 py-3 font-mono text-sm text-[#06b6d4]">{tx.hash}</td>
+                  <tr key={i} className="hover:bg-gray-50 transition-colors">
+                    <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-purple-600">{tx.hash}</td>
                     <td className="whitespace-nowrap px-4 py-3">
-                      <span className={`rounded-full px-2 py-1 text-xs font-medium ${
-                        tx.type === 'Deploy' ? 'bg-[#7c3aed]/20 text-[#7c3aed]' :
-                        tx.type === 'Invoke' ? 'bg-[#06b6d4]/20 text-[#06b6d4]' :
-                        tx.type === 'Transfer' ? 'bg-green-500/20 text-green-400' :
-                        tx.type === 'Swap' ? 'bg-yellow-500/20 text-yellow-400' :
-                        'bg-pink-500/20 text-pink-400'
+                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold border ${
+                        tx.type === 'Deploy' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                        tx.type === 'Invoke' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                        tx.type === 'Transfer' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                        tx.type === 'Swap' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                        'bg-pink-50 text-pink-700 border-pink-200'
                       }`}>
                         {tx.type}
                       </span>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-[#f1f5f9]">{tx.xlmAmount} ✦</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-[#94a3b8]">{tx.date}</td>
+                    <td className="whitespace-nowrap px-4 py-3 font-semibold text-amber-600">{tx.xlmAmount} ✦</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-gray-500 text-xs">{tx.date}</td>
                   </tr>
                 ))}
               </tbody>
@@ -208,23 +189,19 @@ export default function ProfilePage() {
         </div>
       </section>
 
-      {/* XP Over Time Chart */}
+      {/* XP Progress Chart */}
       <section>
-        <h2 className="mb-4 text-xl font-semibold text-[#f1f5f9]">XP Progress Over Time</h2>
-        <div className="rounded-xl border border-[#2a2a4a] bg-[#1a1a2e] p-6">
+        <h2 className="mb-4 text-xl font-bold text-gray-900">XP Progress Over Time</h2>
+        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={weeklyXPData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2a2a4a" />
-                <XAxis dataKey="week" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="week" stroke="#94a3b8" tick={{ fontSize: 12 }} />
+                <YAxis stroke="#94a3b8" tick={{ fontSize: 12 }} />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#1a1a2e',
-                    border: '1px solid #2a2a4a',
-                    borderRadius: '8px',
-                  }}
-                  labelStyle={{ color: '#f1f5f9' }}
+                  contentStyle={tooltipStyle}
+                  labelStyle={{ color: '#111827', fontWeight: 600 }}
                   itemStyle={{ color: '#7c3aed' }}
                 />
                 <Line
@@ -233,7 +210,7 @@ export default function ProfilePage() {
                   stroke="#7c3aed"
                   strokeWidth={3}
                   dot={{ fill: '#7c3aed', strokeWidth: 2 }}
-                  activeDot={{ r: 8, fill: '#9d4edd' }}
+                  activeDot={{ r: 7, fill: '#9d4edd' }}
                 />
               </LineChart>
             </ResponsiveContainer>

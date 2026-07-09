@@ -29,8 +29,9 @@ import {
   ShieldCheck,
   ExternalLink,
   Star,
-  CheckCircle2,
 } from "lucide-react";
+
+const COLORS = ["#7c3aed", "#06b6d4", "#f59e0b", "#10b981", "#ef4444"];
 
 export default function AnalyticsPage() {
   const [activeTab, setActiveTab] = useState<"metrics" | "users" | "interactions" | "feedback">("metrics");
@@ -39,13 +40,11 @@ export default function AnalyticsPage() {
   const [users, setUsers] = useState<OnboardedUser[]>([]);
 
   useEffect(() => {
-    // Load lists from telemetry
     setInteractions(getWalletInteractions());
     setFeedback(getFeedbackList());
     setUsers(getOnboardedUsers());
   }, []);
 
-  // Compute metrics
   const totalInteractions = interactions.length;
   const totalFeedbackCount = feedback.length;
   const averageRating =
@@ -54,9 +53,8 @@ export default function AnalyticsPage() {
       : "0";
   const uniqueUsersCount = users.length;
 
-  // Chart 1: Action Type Distribution
-  const actionCounts = interactions.reduce((acc, current) => {
-    acc[current.action] = (acc[current.action] || 0) + 1;
+  const actionCounts = interactions.reduce((acc, cur) => {
+    acc[cur.action] = (acc[cur.action] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 
@@ -65,105 +63,128 @@ export default function AnalyticsPage() {
     value: count,
   }));
 
-  const COLORS = ["#7c3aed", "#06b6d4", "#f59e0b", "#10b981", "#ef4444"];
-
-  // Chart 2: Feedback Rating Distribution
   const ratingCounts = [1, 2, 3, 4, 5].map((star) => ({
-    rating: `${star} Star`,
+    rating: `${star}★`,
     count: feedback.filter((f) => f.rating === star).length,
   }));
 
   const truncateKey = (key: string) =>
     key.length > 16 ? `${key.slice(0, 8)}...${key.slice(-8)}` : key;
 
+  const statCards = [
+    {
+      label: "Onboarded Users",
+      value: uniqueUsersCount,
+      sub: "Min Requirement: 10",
+      icon: <Users className="h-5 w-5 text-purple-500" />,
+      iconBg: "bg-purple-50",
+      subColor: "text-purple-500",
+    },
+    {
+      label: "Wallet Interactions",
+      value: totalInteractions,
+      sub: "Proof of wallet active",
+      icon: <Network className="h-5 w-5 text-cyan-500" />,
+      iconBg: "bg-cyan-50",
+      subColor: "text-cyan-600",
+    },
+    {
+      label: "Feedback Collected",
+      value: totalFeedbackCount,
+      sub: "Mandatory requirement",
+      icon: <MessageSquare className="h-5 w-5 text-amber-500" />,
+      iconBg: "bg-amber-50",
+      subColor: "text-amber-600",
+    },
+    {
+      label: "Avg. User Rating",
+      value: null,
+      ratingVal: averageRating,
+      sub: null,
+      icon: <Star className="h-5 w-5 text-yellow-500" />,
+      iconBg: "bg-yellow-50",
+      subColor: "",
+    },
+  ];
+
+  const tooltipStyle = {
+    backgroundColor: "#fff",
+    border: "1px solid #e2e8f0",
+    borderRadius: "12px",
+    boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)",
+  };
+
   return (
-    <div className="space-y-8">
-      {/* Top Banner */}
-      <section className="rounded-xl bg-gradient-to-r from-[#0f0f1a] to-[#1e1136] p-8 border border-purple-900/30">
+    <div className="space-y-6">
+      {/* Hero Banner */}
+      <section className="rounded-2xl bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 p-7 text-white shadow-lg shadow-purple-100">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#f1f5f9] flex items-center gap-3">
-              <Activity className="h-8 w-8 text-[#7c3aed] animate-pulse" />
-              Telemetry & Analytics Setup
+            <h1 className="text-2xl font-bold flex items-center gap-3">
+              <Activity className="h-7 w-7 animate-pulse" />
+              Telemetry &amp; Analytics
             </h1>
-            <p className="text-gray-400 mt-2">
-              Level 4 Verification Dashboard tracking real-time user onboarding, feedback, on-chain Stellar transactions, and contract operations.
+            <p className="text-purple-200 text-sm mt-1">
+              Real-time dashboard tracking user onboarding, feedback, on-chain transactions, and contract operations.
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-green-950/60 border border-green-800 text-green-400 px-4 py-2 rounded-lg text-sm font-semibold">
-            <ShieldCheck className="h-5 w-5" />
-            <span>Telemetry System Active</span>
+          <div className="inline-flex items-center gap-2 bg-white/15 border border-white/20 text-white px-4 py-2 rounded-xl text-sm font-semibold">
+            <ShieldCheck className="h-4 w-4" />
+            Telemetry Active
           </div>
         </div>
       </section>
 
-      {/* Grid Stats */}
+      {/* Stats Grid */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-[#1a1a2e] border border-[#2a2a4a] rounded-xl p-5 flex items-center justify-between">
-          <div>
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Total Onboarded Users</p>
-            <h3 className="text-2xl font-bold text-white mt-1">{uniqueUsersCount}</h3>
-            <p className="text-xs text-purple-400 mt-1 font-mono">Min Requirement: 10</p>
+        {statCards.map((s, i) => (
+          <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 flex items-center justify-between shadow-sm">
+            <div>
+              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
+              {s.value !== null ? (
+                <h3 className="text-2xl font-bold text-gray-900 mt-1">{s.value}</h3>
+              ) : (
+                <h3 className="text-2xl font-bold text-gray-900 mt-1">{s.ratingVal} / 5</h3>
+              )}
+              {s.sub ? (
+                <p className={`text-xs mt-1 font-medium ${s.subColor}`}>{s.sub}</p>
+              ) : (
+                <div className="flex items-center gap-0.5 mt-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`h-3 w-3 ${
+                        star <= Math.round(Number(s.ratingVal)) ? "fill-amber-400 text-amber-400" : "text-gray-200"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className={`w-10 h-10 rounded-xl ${s.iconBg} flex items-center justify-center`}>
+              {s.icon}
+            </div>
           </div>
-          <Users className="h-10 w-10 text-purple-500 opacity-80" />
-        </div>
-
-        <div className="bg-[#1a1a2e] border border-[#2a2a4a] rounded-xl p-5 flex items-center justify-between">
-          <div>
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Wallet Interactions</p>
-            <h3 className="text-2xl font-bold text-white mt-1">{totalInteractions}</h3>
-            <p className="text-xs text-green-400 mt-1 font-mono">Proof of wallet active</p>
-          </div>
-          <Network className="h-10 w-10 text-cyan-500 opacity-80" />
-        </div>
-
-        <div className="bg-[#1a1a2e] border border-[#2a2a4a] rounded-xl p-5 flex items-center justify-between">
-          <div>
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Total Feedback Collected</p>
-            <h3 className="text-2xl font-bold text-white mt-1">{totalFeedbackCount}</h3>
-            <p className="text-xs text-amber-500 mt-1 font-mono">Mandatory requirement</p>
-          </div>
-          <MessageSquare className="h-10 w-10 text-amber-500 opacity-80" />
-        </div>
-
-        <div className="bg-[#1a1a2e] border border-[#2a2a4a] rounded-xl p-5 flex items-center justify-between">
-          <div>
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Average User Rating</p>
-            <h3 className="text-2xl font-bold text-white mt-1">{averageRating} / 5.0</h3>
-            <p className="text-xs text-indigo-400 mt-1 flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((s) => (
-                <Star
-                  key={s}
-                  className={`h-3 w-3 ${
-                    s <= Math.round(Number(averageRating))
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-gray-600"
-                  }`}
-                />
-              ))}
-            </p>
-          </div>
-          <Star className="h-10 w-10 text-yellow-500 opacity-80" />
-        </div>
+        ))}
       </section>
 
-      {/* Tabs Selector */}
-      <div className="flex border-b border-[#2a2a4a]">
+      {/* Tabs */}
+      <div className="flex gap-1 border-b border-gray-100 overflow-x-auto">
         {(
           [
             { id: "metrics", label: "📊 System Metrics" },
-            { id: "users", label: `👥 Onboarded Builders (${uniqueUsersCount})` },
-            { id: "interactions", label: `⛓️ Wallet Interactions (${totalInteractions})` },
-            { id: "feedback", label: `💬 User Feedback (${totalFeedbackCount})` },
+            { id: "users", label: `👥 Builders (${uniqueUsersCount})` },
+            { id: "interactions", label: `⛓️ Interactions (${totalInteractions})` },
+            { id: "feedback", label: `💬 Feedback (${totalFeedbackCount})` },
           ] as const
         ).map((t) => (
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            className={`px-5 py-3 text-sm font-semibold border-b-2 transition-all ${
+            className={`px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap transition-all ${
               activeTab === t.id
-                ? "border-purple-500 text-white bg-purple-950/20"
-                : "border-transparent text-gray-400 hover:text-white hover:bg-[#1a1a2e]/50"
+                ? "border-purple-600 text-purple-700"
+                : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-200"
             }`}
           >
             {t.label}
@@ -172,13 +193,13 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Tab Panels */}
-      <div className="bg-[#1a1a2e] border border-[#2a2a4a] rounded-xl p-6">
+      <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+        {/* Metrics */}
         {activeTab === "metrics" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Action Distribution Chart */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-bold text-white">Wallet Action Types</h3>
-              <p className="text-xs text-gray-400">Distribution of wallet actions logged through the telemetry platform.</p>
+            <div className="space-y-3">
+              <h3 className="text-base font-bold text-gray-900">Wallet Action Types</h3>
+              <p className="text-xs text-gray-500">Distribution of wallet actions logged through the telemetry platform.</p>
               <div className="h-64 flex justify-center items-center">
                 {actionChartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
@@ -188,49 +209,39 @@ export default function AnalyticsPage() {
                         cx="50%"
                         cy="50%"
                         innerRadius={60}
-                        outerRadius={80}
-                        paddingAngle={5}
+                        outerRadius={90}
+                        paddingAngle={4}
                         dataKey="value"
                         label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                        labelLine={false}
                       >
-                        {actionChartData.map((entry, index) => (
+                        {actionChartData.map((_, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#0f0f1a",
-                          border: "1px solid #2a2a4a",
-                          borderRadius: "8px",
-                        }}
-                      />
+                      <Tooltip contentStyle={tooltipStyle} />
                     </PieChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-sm text-gray-500">No actions recorded yet.</p>
+                  <p className="text-sm text-gray-400">No actions recorded yet.</p>
                 )}
               </div>
             </div>
 
-            {/* Ratings distribution */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-bold text-white">Feedback Rating Distribution</h3>
-              <p className="text-xs text-gray-400">Analysis of feedback scores collected from onboarded builders.</p>
+            <div className="space-y-3">
+              <h3 className="text-base font-bold text-gray-900">Feedback Rating Distribution</h3>
+              <p className="text-xs text-gray-500">Analysis of feedback scores from onboarded builders.</p>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={ratingCounts}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#2a2a4a" />
-                    <XAxis dataKey="rating" stroke="#94a3b8" />
-                    <YAxis stroke="#94a3b8" allowDecimals={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                    <XAxis dataKey="rating" stroke="#94a3b8" tick={{ fontSize: 12 }} />
+                    <YAxis stroke="#94a3b8" allowDecimals={false} tick={{ fontSize: 12 }} />
                     <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#0f0f1a",
-                        border: "1px solid #2a2a4a",
-                        borderRadius: "8px",
-                      }}
-                      labelStyle={{ color: "#f1f5f9" }}
+                      contentStyle={tooltipStyle}
+                      labelStyle={{ color: "#111827", fontWeight: 600 }}
                     />
-                    <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="count" fill="#7c3aed" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -238,152 +249,162 @@ export default function AnalyticsPage() {
           </div>
         )}
 
+        {/* Users */}
         {activeTab === "users" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-bold text-white">Onboarded User List</h3>
-              <p className="text-xs text-gray-400 mt-1">
-                List of real onboarded builders. Minimum 10 builders are tracked with their total wallet operation counts.
+              <h3 className="text-base font-bold text-gray-900">Onboarded Builders</h3>
+              <p className="text-xs text-gray-500 mt-1">
+                Real builders tracked with wallet operation counts. Minimum 10 required.
               </p>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-gray-400">
-                <thead className="bg-[#0f0f1a] text-gray-300 uppercase text-xs font-semibold border-b border-[#2a2a4a]">
+            <div className="overflow-x-auto rounded-xl border border-gray-100">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-gray-50 text-gray-500 uppercase text-xs font-semibold border-b border-gray-100">
                   <tr>
                     <th className="px-4 py-3">Builder</th>
                     <th className="px-4 py-3">Stellar Public Key</th>
-                    <th className="px-4 py-3">Joined Date</th>
+                    <th className="px-4 py-3">Joined</th>
                     <th className="px-4 py-3">Last Active</th>
                     <th className="px-4 py-3 text-right">Interactions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#2a2a4a]">
+                <tbody className="divide-y divide-gray-50">
                   {users.map((u, i) => (
-                    <tr key={u.address} className="hover:bg-[#25253e]/30 transition-colors">
-                      <td className="px-4 py-3 font-medium text-white flex items-center gap-2">
-                        <span className="w-6 h-6 bg-purple-900/50 rounded-full flex items-center justify-center text-xs text-purple-300 font-bold">
+                    <tr key={u.address} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-3 font-medium text-gray-900 flex items-center gap-2">
+                        <span className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center text-xs text-purple-600 font-bold flex-shrink-0">
                           {i + 1}
                         </span>
                         {u.username}
                       </td>
-                      <td className="px-4 py-3 font-mono text-xs max-w-xs truncate">{u.address}</td>
-                      <td className="px-4 py-3">{u.joinedAt}</td>
-                      <td className="px-4 py-3">{u.lastActive}</td>
-                      <td className="px-4 py-3 text-right font-mono font-semibold text-cyan-400">
-                        {u.interactionsCount}
-                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-gray-500 max-w-xs truncate">{u.address}</td>
+                      <td className="px-4 py-3 text-gray-600 text-xs">{u.joinedAt}</td>
+                      <td className="px-4 py-3 text-gray-600 text-xs">{u.lastActive}</td>
+                      <td className="px-4 py-3 text-right font-mono font-semibold text-purple-600">{u.interactionsCount}</td>
                     </tr>
                   ))}
+                  {users.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="px-4 py-10 text-center text-sm text-gray-400">No users onboarded yet.</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
         )}
 
+        {/* Interactions */}
         {activeTab === "interactions" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-bold text-white">Proof of Wallet Interactions</h3>
-              <p className="text-xs text-gray-400 mt-1">
-                Raw logs of wallet events (connection updates, friendbot funds, XLM transfers, and smart contract invocations).
+              <h3 className="text-base font-bold text-gray-900">Proof of Wallet Interactions</h3>
+              <p className="text-xs text-gray-500 mt-1">
+                Raw logs of wallet events: connections, XLM transfers, friendbot funds, and smart contract calls.
               </p>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-gray-400">
-                <thead className="bg-[#0f0f1a] text-gray-300 uppercase text-xs font-semibold border-b border-[#2a2a4a]">
+            <div className="overflow-x-auto rounded-xl border border-gray-100">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-gray-50 text-gray-500 uppercase text-xs font-semibold border-b border-gray-100">
                   <tr>
                     <th className="px-4 py-3">Account</th>
                     <th className="px-4 py-3">Action</th>
-                    <th className="px-4 py-3">Operation Details</th>
-                    <th className="px-4 py-3">Transaction Explorer Link</th>
-                    <th className="px-4 py-3 text-right">Timestamp</th>
+                    <th className="px-4 py-3">Details</th>
+                    <th className="px-4 py-3">Tx Explorer</th>
+                    <th className="px-4 py-3 text-right">Time</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#2a2a4a]">
+                <tbody className="divide-y divide-gray-50">
                   {interactions.map((item) => (
-                    <tr key={item.id} className="hover:bg-[#25253e]/30 transition-colors">
-                      <td className="px-4 py-3 font-mono text-xs">{truncateKey(item.address)}</td>
+                    <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-3 font-mono text-xs text-gray-500">{truncateKey(item.address)}</td>
                       <td className="px-4 py-3">
                         <span
-                          className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                          className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${
                             item.action === "contract_call"
-                              ? "bg-purple-950 text-purple-300 border border-purple-800"
+                              ? "bg-purple-50 text-purple-700 border-purple-200"
                               : item.action === "send_xlm"
-                              ? "bg-emerald-950 text-emerald-300 border border-emerald-800"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                               : item.action === "fund_wallet"
-                              ? "bg-blue-950 text-blue-300 border border-blue-800"
-                              : "bg-gray-950 text-gray-300 border border-gray-800"
+                              ? "bg-blue-50 text-blue-700 border-blue-200"
+                              : "bg-gray-100 text-gray-600 border-gray-200"
                           }`}
                         >
                           {item.action.replace("_", " ")}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-white text-xs">{item.details || "No details"}</td>
+                      <td className="px-4 py-3 text-xs text-gray-700 max-w-xs truncate">{item.details || "—"}</td>
                       <td className="px-4 py-3">
                         {item.txHash ? (
                           <a
                             href={`https://stellar.expert/explorer/testnet/tx/${item.txHash}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs hover:underline"
+                            className="inline-flex items-center gap-1 text-purple-600 hover:text-purple-700 text-xs font-medium"
                           >
-                            <span className="font-mono text-xs">{item.txHash.slice(0, 10)}...</span>
-                            <ExternalLink className="h-3.5 w-3.5" />
+                            <span className="font-mono">{item.txHash.slice(0, 8)}…</span>
+                            <ExternalLink className="h-3 w-3" />
                           </a>
                         ) : (
-                          <span className="text-gray-600 text-xs">—</span>
+                          <span className="text-gray-300 text-xs">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-right text-xs">
-                        {new Date(item.timestamp).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          second: "2-digit",
-                        })}
+                      <td className="px-4 py-3 text-right text-xs text-gray-500">
+                        {new Date(item.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
                       </td>
                     </tr>
                   ))}
+                  {interactions.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="px-4 py-10 text-center text-sm text-gray-400">No interactions logged yet.</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
         )}
 
+        {/* Feedback */}
         {activeTab === "feedback" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-bold text-white">Basic User Feedback Summary</h3>
-              <p className="text-xs text-gray-400 mt-1">
-                Listing comments and ratings provided by builders. Ratings are used to measure project quality and UX optimization.
+              <h3 className="text-base font-bold text-gray-900">User Feedback Summary</h3>
+              <p className="text-xs text-gray-500 mt-1">
+                Comments and ratings from builders. Used to measure project quality and UX.
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-3">
               {feedback.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-[#0f0f1a] border border-[#2a2a4a] rounded-xl p-4 space-y-2 hover:border-purple-500/40 transition-colors"
+                  className="bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-2 hover:border-purple-200 transition-colors"
                 >
                   <div className="flex justify-between items-start">
-                    <span className="text-xs font-mono text-purple-400 bg-purple-950/40 px-2.5 py-1 rounded-md">
-                      Account: {item.address}
+                    <span className="text-xs font-mono text-gray-500 bg-white border border-gray-100 px-2.5 py-1 rounded-lg">
+                      {item.address}
                     </span>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-0.5">
                       {[1, 2, 3, 4, 5].map((s) => (
                         <Star
                           key={s}
                           className={`h-4 w-4 ${
-                            s <= item.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-600"
+                            s <= item.rating ? "fill-amber-400 text-amber-400" : "text-gray-200"
                           }`}
                         />
                       ))}
                     </div>
                   </div>
-                  <p className="text-white text-sm italic">"{item.comment}"</p>
-                  <p className="text-[10px] text-gray-500 text-right">
-                    Submitted: {new Date(item.timestamp).toLocaleString()}
+                  <p className="text-gray-800 text-sm italic">"{item.comment}"</p>
+                  <p className="text-[10px] text-gray-400 text-right">
+                    {new Date(item.timestamp).toLocaleString()}
                   </p>
                 </div>
               ))}
+              {feedback.length === 0 && (
+                <div className="py-10 text-center text-sm text-gray-400">No feedback submitted yet.</div>
+              )}
             </div>
           </div>
         )}

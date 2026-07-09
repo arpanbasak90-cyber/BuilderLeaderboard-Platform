@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-screen bg-[#0f0f1a] text-[#f1f5f9]`}>
+      <body className={`${inter.className} min-h-screen bg-white text-gray-900`}>
         <WalletProvider>
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
         </WalletProvider>
