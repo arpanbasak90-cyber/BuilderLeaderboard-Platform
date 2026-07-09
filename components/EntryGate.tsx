@@ -2,7 +2,7 @@
 
 import React, { useContext } from "react";
 import { WalletContext } from "@/context/WalletContext";
-import { Zap, ShieldAlert, Award, Star, Compass } from "lucide-react";
+import { Zap, ShieldCheck, Trophy, Crosshair, Coins } from "lucide-react";
 
 export default function EntryGate() {
   const context = useContext(WalletContext);
@@ -13,63 +13,109 @@ export default function EntryGate() {
   if (isConnected) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex flex-col justify-center items-center bg-[#09090e] overflow-hidden p-4">
-      {/* Background Neon Glows */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-purple-600/10 blur-[100px] pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-96 h-96 rounded-full bg-cyan-600/10 blur-[100px] pointer-events-none"></div>
-
-      {/* Glassmorphic Portal Box */}
-      <div className="relative w-full max-w-xl bg-[#131326]/60 backdrop-blur-xl border border-purple-500/20 rounded-3xl p-8 md:p-12 shadow-2xl text-center space-y-8 animate-fade-in z-10">
-        
-        {/* Glowing Logo */}
-        <div className="relative inline-flex items-center justify-center p-5 bg-purple-900/30 rounded-2xl border border-purple-500/30 shadow-[0_0_30px_rgba(124,58,237,0.3)] animate-pulse">
-          <Zap className="h-12 w-12 text-purple-400" />
-        </div>
-
-        {/* Text Area */}
-        <div className="space-y-3">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-300 to-cyan-200">
-            Welcome to BuilderBoard
-          </h1>
-          <p className="text-sm md:text-base text-gray-400 max-w-md mx-auto leading-relaxed">
-            A gamified leader-board tracking builders, quests, balances, and smart contracts on the Stellar ecosystem.
-          </p>
-        </div>
-
-        {/* Highlight Badges */}
-        <div className="grid grid-cols-3 gap-3 py-2 border-t border-b border-[#2a2a4a]">
-          <div className="flex flex-col items-center p-2 rounded-xl bg-purple-950/20 text-purple-300">
-            <Award className="h-5 w-5 mb-1" />
-            <span className="text-[10px] font-bold uppercase tracking-wider">Compete</span>
-          </div>
-          <div className="flex flex-col items-center p-2 rounded-xl bg-cyan-950/20 text-cyan-300">
-            <Compass className="h-5 w-5 mb-1" />
-            <span className="text-[10px] font-bold uppercase tracking-wider">Quest</span>
-          </div>
-          <div className="flex flex-col items-center p-2 rounded-xl bg-emerald-950/20 text-emerald-300">
-            <Star className="h-5 w-5 mb-1" />
-            <span className="text-[10px] font-bold uppercase tracking-wider">Earn XLM</span>
-          </div>
-        </div>
-
-        {/* Connect Action */}
-        <div className="space-y-4 pt-2">
-          <button
-            onClick={() => setShowPicker(true)}
-            className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(124,58,237,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transform hover:-translate-y-0.5 transition-all duration-200 text-base"
-          >
-            🔗 Connect Wallet to Enter
-          </button>
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-500 font-medium">
-            <ShieldAlert className="h-4 w-4 text-cyan-500" />
-            <span>freighter, xBull, or LOBSTR supported</span>
-          </div>
-        </div>
+    <div className="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-[#06060f] overflow-hidden">
+      {/* ── Ambient background layers ── */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Grid */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(124,58,237,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.6) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
+        {/* Glow orbs */}
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-purple-600/20 blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-indigo-700/15 blur-[120px]" />
+        <div className="absolute bottom-0 right-0 w-[350px] h-[350px] rounded-full bg-cyan-600/10 blur-[100px]" />
+        {/* Scanline shimmer */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/5 to-transparent" />
       </div>
 
-      {/* Footer Info */}
-      <div className="absolute bottom-6 text-xs text-gray-600 font-mono tracking-wider pointer-events-none z-10">
-        POWERED BY STELLAR SOROBAN | TESTNET PASS
+      {/* ── Main card ── */}
+      <div className="relative z-10 w-full max-w-lg px-4">
+        <div
+          className="relative rounded-3xl overflow-hidden border border-white/[0.07] shadow-[0_0_80px_rgba(124,58,237,0.15)]"
+          style={{ background: "linear-gradient(135deg, rgba(19,18,40,0.95) 0%, rgba(10,10,25,0.98) 100%)" }}
+        >
+          {/* Top accent line */}
+          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-80" />
+
+          <div className="px-8 pt-10 pb-10 flex flex-col items-center text-center gap-7">
+            {/* Logo mark */}
+            <div className="relative">
+              <div className="absolute inset-0 rounded-2xl bg-purple-500/20 blur-xl scale-110" />
+              <div className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600/40 to-indigo-700/40 border border-purple-500/30 shadow-[0_0_24px_rgba(124,58,237,0.4)]">
+                <Zap className="w-8 h-8 text-purple-300 drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]" />
+              </div>
+            </div>
+
+            {/* Live badge */}
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/10">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399] animate-pulse" />
+              <span className="text-[11px] font-semibold tracking-widest text-emerald-400 uppercase">Live on Stellar Testnet</span>
+            </div>
+
+            {/* Headline */}
+            <div className="space-y-3">
+              <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-none">
+                <span className="block text-white">Builder</span>
+                <span className="block bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-fuchsia-300 to-cyan-300">
+                  Board
+                </span>
+              </h1>
+              <p className="text-sm text-gray-400 max-w-xs mx-auto leading-relaxed">
+                The gamified leaderboard for Stellar builders — compete in quests, climb ranks, and earn <span className="text-purple-300 font-semibold">XLM rewards</span>.
+              </p>
+            </div>
+
+            {/* Feature pills */}
+            <div className="grid grid-cols-3 gap-2 w-full">
+              {[
+                { icon: Trophy, label: "Compete", color: "text-amber-300", bg: "bg-amber-500/8 border-amber-500/20" },
+                { icon: Crosshair, label: "Quests", color: "text-cyan-300", bg: "bg-cyan-500/8 border-cyan-500/20" },
+                { icon: Coins, label: "Earn XLM", color: "text-emerald-300", bg: "bg-emerald-500/8 border-emerald-500/20" },
+              ].map(({ icon: Icon, label, color, bg }) => (
+                <div
+                  key={label}
+                  className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border ${bg} backdrop-blur-sm`}
+                >
+                  <Icon className={`w-4 h-4 ${color}`} />
+                  <span className={`text-[10px] font-bold uppercase tracking-widest ${color}`}>{label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <button
+              onClick={() => setShowPicker(true)}
+              className="w-full group relative flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl font-bold text-base text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+              style={{
+                background: "linear-gradient(135deg, #7c3aed, #6366f1, #06b6d4)",
+                boxShadow: "0 0 24px rgba(124,58,237,0.5), 0 4px 20px rgba(0,0,0,0.4)",
+              }}
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-white/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Zap className="w-4 h-4 relative z-10" />
+              <span className="relative z-10">Connect Wallet to Enter</span>
+            </button>
+
+            {/* Supported wallets note */}
+            <div className="flex items-center gap-2 text-[11px] text-gray-600">
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-600" />
+              <span>Freighter · xBull · LOBSTR</span>
+            </div>
+          </div>
+
+          {/* Bottom accent */}
+          <div className="absolute bottom-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+        </div>
+
+        {/* Footer */}
+        <p className="mt-5 text-center text-[10px] font-mono tracking-[0.2em] text-gray-700 uppercase">
+          Powered by Stellar Soroban · Testnet
+        </p>
       </div>
     </div>
   );

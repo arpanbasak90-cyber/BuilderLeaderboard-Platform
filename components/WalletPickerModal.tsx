@@ -13,9 +13,9 @@ export default function WalletPickerModal() {
   if (!showPicker) return null;
 
   const WALLETS = [
-    { id: "freighter", name: "Freighter", subtitle: "Standard Stellar wallet extension", emoji: "🟣", recommended: true },
-    { id: "xbull", name: "xBull", subtitle: "Advanced wallet for power users", emoji: "🔵", recommended: false },
-    { id: "lobstr", name: "LOBSTR", subtitle: "Popular mobile & web wallet", emoji: "🟠", recommended: false },
+    { id: "freighter", name: "Freighter", subtitle: "Standard Stellar wallet extension", emoji: "🟣" },
+    { id: "xbull", name: "xBull", subtitle: "Advanced wallet for power users", emoji: "🔵" },
+    { id: "lobstr", name: "LOBSTR", subtitle: "Popular mobile & web wallet", emoji: "🟠" },
   ];
 
   return (
@@ -55,9 +55,6 @@ export default function WalletPickerModal() {
                 <div className="flex-1">
                   <span className="block text-sm font-medium text-gray-900 group-hover:text-purple-700">
                     {w.name}
-                    {w.recommended && (
-                      <span className="ml-2 text-[10px] bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded-full font-medium">Recommended</span>
-                    )}
                   </span>
                   <span className="block text-xs text-gray-400">{w.subtitle}</span>
                 </div>
