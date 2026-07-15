@@ -88,6 +88,26 @@ export async function sendXLM(
   // Load sender account
   const sourceAccount = await server.loadAccount(senderPublicKey);
 
+  // Auto-fund destination if it does not exist on testnet/localhost
+  try {
+    await server.loadAccount(destination);
+  } catch (e: any) {
+    if (e.response?.status === 404) {
+      try {
+        const friendbotUrl = network === "localhost"
+          ? `http://localhost:8000/friendbot?addr=${destination}`
+          : `https://friendbot.stellar.org?addr=${destination}`;
+        const fundRes = await fetch(friendbotUrl);
+        if (fundRes.ok) {
+          // Wait briefly for ledger ingestion
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+        }
+      } catch (fbErr) {
+        console.warn("Auto-funding destination failed:", fbErr);
+      }
+    }
+  }
+
   // Build transaction
   let txBuilder = new StellarSdk.TransactionBuilder(sourceAccount, {
     fee: StellarSdk.BASE_FEE,
