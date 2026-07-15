@@ -132,21 +132,21 @@ export default function WalletConnect() {
                   placeholder="Destination address (G...)"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                  className="w-full border border-gray-200 bg-white rounded-xl px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
                 <input
                   type="number"
                   placeholder="Amount in XLM"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                  className="w-full border border-gray-200 bg-white rounded-xl px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
                 <input
                   type="text"
                   placeholder="Memo (optional)"
                   value={memo}
                   onChange={(e) => setMemo(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                  className="w-full border border-gray-200 bg-white rounded-xl px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
                 <button
                   onClick={handleSend}

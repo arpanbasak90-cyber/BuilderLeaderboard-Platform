@@ -151,7 +151,7 @@ export default function InteractiveBuilder({ onProfileUpdate }: InteractiveBuild
                 placeholder="e.g. StarCoder"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full border border-gray-200 focus:border-purple-400 rounded-xl p-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-100 text-sm transition-all"
+                className="w-full border border-gray-200 bg-white focus:border-purple-400 rounded-xl p-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-100 text-sm transition-all"
               />
             </div>
 

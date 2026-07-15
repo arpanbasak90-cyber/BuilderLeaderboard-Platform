@@ -106,7 +106,7 @@ export default function CreateQuestModal({ isOpen, onClose, onCreated }: CreateQ
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Deploy a Soroban Counter Contract"
-              className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              className="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
               maxLength={80}
             />
           </div>
@@ -176,7 +176,7 @@ export default function CreateQuestModal({ isOpen, onClose, onCreated }: CreateQ
                 min={50}
                 max={2000}
                 step={50}
-                className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
               />
             </div>
             <div>
@@ -190,7 +190,7 @@ export default function CreateQuestModal({ isOpen, onClose, onCreated }: CreateQ
                 min={1}
                 max={500}
                 step={5}
-                className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
               />
             </div>
             <div>
@@ -202,7 +202,7 @@ export default function CreateQuestModal({ isOpen, onClose, onCreated }: CreateQ
                 min={5}
                 max={1000}
                 step={5}
-                className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
               />
             </div>
           </div>
