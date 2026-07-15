@@ -1,15 +1,17 @@
 import * as StellarSdk from "stellar-sdk";
 
-export type StellarNetwork = "testnet" | "mainnet";
+export type StellarNetwork = "testnet" | "mainnet" | "localhost";
 
 const HORIZON_URLS: Record<StellarNetwork, string> = {
   testnet: "https://horizon-testnet.stellar.org",
   mainnet: "https://horizon.stellar.org",
+  localhost: "http://localhost:8000",
 };
 
 const NETWORK_PASSPHRASES: Record<StellarNetwork, string> = {
   testnet: StellarSdk.Networks.TESTNET,
   mainnet: StellarSdk.Networks.PUBLIC,
+  localhost: "Standalone Network ; February 2017",
 };
 
 function getServer(network: StellarNetwork = "testnet") {
@@ -55,11 +57,12 @@ export async function getXLMBalance(publicKey: string, network: StellarNetwork =
   }
 }
 
-// Fund account via Friendbot (testnet only)
-export async function fundWithFriendbot(publicKey: string): Promise<void> {
-  const response = await fetch(
-    `https://friendbot.stellar.org?addr=${publicKey}`
-  );
+// Fund account via Friendbot
+export async function fundWithFriendbot(publicKey: string, network: StellarNetwork = "testnet"): Promise<void> {
+  const url = network === "localhost"
+    ? `http://localhost:8000/friendbot?addr=${publicKey}`
+    : `https://friendbot.stellar.org?addr=${publicKey}`;
+  const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Friendbot funding failed");
   }

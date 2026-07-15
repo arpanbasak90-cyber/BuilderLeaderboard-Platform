@@ -70,10 +70,12 @@ export default function Navbar() {
               className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold select-none cursor-pointer transition-all duration-200 ${
                 network === 'mainnet'
                   ? 'border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400'
+                  : network === 'localhost'
+                  ? 'border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
                   : 'border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400'
               }`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${network === 'mainnet' ? 'bg-amber-500' : 'bg-emerald-500'}`} />
+              <span className={`w-1.5 h-1.5 rounded-full ${network === 'mainnet' ? 'bg-amber-500' : network === 'localhost' ? 'bg-blue-500' : 'bg-emerald-500'}`} />
               <span className="capitalize">{network}</span>
             </button>
             
@@ -98,6 +100,16 @@ export default function Navbar() {
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                   Stellar Mainnet
+                </button>
+                <button
+                  onClick={() => {
+                    setNetwork('localhost');
+                    setShowNetworkMenu(false);
+                  }}
+                  className="w-full text-left px-3 py-2 text-xs font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center gap-2"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                  Localhost
                 </button>
               </div>
             )}

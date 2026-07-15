@@ -156,17 +156,17 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setBalance((prev) => (parseFloat(prev || "100") + 10000).toFixed(4));
       } else {
-        await fundWithFriendbot(publicKey);
+        await fundWithFriendbot(publicKey, network);
         await refreshBalance();
       }
-      logWalletInteraction(publicKey, "fund_wallet", undefined, "Funded wallet with 10,000 XLM via Friendbot");
+      logWalletInteraction(publicKey, "fund_wallet", undefined, `Funded wallet with 10,000 XLM via Friendbot on ${network}`);
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Funding failed");
     } finally {
       setIsLoading(false);
     }
-  }, [publicKey, refreshBalance]);
+  }, [publicKey, refreshBalance, network]);
 
   return (
     <WalletContext.Provider

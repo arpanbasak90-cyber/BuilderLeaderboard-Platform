@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import * as StellarSdk from "stellar-sdk";
 
-export type Network = "testnet" | "mainnet";
+export type Network = "testnet" | "mainnet" | "localhost";
 
 interface NetworkContextType {
   network: Network;
@@ -26,6 +26,11 @@ const NETWORK_CONFIG: Record<Network, { horizonUrl: string; networkPassphrase: s
     networkPassphrase: StellarSdk.Networks.PUBLIC,
     explorerBaseUrl: "https://stellar.expert/explorer/public",
   },
+  localhost: {
+    horizonUrl: "http://localhost:8000",
+    networkPassphrase: "Standalone Network ; February 2017",
+    explorerBaseUrl: "http://localhost:8000",
+  },
 };
 
 export const NetworkProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -33,7 +38,7 @@ export const NetworkProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   useEffect(() => {
     const stored = localStorage.getItem("bb_network") as Network | null;
-    if (stored === "testnet" || stored === "mainnet") {
+    if (stored === "testnet" || stored === "mainnet" || stored === "localhost") {
       setNetworkState(stored);
     }
   }, []);

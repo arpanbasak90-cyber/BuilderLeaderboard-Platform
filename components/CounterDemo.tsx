@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { callIncrementContract, getContractCount } from "@/lib/contract";
 import { useWallet } from "@/hooks/useWallet";
+import { useNetwork } from "@/context/NetworkContext";
 import { logWalletInteraction } from "@/lib/telemetry";
 import { Loader2, ExternalLink, Zap } from "lucide-react";
 
@@ -26,6 +27,7 @@ const ERROR_MESSAGES: Record<WalletError, string> = {
 
 export default function CounterDemo() {
   const { publicKey, isConnected, setShowPicker } = useWallet();
+  const { network, networkPassphrase } = useNetwork();
   const [count, setCount] = useState<number | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "pending" | "success" | "error">("idle");
@@ -33,8 +35,8 @@ export default function CounterDemo() {
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
-    getContractCount().then(setCount).catch(() => setCount(0));
-  }, []);
+    getContractCount(network).then(setCount).catch(() => setCount(0));
+  }, [network]);
 
   async function incrementCounter() {
     if (!publicKey) return;
@@ -46,16 +48,16 @@ export default function CounterDemo() {
       const freighter = await import("@stellar/freighter-api");
       const hash = await callIncrementContract(publicKey, async (xdr: string) => {
         const result = await freighter.signTransaction(xdr, {
-          networkPassphrase: "Test SDF Network ; September 2015",
+          networkPassphrase,
         });
         if (result.error) throw new Error(`Sign error: ${result.error}`);
         return result.signedTxXdr;
-      });
+      }, network);
       setTxHash(hash);
-      const newCount = await getContractCount();
+      const newCount = await getContractCount(network);
       setCount(newCount);
       setStatus("success");
-      logWalletInteraction(publicKey, "contract_call", hash, "Called Counter Smart Contract: increment()");
+      logWalletInteraction(publicKey, "contract_call", hash, `Called Counter Smart Contract: increment() on ${network}`);
     } catch (err) {
       setErrorType(classifyError(err));
       setErrorMsg(String(err));
