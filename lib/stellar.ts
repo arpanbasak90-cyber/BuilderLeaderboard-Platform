@@ -1,8 +1,20 @@
 import * as StellarSdk from "stellar-sdk";
 
-const server = new StellarSdk.Horizon.Server(
-  "https://horizon-testnet.stellar.org"
-);
+export type StellarNetwork = "testnet" | "mainnet";
+
+const HORIZON_URLS: Record<StellarNetwork, string> = {
+  testnet: "https://horizon-testnet.stellar.org",
+  mainnet: "https://horizon.stellar.org",
+};
+
+const NETWORK_PASSPHRASES: Record<StellarNetwork, string> = {
+  testnet: StellarSdk.Networks.TESTNET,
+  mainnet: StellarSdk.Networks.PUBLIC,
+};
+
+function getServer(network: StellarNetwork = "testnet") {
+  return new StellarSdk.Horizon.Server(HORIZON_URLS[network]);
+}
 
 // Connect Freighter Wallet
 export async function connectWallet(): Promise<string> {
@@ -26,8 +38,9 @@ export async function connectWallet(): Promise<string> {
   return addressResult.address;
 }
 
-// Get XLM Balance from Testnet
-export async function getXLMBalance(publicKey: string): Promise<string> {
+// Get XLM Balance
+export async function getXLMBalance(publicKey: string, network: StellarNetwork = "testnet"): Promise<string> {
+  const server = getServer(network);
   try {
     const account = await server.loadAccount(publicKey);
     const xlmBalance = account.balances.find(
@@ -42,7 +55,7 @@ export async function getXLMBalance(publicKey: string): Promise<string> {
   }
 }
 
-// Fund account via Friendbot
+// Fund account via Friendbot (testnet only)
 export async function fundWithFriendbot(publicKey: string): Promise<void> {
   const response = await fetch(
     `https://friendbot.stellar.org?addr=${publicKey}`
@@ -57,9 +70,12 @@ export async function sendXLM(
   senderPublicKey: string,
   destination: string,
   amount: string,
-  memo?: string
+  memo?: string,
+  network: StellarNetwork = "testnet"
 ): Promise<string> {
   const freighter = await import("@stellar/freighter-api");
+  const server = getServer(network);
+  const networkPassphrase = NETWORK_PASSPHRASES[network];
 
   // Validate destination
   if (!StellarSdk.StrKey.isValidEd25519PublicKey(destination)) {
@@ -72,7 +88,7 @@ export async function sendXLM(
   // Build transaction
   let txBuilder = new StellarSdk.TransactionBuilder(sourceAccount, {
     fee: StellarSdk.BASE_FEE,
-    networkPassphrase: StellarSdk.Networks.TESTNET,
+    networkPassphrase,
   })
     .addOperation(
       StellarSdk.Operation.payment({
@@ -92,7 +108,7 @@ export async function sendXLM(
 
   // Sign with Freighter
   const signResult = await freighter.signTransaction(xdr, {
-    networkPassphrase: StellarSdk.Networks.TESTNET,
+    networkPassphrase,
   });
 
   if (signResult.error) {
@@ -102,7 +118,7 @@ export async function sendXLM(
   // Submit transaction
   const signedTx = StellarSdk.TransactionBuilder.fromXDR(
     signResult.signedTxXdr,
-    StellarSdk.Networks.TESTNET
+    networkPassphrase
   );
 
   const result = await server.submitTransaction(signedTx);

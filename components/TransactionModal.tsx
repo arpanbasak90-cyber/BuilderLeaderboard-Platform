@@ -15,7 +15,7 @@ interface TransactionModalProps {
   xlmReward: number;
 }
 
-const TREASURY_ADDRESS = 'GAHJJJKMOKYE4RVPZEWZTKH5FVI4PA3VL7GK2LFNUBSGBV3B7WHXK7C';
+const TREASURY_ADDRESS = 'GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWN';
 
 export default function TransactionModal({
   isOpen,

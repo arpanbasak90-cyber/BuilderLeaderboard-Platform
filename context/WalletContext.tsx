@@ -1,8 +1,9 @@
 "use client";
 
-import React, { createContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useState, useEffect, useCallback, useContext } from "react";
 import { connectWallet, getXLMBalance, sendXLM, fundWithFriendbot } from "@/lib/stellar";
 import { logWalletInteraction } from "@/lib/telemetry";
+import { NetworkContext } from "@/context/NetworkContext";
 
 interface WalletContextType {
   publicKey: string | null;
@@ -22,6 +23,9 @@ interface WalletContextType {
 export const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const networkCtx = useContext(NetworkContext);
+  const network = networkCtx?.network ?? "testnet";
+
   const [publicKey, setPublicKey] = useState<string | null>(null);
   const [balance, setBalance] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -32,13 +36,13 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const refreshBalance = useCallback(async () => {
     if (!publicKey) return;
     try {
-      const bal = await getXLMBalance(publicKey);
+      const bal = await getXLMBalance(publicKey, network);
       setBalance(bal);
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Failed to fetch balance.");
     }
-  }, [publicKey]);
+  }, [publicKey, network]);
 
   // Auto-connect from localStorage on mount
   useEffect(() => {
@@ -46,12 +50,20 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (savedKey) {
       setPublicKey(savedKey);
       setIsConnected(true);
-      // Fetch initial balance
-      getXLMBalance(savedKey)
+      getXLMBalance(savedKey, network)
         .then(setBalance)
         .catch((e) => console.error("Auto-connect balance check failed:", e));
     }
   }, []);
+
+  // Refresh balance when network changes
+  useEffect(() => {
+    if (publicKey) {
+      getXLMBalance(publicKey, network)
+        .then(setBalance)
+        .catch((e) => console.error("Network switch balance check failed:", e));
+    }
+  }, [network, publicKey]);
 
   const connect = useCallback(async (walletType: string) => {
     setIsLoading(true);
@@ -59,7 +71,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       if (walletType === "freighter") {
         const key = await connectWallet();
-        const bal = await getXLMBalance(key);
+        const bal = await getXLMBalance(key, network);
         setPublicKey(key);
         setBalance(bal);
         setIsConnected(true);
@@ -67,8 +79,6 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setShowPicker(false);
         logWalletInteraction(key, "connect", undefined, `Connected via Freighter Wallet`);
       } else {
-        // Mock connection for xBull and LOBSTR if they are not installed
-        // Generates a consistent testnet address for demo purposes
         const mockKeys: Record<string, string> = {
           xbull: "GDXBULLY4J7K2P8W9L0X1Y2Z3A4B5C6D7E8F9G0H1I2J3K4L5M6N7O8P",
           lobstr: "GDLOBSTRK2L7J3K4L5M6N7O8P9Q0R1S2T3U4V5W6X7Y8Z9A0B1C2D3E4",
@@ -87,7 +97,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [network]);
 
   const disconnect = useCallback(() => {
     const oldKey = publicKey;
@@ -106,19 +116,18 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setIsLoading(true);
       try {
         let hash = "";
-        // If mock key, simulate successful hash
         if (publicKey.startsWith("GDXBULL") || publicKey.startsWith("GDLOBSTR")) {
           hash = Array.from({ length: 64 }, () =>
             Math.floor(Math.random() * 16).toString(16)
           ).join("");
-          await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate delay
+          await new Promise((resolve) => setTimeout(resolve, 1500));
           setBalance((prev) => {
             const current = parseFloat(prev || "100.0");
             const amt = parseFloat(amount);
             return (current - amt - 0.0001).toFixed(4);
           });
         } else {
-          hash = await sendXLM(publicKey, destination, amount, memo);
+          hash = await sendXLM(publicKey, destination, amount, memo, network);
           await refreshBalance();
         }
 
@@ -136,7 +145,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setIsLoading(false);
       }
     },
-    [publicKey, refreshBalance]
+    [publicKey, refreshBalance, network]
   );
 
   const fundAccount = useCallback(async () => {
