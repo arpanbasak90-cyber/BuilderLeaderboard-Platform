@@ -184,20 +184,22 @@ BuilderBoard implements Stellar's **Fee Bump Transaction** feature (`lib/feeBump
 
 ## 📈 Improvement Plan (Based on User Feedback)
 
-Based on real user feedback collected via the Google Form (see exported sheet above), here is how we plan to improve and evolve BuilderBoard:
+Based on **4 real user responses** collected via the Google Form ([View Responses Sheet](https://docs.google.com/spreadsheets/d/1rw8WcQs3iz_BmY_z_yFfbEfj65xqewDHztuzJZ9S9M0)), here is how we plan to improve and evolve BuilderBoard:
 
-| # | Feedback Theme | Planned Improvement | Status / Commit |
+> 🌟 **Average Rating: 5/5** — All 4 users rated BuilderBoard 5 stars overall.
+
+| # | Real User Feedback | Planned Improvement | Status / Commit |
 |---|---|---|---|
-| 1 | "Work more on UI and have a proper logo" *(reviewer feedback)* | Professional logo design + complete UI refresh with dark glassmorphism theme | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) — UI overhaul in progress |
-| 2 | "The process of connecting the wallet" *(user feedback)* | Simplified wallet connect flow with step-by-step onboarding modal | Planned — Level 6 sprint |
-| 3 | "No real transactions on quest click" | TransactionModal with real Stellar signing flow | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) |
-| 4 | "Can't create my own quests" | CreateQuestModal with localStorage persistence | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) |
-| 5 | "Fees are annoying for new users" | Fee Bump sponsorship for gasless quest tx | Implemented — [`lib/feeBump.ts`](lib/feeBump.ts) |
-| 6 | "Need mainnet deployment" | Mainnet contract deployment | Planned — next milestone |
-| 7 | "Want multi-sig for quest approval" | Multi-sig quest validation | Planned — Level 6 milestone |
-| 8 | "More quest variety" | SEP-24 anchor integration for cross-border quests | Planned |
+| 1 | *"The process of connecting the wallet"* — wallet onboarding UX needs work *(User 3)* | Step-by-step wallet connect modal with guided onboarding flow | Planned — Level 6 sprint |
+| 2 | *"responsivity"* — mobile/responsive layout issues *(User 4)* | Full mobile-responsive redesign across all pages | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) — in progress |
+| 3 | *"More Wallet options"* — support beyond Freighter *(User 2)* | Expand multi-wallet picker: WalletConnect, Albedo integration | Planned — Level 6 sprint |
+| 4 | *"add a dark toggle mode"* — theme toggle requested *(User 4)* | Dark/Light theme toggle with system preference detection | [`eadd4a5`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/eadd4a5) — dark mode implemented |
+| 5 | *"more contests"* — more quest variety needed *(User 4)* | Expand quest library; SEP-24 anchor quests for cross-border tasks | Planned — Level 7 |
+| 6 | *Reviewer feedback* — "work more on UI and have a proper logo" | Professional logo + glassmorphism UI overhaul | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) |
+| 7 | Platform gap — no gasless UX for new users | Fee Bump sponsorship for gasless quest tx | Implemented — [`lib/feeBump.ts`](lib/feeBump.ts) |
+| 8 | Platform gap — no user-created quests | CreateQuestModal with localStorage persistence | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) |
 
-> 💡 All improvements are tracked against real user responses in the [exported feedback sheet](https://docs.google.com/spreadsheets/d/1rw8WcQs3iz_BmY_z_yFfbEfj65xqewDHztuzJZ9S9M0). Git commit links are included above where work is already underway.
+> 💡 All improvements are directly mapped to real user responses. Git commit links are included above where work is already underway.
 
 ---
 
