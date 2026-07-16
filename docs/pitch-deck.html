@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BuilderBoard — Pitch Deck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --stellar-blue: #3E8EDE;
+      --stellar-purple: #7B3FE4;
+      --stellar-cyan: #00D4FF;
+      --gold: #F5C842;
+      --bg-dark: #06060f;
+      --bg-card: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.10);
+      --text: #F0F0FF;
+      --text-muted: #9090AA;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .slide { width: 1280px; min-height: 720px; margin: 0 auto 4px; padding: 60px 80px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; page-break-after: always; break-after: page; }
+    .slide-1  { background: radial-gradient(ellipse 80% 60% at 50% 0%, #1a0a4a 0%, #06060f 70%); }
+    .slide-2  { background: radial-gradient(ellipse 70% 50% at 10% 50%, #0a1a4a 0%, #06060f 70%); }
+    .slide-3  { background: radial-gradient(ellipse 70% 50% at 90% 50%, #0a2a1a 0%, #06060f 70%); }
+    .slide-4  { background: radial-gradient(ellipse 70% 50% at 50% 100%, #1a1a0a 0%, #06060f 70%); }
+    .slide-5  { background: radial-gradient(ellipse 70% 50% at 10% 10%, #2a0a1a 0%, #06060f 70%); }
+    .slide-6  { background: radial-gradient(ellipse 70% 50% at 90% 90%, #0a2a2a 0%, #06060f 70%); }
+    .slide-7  { background: radial-gradient(ellipse 80% 60% at 50% 50%, #1a0a4a 0%, #06060f 70%); }
+    .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.18; pointer-events: none; }
+    .slide-num { position: absolute; top: 28px; right: 40px; font-size: 12px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+    .brand { position: absolute; top: 28px; left: 40px; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--stellar-cyan); letter-spacing: 0.5px; }
+    .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--stellar-cyan); box-shadow: 0 0 10px var(--stellar-cyan); }
+    .kicker { font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--stellar-cyan); margin-bottom: 16px; }
+    h1 { font-size: 64px; font-weight: 900; line-height: 1.05; background: linear-gradient(135deg, #ffffff 0%, var(--stellar-cyan) 60%, var(--stellar-purple) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 24px; }
+    h2 { font-size: 42px; font-weight: 800; line-height: 1.15; background: linear-gradient(120deg, #fff 0%, var(--stellar-cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 32px; }
+    .subtitle { font-size: 22px; font-weight: 400; color: var(--text-muted); max-width: 700px; line-height: 1.6; }
+    .body-text { font-size: 18px; color: var(--text-muted); line-height: 1.7; }
+    .cards { display: grid; gap: 20px; margin-top: 8px; }
+    .cards-2 { grid-template-columns: 1fr 1fr; }
+    .cards-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; backdrop-filter: blur(12px); }
+    .card-icon { font-size: 32px; margin-bottom: 12px; }
+    .card h3 { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .card p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .stats { display: flex; gap: 24px; margin-top: 40px; }
+    .stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 36px; text-align: center; flex: 1; }
+    .stat-value { font-size: 42px; font-weight: 900; color: var(--stellar-cyan); line-height: 1; }
+    .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 8px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+    .pill { display: inline-block; padding: 5px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; margin: 4px; }
+    .pill-blue  { background: rgba(62,142,222,0.18); color: var(--stellar-blue); border: 1px solid rgba(62,142,222,0.35); }
+    .pill-cyan  { background: rgba(0,212,255,0.12); color: var(--stellar-cyan); border: 1px solid rgba(0,212,255,0.30); }
+    .pill-purple{ background: rgba(123,63,228,0.18); color: #b47cff; border: 1px solid rgba(123,63,228,0.35); }
+    .pill-gold  { background: rgba(245,200,66,0.15); color: var(--gold); border: 1px solid rgba(245,200,66,0.35); }
+    .timeline { display: flex; flex-direction: column; gap: 18px; margin-top: 16px; }
+    .tl-item { display: flex; align-items: flex-start; gap: 20px; }
+    .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--stellar-cyan); box-shadow: 0 0 12px var(--stellar-cyan); margin-top: 5px; flex-shrink: 0; }
+    .tl-dot.gold { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
+    .tl-dot.purple { background: #b47cff; box-shadow: 0 0 12px #b47cff; }
+    .tl-content h4 { font-size: 16px; font-weight: 700; color: #fff; }
+    .tl-content p  { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
+    .arch { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+    .arch-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 22px; text-align: center; font-size: 14px; font-weight: 600; color: #fff; min-width: 120px; }
+    .arch-arrow { color: var(--stellar-cyan); font-size: 22px; font-weight: 300; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--stellar-cyan), var(--stellar-purple)); border-radius: 2px; margin-bottom: 24px; }
+    .cta-row { display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; }
+    .btn { padding: 14px 32px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; display: inline-block; }
+    .btn-primary { background: linear-gradient(135deg, var(--stellar-blue), var(--stellar-purple)); color: #fff; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .cover-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,212,255,0.10); border: 1px solid rgba(0,212,255,0.25); border-radius: 999px; padding: 6px 18px; font-size: 13px; font-weight: 600; color: var(--stellar-cyan); margin-bottom: 28px; width: fit-content; }
+    @page { size: 1280px 720px; margin: 0; }
+    @media print { body { background: #06060f; } .slide { margin: 0; page-break-after: always; } }
+  </style>
+</head>
+<body>
+
+<div class="slide slide-1">
+  <div class="orb" style="width:600px;height:600px;top:-200px;left:-100px;background:var(--stellar-purple);"></div>
+  <div class="orb" style="width:400px;height:400px;bottom:-100px;right:-50px;background:var(--stellar-cyan);"></div>
+  <div class="brand"><div class="brand-dot"></div> BuilderBoard</div>
+  <div class="slide-num">01 / 07</div>
+  <div class="cover-tag">🏆 Stellar Journey to Mastery — Level 5 Blue Belt</div>
+  <h1>BuilderBoard</h1>
+  <p class="subtitle">A gamified, on-chain leaderboard platform for the Stellar ecosystem.<br/>Builders connect wallets, complete quests, earn XP &amp; XLM, and prove their skills on-chain.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="https://builder-leaderboard-platform.vercel.app">🚀 Live App</a>
+    <a class="btn btn-ghost" href="https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform">📦 GitHub</a>
+    <a class="btn btn-ghost" href="https://youtu.be/hJR_3ioguC4">📹 Demo Video</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value">43</div><div class="stat-label">Git Commits</div></div>
+    <div class="stat"><div class="stat-value">3+</div><div class="stat-label">Verified Users</div></div>
+    <div class="stat"><div class="stat-value">Live</div><div class="stat-label">On Vercel</div></div>
+    <div class="stat"><div class="stat-value">Testnet</div><div class="stat-label">Soroban Contract</div></div>
+  </div>
+</div>
+
+<div class="slide slide-2">
+  <div class="orb" style="width:500px;height:500px;top:-100px;right:-100px;background:var(--stellar-blue);"></div>
+  <div class="brand"><div class="brand-dot"></div> BuilderBoard</div>
+  <div class="slide-num">02 / 07</div>
+  <p class="kicker">Problem Statement</p>
+  <h2>Stellar builders have no proof-of-work identity</h2>
+  <div class="divider"></div>
+  <div class="cards cards-3">
+    <div class="card"><div class="card-icon">😶‍🌫️</div><h3>No On-Chain Reputation</h3><p>Building on Stellar leaves no persistent, verifiable record of contributions or skills on the blockchain.</p></div>
+    <div class="card"><div class="card-icon">🚫</div><h3>No Incentive Layer</h3><p>New developers have no clear gamified path to learn Stellar — no quests, no rewards, no progression system.</p></div>
+    <div class="card"><div class="card-icon">📉</div><h3>High Drop-Off Rate</h3><p>Without engagement mechanics, builders lose motivation early. Ecosystem growth stalls without a retention mechanism.</p></div>
+  </div>
+  <div class="stats" style="margin-top:32px;">
+    <div class="stat"><div class="stat-value">~70%</div><div class="stat-label">Drop off in month 1</div></div>
+    <div class="stat"><div class="stat-value">0</div><div class="stat-label">Existing gamified Stellar quest platforms</div></div>
+    <div class="stat"><div class="stat-value">$$$</div><div class="stat-label">Grants wasted on non-retained builders</div></div>
+  </div>
+</div>
+
+<div class="slide slide-3">
+  <div class="orb" style="width:500px;height:500px;bottom:-100px;left:-100px;background:var(--stellar-cyan);"></div>
+  <div class="brand"><div class="brand-dot"></div> BuilderBoard</div>
+  <div class="slide-num">03 / 07</div>
+  <p class="kicker">Solution</p>
+  <h2>Proof-of-Build: Gamified quests proven on-chain</h2>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div>
+      <p class="body-text" style="margin-bottom:24px;">BuilderBoard turns every Stellar interaction into a verifiable achievement — stored on-chain, displayed on a public leaderboard, and rewarded with XP + XLM.</p>
+      <div style="margin-bottom:12px;">
+        <span class="pill pill-cyan">🏆 Live Leaderboard</span>
+        <span class="pill pill-blue">🔗 Multi-Wallet Connect</span>
+        <span class="pill pill-purple">🎯 Quest System</span>
+        <span class="pill pill-gold">⚡ Fee Sponsorship</span>
+        <span class="pill pill-cyan">🔗 Soroban Contract</span>
+        <span class="pill pill-blue">📊 Analytics Dashboard</span>
+        <span class="pill pill-purple">🎨 Builder Profiles</span>
+        <span class="pill pill-gold">🚰 Friendbot Funding</span>
+      </div>
+    </div>
+    <div class="cards" style="grid-template-columns:1fr;">
+      <div class="card"><div class="card-icon">⛓️</div><h3>On-Chain Proof</h3><p>Every quest completion is a real Stellar transaction — immutable, public, verifiable on Stellar Expert.</p></div>
+      <div class="card"><div class="card-icon">⛽</div><h3>Gasless UX via Fee Bump</h3><p>Builders complete quests without paying fees. Platform sponsors transactions via Stellar Fee Bump (Black Belt feature).</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-4">
+  <div class="orb" style="width:600px;height:600px;top:-200px;right:-100px;background:var(--gold);opacity:0.10;"></div>
+  <div class="brand"><div class="brand-dot"></div> BuilderBoard</div>
+  <div class="slide-num">04 / 07</div>
+  <p class="kicker">Market Opportunity</p>
+  <h2>A growing ecosystem with no engagement layer</h2>
+  <div class="divider"></div>
+  <div class="cards cards-3">
+    <div class="card"><div class="card-icon">🌐</div><h3>Stellar Ecosystem</h3><p>9M+ active Stellar accounts. $30B+ in issued assets. $70B annual cross-border payment volume on Stellar network.</p></div>
+    <div class="card"><div class="card-icon">🧑‍💻</div><h3>Developer Market</h3><p>Stellar has 50K+ registered developers. The Rise In Stellar Journey program onboards 1,000+ new builders monthly.</p></div>
+    <div class="card"><div class="card-icon">🎮</div><h3>GameFi / LearnToEarn</h3><p>Learn-to-earn is a $4.5B market growing at 25% CAGR. No dominant player exists for L1 blockchain builder quests.</p></div>
+  </div>
+  <div class="stats" style="margin-top:28px;">
+    <div class="stat"><div class="stat-value">9M+</div><div class="stat-label">Stellar Accounts</div></div>
+    <div class="stat"><div class="stat-value">50K+</div><div class="stat-label">Stellar Developers</div></div>
+    <div class="stat"><div class="stat-value">$4.5B</div><div class="stat-label">Learn-to-Earn Market</div></div>
+    <div class="stat"><div class="stat-value">0</div><div class="stat-label">Direct Competitors on Stellar</div></div>
+  </div>
+</div>
+
+<div class="slide slide-5">
+  <div class="orb" style="width:500px;height:500px;bottom:-150px;right:-100px;background:var(--stellar-purple);"></div>
+  <div class="brand"><div class="brand-dot"></div> BuilderBoard</div>
+  <div class="slide-num">05 / 07</div>
+  <p class="kicker">Architecture</p>
+  <h2>Full-stack Stellar-native platform</h2>
+  <div class="divider"></div>
+  <div class="arch">
+    <div class="arch-box">🌐<br/>Next.js 13<br/><span style="font-size:12px;color:var(--text-muted);">App Router + TS</span></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box">🔗<br/>Freighter / xBull<br/><span style="font-size:12px;color:var(--text-muted);">Multi-wallet</span></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box">⛓️<br/>Stellar SDK<br/><span style="font-size:12px;color:var(--text-muted);">Horizon API</span></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box">📜<br/>Soroban<br/><span style="font-size:12px;color:var(--text-muted);">Rust Contract</span></div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box">📊<br/>Supabase<br/><span style="font-size:12px;color:var(--text-muted);">Analytics</span></div>
+  </div>
+  <div class="cards cards-2" style="margin-top:28px;">
+    <div class="card"><h3>🧱 Frontend Layer</h3><p>Next.js 13 App Router · TypeScript · Tailwind CSS · shadcn/ui · Context API for wallet state · Deployed on Vercel</p></div>
+    <div class="card"><h3>⛓️ Blockchain Layer</h3><p>Stellar SDK · Freighter / xBull / LOBSTR wallets · Soroban smart contract · Fee Bump sponsorship · Horizon REST API</p></div>
+    <div class="card"><h3>🗄️ Data Layer</h3><p>Supabase (hosted DB) · localStorage fallback · Google Forms for user onboarding · Analytics dashboard at /analytics</p></div>
+    <div class="card"><h3>🔄 CI/CD</h3><p>GitHub Actions → Vitest unit tests → Vercel auto-deploy on merge to main. 43 meaningful commits tracked.</p></div>
+  </div>
+</div>
+
+<div class="slide slide-6">
+  <div class="orb" style="width:500px;height:500px;top:-100px;left:-100px;background:var(--stellar-blue);"></div>
+  <div class="brand"><div class="brand-dot"></div> BuilderBoard</div>
+  <div class="slide-num">06 / 07</div>
+  <p class="kicker">Growth Strategy</p>
+  <h2>Community-first, ecosystem-led growth</h2>
+  <div class="divider"></div>
+  <div class="cards cards-3">
+    <div class="card"><div class="card-icon">📣</div><h3>Phase 1 — Ecosystem Seeding</h3><p>Partner with Rise In Stellar Journey program. Onboard all active monthly builders. Share on Stellar Discord, Twitter/X, and Dev.to.</p></div>
+    <div class="card"><div class="card-icon">🤝</div><h3>Phase 2 — Quest Sponsorships</h3><p>Allow Stellar projects to create sponsored quests. Builders complete quests and earn real XLM from project treasuries.</p></div>
+    <div class="card"><div class="card-icon">🏅</div><h3>Phase 3 — NFT Badges &amp; Certs</h3><p>Issue Soroban-based NFT achievement badges. Verifiable builder credentials for hiring, grants, and ecosystem recognition.</p></div>
+  </div>
+  <div class="stats" style="margin-top:28px;">
+    <div class="stat"><div class="stat-value">Rise In</div><div class="stat-label">Primary distribution channel</div></div>
+    <div class="stat"><div class="stat-value">Twitter/X</div><div class="stat-label">Viral growth via on-chain proof</div></div>
+    <div class="stat"><div class="stat-value">Dev.to</div><div class="stat-label">Technical content marketing</div></div>
+    <div class="stat"><div class="stat-value">Grants</div><div class="stat-label">Stellar Community Fund target</div></div>
+  </div>
+</div>
+
+<div class="slide slide-7">
+  <div class="orb" style="width:600px;height:600px;bottom:-200px;right:-150px;background:var(--stellar-purple);"></div>
+  <div class="brand"><div class="brand-dot"></div> BuilderBoard</div>
+  <div class="slide-num">07 / 07</div>
+  <p class="kicker">Future Roadmap</p>
+  <h2>What's next for BuilderBoard</h2>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-content"><h4>✅ Done — Level 1–5 (Current)</h4><p>Multi-wallet connect · Soroban contract · Quest system · Fee Bump · Analytics dashboard · Google Form onboarding</p></div></div>
+      <div class="tl-item"><div class="tl-dot gold"></div><div class="tl-content"><h4>🔜 Level 6 — Mainnet &amp; Multi-sig</h4><p>Deploy contract to Stellar Mainnet · Multi-sig quest approval flow · Improved wallet connect UX · Professional logo redesign</p></div></div>
+      <div class="tl-item"><div class="tl-dot purple"></div><div class="tl-content"><h4>🔮 Level 7 — Ecosystem Integration</h4><p>SEP-24 anchor quests · NFT achievement badges · Sponsored quest marketplace · Mobile PWA · SCF grant application</p></div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-content"><h4>🚀 Vision — Builder Identity Protocol</h4><p>The on-chain CV for every Stellar developer. Verifiable builder reputation, portable across the entire Stellar ecosystem.</p></div></div>
+    </div>
+    <div class="cards" style="grid-template-columns:1fr;">
+      <div class="card"><h3>📬 Based on User Feedback</h3><p style="font-size:14px;line-height:1.8;">🔹 Simplified wallet connect flow<br/>🔹 Professional UI redesign + custom logo<br/>🔹 More quest variety &amp; categories<br/>🔹 Gasless quests for all users<br/>🔹 Mainnet deployment</p></div>
+      <div class="card" style="background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.20);">
+        <h3 style="color:var(--stellar-cyan);">🔗 Links</h3>
+        <p style="font-size:14px;line-height:2.0;">
+          🌐 <a href="https://builder-leaderboard-platform.vercel.app" style="color:var(--stellar-cyan);">Live App</a><br/>
+          📦 <a href="https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform" style="color:var(--stellar-cyan);">GitHub Repo</a><br/>
+          📹 <a href="https://youtu.be/hJR_3ioguC4" style="color:var(--stellar-cyan);">Demo Video</a><br/>
+          📊 <a href="https://docs.google.com/spreadsheets/d/1rw8WcQs3iz_BmY_z_yFfbEfj65xqewDHztuzJZ9S9M0/edit?resourcekey=&gid=999708755#gid=999708755" style="color:var(--stellar-cyan);">User Feedback Sheet</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
