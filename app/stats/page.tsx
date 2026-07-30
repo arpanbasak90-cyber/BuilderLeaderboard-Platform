@@ -1,6 +1,7 @@
 'use client';
 
-import { builders, quests, getTotalStats } from '@/lib/mockData';
+import { useState, useEffect } from 'react';
+import { builders as mockBuilders, quests, getTotalStats } from '@/lib/mockData';
 import StatsBar from '@/components/StatsBar';
 import {
   BarChart,
@@ -14,9 +15,53 @@ import {
   Pie,
   Cell,
 } from 'recharts';
+import { getTelemetryData } from '@/lib/telemetry';
 
 export default function StatsPage() {
-  const stats = getTotalStats();
+  const [liveStats, setLiveStats] = useState({
+    totalXP: 0,
+    totalQuestsCompleted: 0,
+    activeBuilders: 0,
+    totalXLM: 0,
+  });
+
+  useEffect(() => {
+    // Calculate aggregate totals from mock data + telemetry/localStorage
+    const baseStats = getTotalStats();
+    let additionalQuests = 0;
+    let additionalXP = 0;
+    let additionalXLM = 0;
+    let userProfilesCount = 0;
+
+    try {
+      // Aggregate all quest completions across keys in localStorage
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('quest_status_')) {
+          const val = localStorage.getItem(key);
+          if (val === 'completed') {
+            additionalQuests += 1;
+          }
+        }
+        if (key && key.startsWith('builder_profile_')) {
+          userProfilesCount += 1;
+          const p = JSON.parse(localStorage.getItem(key) || '{}');
+          if (p.xp) additionalXP += p.xp;
+          if (p.xlmEarned) additionalXLM += p.xlmEarned;
+        }
+      }
+    } catch {}
+
+    const telemetry = getTelemetryData();
+    const onboardedCount = Math.max(telemetry.onboardedUsers.length, userProfilesCount || 1);
+
+    setLiveStats({
+      totalXP: baseStats.totalXP + additionalXP + (additionalQuests * 300),
+      totalQuestsCompleted: baseStats.totalQuestsCompleted + additionalQuests,
+      activeBuilders: Math.max(baseStats.activeBuilders, onboardedCount),
+      totalXLM: baseStats.totalXLM + additionalXLM + (additionalQuests * 50),
+    });
+  }, []);
 
   const categoryData = quests.reduce((acc, quest) => {
     const existing = acc.find((c) => c.name === quest.category);
@@ -56,10 +101,10 @@ export default function StatsPage() {
 
       {/* Stats Bar */}
       <StatsBar
-        totalXP={stats.totalXP}
-        totalQuests={stats.totalQuestsCompleted}
-        activeBuilders={stats.activeBuilders}
-        totalXLM={stats.totalXLM}
+        totalXP={liveStats.totalXP}
+        totalQuests={liveStats.totalQuestsCompleted}
+        activeBuilders={liveStats.activeBuilders}
+        totalXLM={liveStats.totalXLM}
       />
 
       {/* Charts Row */}

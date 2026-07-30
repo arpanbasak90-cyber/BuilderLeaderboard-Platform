@@ -105,7 +105,7 @@ export default function TransactionModal({
         );
         setTxHash(hash);
         setStatus('confirmed');
-        setTimeout(() => onConfirmed(hash), 1200);
+        onConfirmed(hash);
       } catch (txErr: any) {
         // Step 4 — Graceful fallback: generate a local proof-of-completion hash
         // This ensures quest XP/rewards are still awarded even if Freighter
@@ -117,7 +117,7 @@ export default function TransactionModal({
         ).join('');
         setTxHash(fallbackHash);
         setStatus('confirmed');
-        setTimeout(() => onConfirmed(fallbackHash), 1200);
+        onConfirmed(fallbackHash);
       }
     } catch (err: any) {
       setError(err.message || 'Transaction failed. Please try again.');

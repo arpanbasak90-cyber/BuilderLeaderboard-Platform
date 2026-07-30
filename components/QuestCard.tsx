@@ -116,7 +116,6 @@ export default function QuestCard({ quest }: QuestCardProps) {
       localStorage.setItem(profileKey, JSON.stringify(updatedProfile));
       localStorage.setItem(`quest_status_${publicKey}_${quest.id}`, 'completed');
       setQuestStatus('completed');
-      setShowTxModal(false);
 
       toast({
         title: '🎉 Quest Completed!',
