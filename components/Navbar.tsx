@@ -24,18 +24,18 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-gray-950/80 shadow-sm transition-colors duration-300">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        {/* Premium Custom Logo */}
-        <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-95 select-none">
-          <div className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-gradient-to-b from-purple-600 to-indigo-700 shadow-md">
-            <svg width="22" height="22" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="25" y="55" width="10" height="20" rx="2" fill="white" opacity="0.4" />
-              <rect x="45" y="40" width="10" height="35" rx="2" fill="white" opacity="0.6" />
-              <rect x="65" y="25" width="10" height="50" rx="2" fill="white" opacity="0.8" />
-              <path d="M52 15L25 52H48L38 85L75 42H50L52 15Z" fill="white" stroke="#6366f1" strokeWidth="2" strokeLinejoin="round" />
+        {/* Premium Custom Brand Logo */}
+        <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-[1.02] active:scale-[0.98] select-none group">
+          <div className="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 via-indigo-600 to-cyan-500 shadow-md shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-shadow">
+            <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="55" width="14" height="25" rx="3" fill="white" opacity="0.4" />
+              <rect x="43" y="40" width="14" height="40" rx="3" fill="white" opacity="0.65" />
+              <rect x="66" y="25" width="14" height="55" rx="3" fill="white" opacity="0.85" />
+              <path d="M54 12L22 52H48L36 88L78 40H50L54 12Z" fill="white" stroke="#6366f1" strokeWidth="2.5" strokeLinejoin="round" />
             </svg>
           </div>
-          <span className="text-lg font-extrabold tracking-tight text-gray-900 dark:text-white">
-            Builder<span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-cyan-500">Board</span>
+          <span className="text-xl font-black tracking-tight text-gray-900 dark:text-white">
+            Builder<span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400">Board</span>
           </span>
         </Link>
 
