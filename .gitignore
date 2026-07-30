@@ -37,4 +37,6 @@ next-env.d.ts
 
 # Rust / Cargo build artifacts
 Cargo.lock
-/target/
+target
+target/
+**/target/**
