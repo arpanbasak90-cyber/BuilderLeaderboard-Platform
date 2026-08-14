@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Trophy, Target, BarChart3, Activity, Sun, Moon, Network } from 'lucide-react';
+import { Trophy, Target, BarChart3, Activity, Sun, Moon, Network, Sparkles } from 'lucide-react';
 import WalletConnect from '@/components/wallet-connect';
 import { useTheme } from '@/context/ThemeContext';
 import { useNetwork } from '@/context/NetworkContext';
@@ -19,24 +19,25 @@ export default function Navbar() {
     { href: '/quests', label: 'Quests', icon: Target },
     { href: '/stats', label: 'Stats', icon: BarChart3 },
     { href: '/analytics', label: 'Analytics', icon: Activity },
+    { href: '/brand', label: 'Brand Kit', icon: Sparkles },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-gray-950/80 shadow-sm transition-colors duration-300">
+    <nav className="sticky top-0 z-50 w-full border-b border-gray-200/80 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-gray-950/80 shadow-sm transition-colors duration-300">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        {/* Premium Custom Brand Logo */}
+        {/* Official Brand Logo */}
         <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-[1.02] active:scale-[0.98] select-none group">
-          <div className="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 via-indigo-600 to-cyan-500 shadow-md shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-shadow">
-            <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="20" y="55" width="14" height="25" rx="3" fill="white" opacity="0.4" />
-              <rect x="43" y="40" width="14" height="40" rx="3" fill="white" opacity="0.65" />
-              <rect x="66" y="25" width="14" height="55" rx="3" fill="white" opacity="0.85" />
-              <path d="M54 12L22 52H48L36 88L78 40H50L54 12Z" fill="white" stroke="#6366f1" strokeWidth="2.5" strokeLinejoin="round" />
-            </svg>
+          <div className="relative w-10 h-10 flex items-center justify-center rounded-xl overflow-hidden shadow-md shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-shadow">
+            <img src="/logo-icon.svg" alt="BuilderBoard Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="text-xl font-black tracking-tight text-gray-900 dark:text-white">
-            Builder<span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400">Board</span>
-          </span>
+          <div className="flex flex-col">
+            <span className="text-xl font-black tracking-tight text-gray-900 dark:text-white leading-none">
+              Builder<span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400">Board</span>
+            </span>
+            <span className="text-[9px] font-bold tracking-widest text-purple-600 dark:text-purple-400 uppercase mt-0.5">
+              Stellar Soroban
+            </span>
+          </div>
         </Link>
 
         {/* Nav links */}
@@ -50,7 +51,7 @@ export default function Navbar() {
                 href={link.href}
                 className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-purple-600 text-white shadow-sm shadow-purple-200 dark:shadow-none'
+                    ? 'bg-purple-600 text-white shadow-sm shadow-purple-200 dark:shadow-none font-bold'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >

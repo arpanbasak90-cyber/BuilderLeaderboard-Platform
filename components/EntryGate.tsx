@@ -44,20 +44,8 @@ export default function EntryGate() {
             {/* Logo Mark */}
             <div className="relative select-none animate-float">
               <div className="absolute inset-[-8px] rounded-2xl bg-gradient-to-r from-purple-500 to-cyan-400 blur-lg opacity-25" />
-              <div className="relative flex items-center justify-center w-20 h-20 bg-white border border-gray-200 rounded-2xl shadow-md">
-                <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#8b5cf6" />
-                      <stop offset="50%" stopColor="#6366f1" />
-                      <stop offset="100%" stopColor="#06b6d4" />
-                    </linearGradient>
-                  </defs>
-                  <rect x="22" y="52" width="14" height="23" rx="3" fill="url(#logoGrad)" opacity="0.6" />
-                  <rect x="43" y="34" width="14" height="41" rx="3" fill="url(#logoGrad)" />
-                  <rect x="64" y="44" width="14" height="31" rx="3" fill="url(#logoGrad)" opacity="0.8" />
-                  <path d="M50 11 L53.5 19 L62 19 L55 24 L58 32 L50 27 L42 32 L45 24 L38 19 L46.5 19 Z" fill="#eab308" stroke="#ffffff" strokeWidth="1.5" strokeLinejoin="round" />
-                </svg>
+              <div className="relative flex items-center justify-center w-20 h-20 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-md overflow-hidden p-2">
+                <img src="/logo-icon.svg" alt="BuilderBoard Official Logo" className="w-full h-full object-contain" />
               </div>
             </div>
 

@@ -1,0 +1,40 @@
+<svg width="600" height="150" viewBox="0 0 600 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logo-bg-dark" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#A855F7" />
+      <stop offset="50%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#22D3EE" />
+    </linearGradient>
+    <linearGradient id="text-grad-dark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C084FC" />
+      <stop offset="50%" stop-color="#818CF8" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+    <linearGradient id="logo-star-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#EAB308" />
+    </linearGradient>
+    <filter id="shadow-dark" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#818CF8" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Dark Mode Logo Emblem -->
+  <g transform="translate(15, 15)">
+    <path d="M60 8 L105 30 V75 L60 112 L15 75 V30 Z" fill="url(#logo-bg-dark)" filter="url(#shadow-dark)" />
+    <path d="M60 12 L101 32 V73 L60 108 L19 73 V32 Z" fill="none" stroke="white" stroke-opacity="0.3" stroke-width="2" />
+
+    <rect x="34" y="60" width="11" height="25" rx="3" fill="white" fill-opacity="0.6" />
+    <rect x="54" y="42" width="11" height="43" rx="3" fill="white" fill-opacity="0.95" />
+    <rect x="74" y="52" width="11" height="33" rx="3" fill="white" fill-opacity="0.8" />
+
+    <path d="M60 20 L62.8 27 L70 27 L64.1 31.2 L66.3 38.5 L60 34.2 L53.7 38.5 L55.9 31.2 L50 27 L57.2 27 Z" fill="url(#logo-star-dark)" stroke="#FFFFFF" stroke-width="1.2" stroke-linejoin="round" />
+  </g>
+
+  <!-- Brand Title Typography (Light for Dark Mode) -->
+  <text x="155" y="82" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="52" letter-spacing="-1.5" fill="#FFFFFF">Builder</text>
+  <text x="325" y="82" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="52" letter-spacing="-1.5" fill="url(#text-grad-dark)">Board</text>
+  
+  <!-- Subtitle Tagline -->
+  <text x="157" y="112" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="16" letter-spacing="2" fill="#94A3B8">STELLAR BUILDER PLATFORM</text>
+</svg>

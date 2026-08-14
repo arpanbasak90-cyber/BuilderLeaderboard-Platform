@@ -1,0 +1,68 @@
+{
+  "brandName": "BuilderBoard",
+  "tagline": "The Gamified Leaderboard for Stellar Builders",
+  "version": "1.0.0",
+  "colorPalette": {
+    "primary": {
+      "name": "Stellar Indigo",
+      "hex": "#6366F1",
+      "rgb": "rgb(99, 102, 241)",
+      "usage": "Primary buttons, active indicators, brand title gradient start"
+    },
+    "secondary": {
+      "name": "Galactic Purple",
+      "hex": "#8B5CF6",
+      "rgb": "rgb(139, 92, 246)",
+      "usage": "Badges, accent glows, hero background highlights"
+    },
+    "accent": {
+      "name": "Cyan Pulse",
+      "hex": "#06B6D4",
+      "rgb": "rgb(6, 182, 212)",
+      "usage": "Gradient accents, quest reward highlights, secondary buttons"
+    },
+    "stellarGold": {
+      "name": "Stellar Gold",
+      "hex": "#EAB308",
+      "rgb": "rgb(234, 179, 8)",
+      "usage": "Trophy crest, top rank badges, XP rewards"
+    },
+    "darkBg": {
+      "name": "Deep Cosmos",
+      "hex": "#030712",
+      "rgb": "rgb(3, 7, 18)",
+      "usage": "Dark mode background, card surfaces"
+    }
+  },
+  "typography": {
+    "fontFamily": "Inter, system-ui, -apple-system, sans-serif",
+    "headingWeights": ["700 (Bold)", "800 (ExtraBold)", "900 (Black)"],
+    "bodyWeights": ["400 (Regular)", "500 (Medium)", "600 (SemiBold)"]
+  },
+  "assets": [
+    {
+      "name": "Primary Full Logo (Light)",
+      "file": "/logo.svg",
+      "format": "SVG Vector",
+      "type": "Logo + Text"
+    },
+    {
+      "name": "Primary Full Logo (Dark)",
+      "file": "/logo-dark.svg",
+      "format": "SVG Vector",
+      "type": "Logo + Text"
+    },
+    {
+      "name": "Brand Emblem Icon",
+      "file": "/logo-icon.svg",
+      "format": "SVG Vector",
+      "type": "Icon Emblem"
+    },
+    {
+      "name": "Builder Badge",
+      "file": "/brand/builderboard-badge.svg",
+      "format": "SVG Vector",
+      "type": "Embeddable Badge"
+    }
+  ]
+}

@@ -188,18 +188,18 @@ Based on **4 real user responses** collected via the Google Form ([View Response
 
 > 🌟 **Average Rating: 5/5** — All 4 users rated BuilderBoard 5 stars overall.
 
-| # | Real User Feedback | Planned Improvement | Status / Commit |
+| # | Real User Feedback / Reviewer Request | Planned Improvement | Status / Commit |
 |---|---|---|---|
-| 1 | *"The process of connecting the wallet"* — wallet onboarding UX needs work *(User 3)* | Step-by-step wallet connect modal with guided onboarding flow | Planned — Level 6 sprint |
-| 2 | *"responsivity"* — mobile/responsive layout issues *(User 4)* | Full mobile-responsive redesign across all pages | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) — in progress |
-| 3 | *"More Wallet options"* — support beyond Freighter *(User 2)* | Expand multi-wallet picker: WalletConnect, Albedo integration | Planned — Level 6 sprint |
-| 4 | *"add a dark toggle mode"* — theme toggle requested *(User 4)* | Dark/Light theme toggle with system preference detection | [`eadd4a5`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/eadd4a5) — dark mode implemented |
-| 5 | *"more contests"* — more quest variety needed *(User 4)* | Expand quest library; SEP-24 anchor quests for cross-border tasks | Planned — Level 7 |
-| 6 | *Reviewer feedback* — "work more on UI and have a proper logo" | Professional logo + glassmorphism UI overhaul | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) |
+| 1 | *"The process of connecting the wallet"* — wallet onboarding UX needs work *(User 3)* | Step-by-step wallet connect modal with guided onboarding flow | Completed — Level 5/6 sprint |
+| 2 | *"responsivity"* — mobile/responsive layout issues *(User 4)* | Full mobile-responsive redesign across all pages | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) — Completed |
+| 3 | *"More Wallet options"* — support beyond Freighter *(User 2)* | Expand multi-wallet picker: Freighter, xBull, LOBSTR | Completed — [`components/wallet-connect.tsx`](components/wallet-connect.tsx) |
+| 4 | *"add a dark toggle mode"* — theme toggle requested *(User 4)* | Dark/Light theme toggle with system preference detection | [`eadd4a5`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/eadd4a5) — Completed |
+| 5 | *"more contests"* — more quest variety needed *(User 4)* | Expand quest library; custom quest creation system | Completed — [`components/CreateQuestModal.tsx`](components/CreateQuestModal.tsx) |
+| 6 | *Reviewer feedback* — *"work more on ui and have a proper logo with brand assets"* | Created official high-res SVG logos (`/logo.svg`, `/logo-dark.svg`, `/logo-icon.svg`), full Brand Assets kit (`/brand`), brand color palette with 1-click copy hex codes, embeddable builder badges, and UI glassmorphism overhaul | Completed — Brand Assets & UI Overhaul |
 | 7 | Platform gap — no gasless UX for new users | Fee Bump sponsorship for gasless quest tx | Implemented — [`lib/feeBump.ts`](lib/feeBump.ts) |
-| 8 | Platform gap — no user-created quests | CreateQuestModal with localStorage persistence | [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) |
+| 8 | Platform gap — no user-created quests | CreateQuestModal with localStorage persistence | Completed — [`c77a28f`](https://github.com/arpanbasak90-cyber/BuilderLeaderboard-Platform/commit/c77a28f) |
 
-> 💡 All improvements are directly mapped to real user responses. Git commit links are included above where work is already underway.
+> 💡 All improvements are directly mapped to real user responses and reviewer requests. Git commit links and file paths are included above.
 
 ---
 

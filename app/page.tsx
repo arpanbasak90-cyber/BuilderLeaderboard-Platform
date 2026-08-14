@@ -66,29 +66,48 @@ export default function Home() {
   return (
     <div className="space-y-10">
       {/* Hero Banner */}
-      <section className="rounded-3xl bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 p-8 text-center text-white shadow-lg shadow-purple-200">
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium mb-4">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          Live on Stellar Testnet
-        </div>
-        <h1 className="mb-2 text-4xl font-bold md:text-5xl">
-          Stellar Builder Leaderboard
-        </h1>
-        <p className="mb-6 text-lg text-purple-100">
-          Compete. Build. Earn XLM on the Stellar Network.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <div className="rounded-2xl border border-white/20 bg-white/10 px-5 py-3">
-            <p className="text-2xl font-bold">{allBuilders.length}</p>
-            <p className="text-xs text-purple-200">Total Builders</p>
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-700 via-indigo-700 to-cyan-700 p-8 md:p-10 text-center text-white shadow-xl shadow-purple-500/10">
+        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 rounded-full bg-cyan-400/20 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-64 h-64 rounded-full bg-purple-500/20 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-semibold backdrop-blur">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Live on Stellar Network
+            </div>
+            <Link
+              href="/brand"
+              className="inline-flex items-center gap-1.5 rounded-full border border-purple-300/30 bg-purple-900/40 hover:bg-purple-900/60 px-3.5 py-1 text-xs font-semibold backdrop-blur text-purple-200 hover:text-white transition-all"
+            >
+              🎨 Brand Kit & Assets
+            </Link>
           </div>
-          <div className="rounded-2xl border border-white/20 bg-white/10 px-5 py-3">
-            <p className="text-2xl font-bold">{totalXLM} ✦</p>
-            <p className="text-xs text-purple-200">XLM Distributed</p>
+
+          <div className="flex items-center gap-3 mb-3">
+            <img src="/logo-icon.svg" alt="BuilderBoard Logo" className="w-12 h-12 rounded-xl shadow-lg border border-white/20" />
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight">
+              Builder<span className="text-cyan-300">Board</span>
+            </h1>
           </div>
-          <div className="rounded-2xl border border-white/20 bg-white/10 px-5 py-3">
-            <p className="text-2xl font-bold">{quests.filter(q => q.isActive).length}</p>
-            <p className="text-xs text-purple-200">Active Quests</p>
+
+          <p className="mb-8 text-base md:text-lg text-purple-100 max-w-xl font-medium">
+            The gamified arena for Stellar developers. Battle in quests, conquer ranks, and earn <span className="font-extrabold text-white">XLM bounties</span>.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-4 w-full max-w-2xl">
+            <div className="flex-1 min-w-[130px] rounded-2xl border border-white/20 bg-white/10 backdrop-blur px-5 py-3">
+              <p className="text-2xl font-black">{allBuilders.length}</p>
+              <p className="text-xs font-medium text-purple-200">Active Builders</p>
+            </div>
+            <div className="flex-1 min-w-[130px] rounded-2xl border border-white/20 bg-white/10 backdrop-blur px-5 py-3">
+              <p className="text-2xl font-black">{totalXLM} ✦</p>
+              <p className="text-xs font-medium text-purple-200">XLM Distributed</p>
+            </div>
+            <div className="flex-1 min-w-[130px] rounded-2xl border border-white/20 bg-white/10 backdrop-blur px-5 py-3">
+              <p className="text-2xl font-black">{quests.filter(q => q.isActive).length}</p>
+              <p className="text-xs font-medium text-purple-200">Available Quests</p>
+            </div>
           </div>
         </div>
       </section>
