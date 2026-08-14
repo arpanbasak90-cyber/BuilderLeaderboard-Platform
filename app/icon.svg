@@ -1,30 +1,28 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#7c3aed" />
-      <stop offset="50%" stop-color="#4f46e5" />
-      <stop offset="100%" stop-color="#06b6d4" />
+    <linearGradient id="bb-bg" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7C3AED" />
+      <stop offset="50%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#06B6D4" />
     </linearGradient>
-    <linearGradient id="glowGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3" />
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.0" />
+    <linearGradient id="bb-star" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#EAB308" />
     </linearGradient>
     <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.35" />
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#4F46E5" flood-opacity="0.35"/>
     </filter>
   </defs>
 
-  <!-- Background Card -->
-  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
-  <rect width="512" height="512" rx="112" fill="url(#glowGrad)" />
+  <!-- Hexagonal Shield Background -->
+  <path d="M128 16 L224 64 V160 L128 240 L32 160 V64 Z" fill="url(#bb-bg)" filter="url(#shadow)" />
+  <path d="M128 24 L216 68 V155 L128 228 L40 155 V68 Z" fill="none" stroke="white" stroke-opacity="0.25" stroke-width="3" />
 
-  <!-- Leaderboard Columns (Podium/Bars) -->
-  <g filter="url(#shadow)">
-    <rect x="110" y="280" width="60" height="120" rx="12" fill="#ffffff" opacity="0.35" />
-    <rect x="226" y="210" width="60" height="190" rx="12" fill="#ffffff" opacity="0.55" />
-    <rect x="342" y="140" width="60" height="260" rx="12" fill="#ffffff" opacity="0.75" />
+  <!-- Leaderboard Bar Graphs -->
+  <rect x="72" y="130" width="22" height="50" rx="6" fill="white" fill-opacity="0.5" />
+  <rect x="117" y="90" width="22" height="90" rx="6" fill="white" fill-opacity="0.9" />
+  <rect x="162" y="115" width="22" height="65" rx="6" fill="white" fill-opacity="0.75" />
 
-    <!-- Lightning Bolt / Star of Stellar -->
-    <path d="M275 80L140 260H250L200 420L380 210H265L275 80Z" fill="#ffffff" stroke="#6366f1" stroke-width="8" stroke-linejoin="round" />
-  </g>
+  <!-- Stellar Builder Star Crest -->
+  <path d="M128 42 L133.5 56.5 L148 56.5 L136.2 65 L140.7 79.5 L128 71 L115.3 79.5 L119.8 65 L108 56.5 L122.5 56.5 Z" fill="url(#bb-star)" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" />
 </svg>
