@@ -27,7 +27,17 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [allBuilders, setAllBuilders] = useState<Builder[]>(defaultBuilders);
 
-  const refreshLeaderboard = useCallback(() => {
+  const refreshLeaderboard = useCallback(async () => {
+    let apiBuilders: Builder[] = [];
+    try {
+      const res = await fetch('/api/builders');
+      if (res.ok) {
+        apiBuilders = await res.json();
+      }
+    } catch (e) {
+      console.error('Error fetching builders from API:', e);
+    }
+
     const storedBuilders: Builder[] = [];
     try {
       for (let i = 0; i < localStorage.length; i++) {
@@ -47,8 +57,12 @@ export default function Home() {
     }
 
     const combinedBuildersMap = new Map<string, Builder>();
-    defaultBuilders.forEach((b) => { if (b && b.id) combinedBuildersMap.set(b.id, b); });
-    storedBuilders.forEach((b) => { if (b && b.id) combinedBuildersMap.set(b.id, b); });
+    (Array.isArray(apiBuilders) ? apiBuilders : []).forEach((b) => {
+      if (b && (b.id || b.stellarAddress)) combinedBuildersMap.set(b.id || b.stellarAddress, b);
+    });
+    storedBuilders.forEach((b) => {
+      if (b && (b.id || b.stellarAddress)) combinedBuildersMap.set(b.id || b.stellarAddress, b);
+    });
     const combined = Array.from(combinedBuildersMap.values());
 
     const sorted = combined

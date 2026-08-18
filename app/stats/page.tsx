@@ -30,8 +30,21 @@ export default function StatsPage() {
     totalXLM: 0,
   });
 
-  const refreshStats = () => {
-    // 1. Gather all custom builders from localStorage safely
+  const refreshStats = async () => {
+    let apiBuilders: Builder[] = [];
+    let apiQuests: Quest[] = [];
+
+    try {
+      const [resBuilders, resQuests] = await Promise.all([
+        fetch('/api/builders'),
+        fetch('/api/quests'),
+      ]);
+      if (resBuilders.ok) apiBuilders = await resBuilders.json();
+      if (resQuests.ok) apiQuests = await resQuests.json();
+    } catch (e) {
+      console.error('Error fetching stats data from API:', e);
+    }
+
     const storedBuilders: Builder[] = [];
     let additionalQuestsCount = 0;
 
@@ -58,32 +71,34 @@ export default function StatsPage() {
       }
     } catch {}
 
-    // Merge mock + custom builders
     const combinedBuildersMap = new Map<string, Builder>();
-    mockBuilders.forEach((b) => {
-      if (b && b.id) combinedBuildersMap.set(b.id, b);
+    (Array.isArray(apiBuilders) ? apiBuilders : []).forEach((b) => {
+      if (b && (b.id || b.stellarAddress)) combinedBuildersMap.set(b.id || b.stellarAddress, b);
     });
     storedBuilders.forEach((b) => {
-      if (b && b.id) combinedBuildersMap.set(b.id, b);
+      if (b && (b.id || b.stellarAddress)) combinedBuildersMap.set(b.id || b.stellarAddress, b);
     });
     const combinedBuilders = Array.from(combinedBuildersMap.values());
     setAllBuilders(combinedBuilders);
 
-    // 2. Gather custom quests from localStorage safely
-    let combinedQuests = builtInQuests.filter((q) => q && q.id);
+    const combinedQuestsMap = new Map<string, Quest>();
+    (Array.isArray(apiQuests) ? apiQuests : []).forEach((q) => {
+      if (q && q.id) combinedQuestsMap.set(q.id, q);
+    });
     try {
       const storedQuestsRaw = localStorage.getItem('custom_quests');
       if (storedQuestsRaw) {
         const storedQuests = JSON.parse(storedQuestsRaw);
         if (Array.isArray(storedQuests)) {
-          const valid = storedQuests.filter((q) => q && typeof q === 'object' && q.id);
-          combinedQuests = [...combinedQuests, ...valid];
+          storedQuests.forEach((q) => {
+            if (q && q.id) combinedQuestsMap.set(q.id, q);
+          });
         }
       }
     } catch {}
+    const combinedQuests = Array.from(combinedQuestsMap.values());
     setAllQuests(combinedQuests);
 
-    // 3. Compute telemetry & live totals safely
     const onboardedUsers = getOnboardedUsers();
     const computedTotalXP = combinedBuilders.reduce((sum, b) => sum + (Number(b.xp) || 0), 0);
     const computedTotalXLM = combinedBuilders.reduce((sum, b) => sum + (Number(b.xlmEarned) || 0), 0);

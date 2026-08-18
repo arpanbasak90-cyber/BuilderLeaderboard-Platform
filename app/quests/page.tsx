@@ -18,19 +18,38 @@ export default function QuestsPage() {
   const difficulties = ['all', 'Beginner', 'Intermediate', 'Advanced'];
   const categories = ['all', 'Smart Contract', 'DeFi', 'NFT', 'Governance', 'Community', 'Mainnet Launch'];
 
-  const loadCustomQuests = () => {
+  const loadCustomQuests = async () => {
+    let apiQuests: Quest[] = [];
+    try {
+      const res = await fetch('/api/quests');
+      if (res.ok) {
+        apiQuests = await res.json();
+      }
+    } catch (e) {
+      console.error('Error fetching quests from API:', e);
+    }
+
+    let localQuests: Quest[] = [];
     try {
       const stored = localStorage.getItem('custom_quests');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          const valid = parsed.filter(
+          localQuests = parsed.filter(
             (q) => q && typeof q === 'object' && q.id && q.title
           );
-          setCustomQuests(valid);
         }
       }
     } catch { /* ignore */ }
+
+    const combinedQuestsMap = new Map<string, Quest>();
+    (Array.isArray(apiQuests) ? apiQuests : []).forEach((q) => {
+      if (q && q.id) combinedQuestsMap.set(q.id, q);
+    });
+    localQuests.forEach((q) => {
+      if (q && q.id) combinedQuestsMap.set(q.id, q);
+    });
+    setCustomQuests(Array.from(combinedQuestsMap.values()));
   };
 
   useEffect(() => {

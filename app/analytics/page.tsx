@@ -42,9 +42,36 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     setMounted(true);
-    setInteractions(getWalletInteractions());
-    setFeedback(getFeedbackList());
-    setUsers(getOnboardedUsers());
+
+    const loadData = async () => {
+      try {
+        const [resInt, resFb] = await Promise.all([
+          fetch('/api/telemetry'),
+          fetch('/api/feedback'),
+        ]);
+        if (resInt.ok) {
+          const dataInt = await resInt.json();
+          if (Array.isArray(dataInt) && dataInt.length > 0) setInteractions(dataInt);
+          else setInteractions(getWalletInteractions());
+        } else {
+          setInteractions(getWalletInteractions());
+        }
+
+        if (resFb.ok) {
+          const dataFb = await resFb.json();
+          if (Array.isArray(dataFb) && dataFb.length > 0) setFeedback(dataFb);
+          else setFeedback(getFeedbackList());
+        } else {
+          setFeedback(getFeedbackList());
+        }
+      } catch (e) {
+        setInteractions(getWalletInteractions());
+        setFeedback(getFeedbackList());
+      }
+      setUsers(getOnboardedUsers());
+    };
+
+    loadData();
   }, []);
 
   const totalInteractions = interactions.length;
