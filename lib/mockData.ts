@@ -269,7 +269,32 @@ export const generateWeeklyXPData = (builder: Builder) => {
 };
 
 export const getBuilderById = (id: string): Builder | undefined => {
-  return builders.find(b => b.id === id);
+  const found = builders.find((b) => b.id === id || b.stellarAddress === id);
+  if (found) return found;
+
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem(`builder_profile_${id}`);
+      if (stored) return JSON.parse(stored);
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('builder_profile_')) {
+          const raw = localStorage.getItem(key);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && (parsed.id === id || parsed.stellarAddress === id)) {
+              return parsed;
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.error("Error reading stored builder profile:", e);
+    }
+  }
+
+  return undefined;
 };
 
 export const getTotalStats = () => ({

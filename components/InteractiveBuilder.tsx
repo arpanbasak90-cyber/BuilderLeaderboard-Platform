@@ -67,6 +67,15 @@ export default function InteractiveBuilder({ onProfileUpdate }: InteractiveBuild
     };
 
     localStorage.setItem(`builder_profile_${publicKey}`, JSON.stringify(newProfile));
+
+    try {
+      fetch('/api/builders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProfile),
+      }).catch((e) => console.error('MongoDB builder register error:', e));
+    } catch {}
+
     setRegistered(true);
     setCurrentXP(newProfile.xp);
     toast({ title: "🎉 Profile Registered!", description: `Welcome ${name.trim()} to BuilderBoard!` });

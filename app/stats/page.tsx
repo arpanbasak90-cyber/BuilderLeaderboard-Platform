@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { builders as mockBuilders, quests as builtInQuests, getTotalStats } from '@/lib/mockData';
+import { builders as mockBuilders, quests as builtInQuests } from '@/lib/mockData';
 import StatsBar from '@/components/StatsBar';
 import { Builder, Quest } from '@/types';
 import {
@@ -17,9 +17,10 @@ import {
   Cell,
 } from 'recharts';
 import { getOnboardedUsers } from '@/lib/telemetry';
-import { BarChart3, Target, Trophy, Users, Zap, ShieldCheck } from 'lucide-react';
+import { BarChart3, Target, Users, Zap, ShieldCheck } from 'lucide-react';
 
 export default function StatsPage() {
+  const [mounted, setMounted] = useState(false);
   const [allBuilders, setAllBuilders] = useState<Builder[]>(mockBuilders);
   const [allQuests, setAllQuests] = useState<Quest[]>(builtInQuests);
   const [liveStats, setLiveStats] = useState({
@@ -29,8 +30,8 @@ export default function StatsPage() {
     totalXLM: 0,
   });
 
-  useEffect(() => {
-    // 1. Gather all custom builders from localStorage
+  const refreshStats = () => {
+    // 1. Gather all custom builders from localStorage safely
     const storedBuilders: Builder[] = [];
     let additionalQuestsCount = 0;
 
@@ -41,7 +42,10 @@ export default function StatsPage() {
           const raw = localStorage.getItem(key);
           if (raw) {
             try {
-              storedBuilders.push(JSON.parse(raw));
+              const p = JSON.parse(raw);
+              if (p && typeof p === 'object' && p.id && p.name) {
+                storedBuilders.push(p);
+              }
             } catch {}
           }
         }
@@ -56,28 +60,35 @@ export default function StatsPage() {
 
     // Merge mock + custom builders
     const combinedBuildersMap = new Map<string, Builder>();
-    mockBuilders.forEach((b) => combinedBuildersMap.set(b.id, b));
-    storedBuilders.forEach((b) => combinedBuildersMap.set(b.id, b));
+    mockBuilders.forEach((b) => {
+      if (b && b.id) combinedBuildersMap.set(b.id, b);
+    });
+    storedBuilders.forEach((b) => {
+      if (b && b.id) combinedBuildersMap.set(b.id, b);
+    });
     const combinedBuilders = Array.from(combinedBuildersMap.values());
     setAllBuilders(combinedBuilders);
 
-    // 2. Gather custom quests from localStorage
-    let combinedQuests = [...builtInQuests];
+    // 2. Gather custom quests from localStorage safely
+    let combinedQuests = builtInQuests.filter((q) => q && q.id);
     try {
       const storedQuestsRaw = localStorage.getItem('custom_quests');
       if (storedQuestsRaw) {
-        const storedQuests: Quest[] = JSON.parse(storedQuestsRaw);
-        combinedQuests = [...builtInQuests, ...storedQuests];
+        const storedQuests = JSON.parse(storedQuestsRaw);
+        if (Array.isArray(storedQuests)) {
+          const valid = storedQuests.filter((q) => q && typeof q === 'object' && q.id);
+          combinedQuests = [...combinedQuests, ...valid];
+        }
       }
     } catch {}
     setAllQuests(combinedQuests);
 
-    // 3. Compute telemetry & live totals
+    // 3. Compute telemetry & live totals safely
     const onboardedUsers = getOnboardedUsers();
-    const computedTotalXP = combinedBuilders.reduce((sum, b) => sum + b.xp, 0);
-    const computedTotalXLM = combinedBuilders.reduce((sum, b) => sum + b.xlmEarned, 0);
+    const computedTotalXP = combinedBuilders.reduce((sum, b) => sum + (Number(b.xp) || 0), 0);
+    const computedTotalXLM = combinedBuilders.reduce((sum, b) => sum + (Number(b.xlmEarned) || 0), 0);
     const computedTotalQuests = Math.max(
-      combinedBuilders.reduce((sum, b) => sum + b.questsCompleted, 0),
+      combinedBuilders.reduce((sum, b) => sum + (Number(b.questsCompleted) || 0), 0),
       additionalQuestsCount
     );
 
@@ -87,14 +98,29 @@ export default function StatsPage() {
       activeBuilders: Math.max(combinedBuilders.length, onboardedUsers.length),
       totalXLM: computedTotalXLM,
     });
+  };
+
+  useEffect(() => {
+    setMounted(true);
+    refreshStats();
+
+    const handleUpdate = () => refreshStats();
+    window.addEventListener('builder_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+
+    return () => {
+      window.removeEventListener('builder_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
   }, []);
 
   const categoryData = allQuests.reduce((acc, quest) => {
-    const existing = acc.find((c) => c.name === quest.category);
+    const catName = quest?.category || 'General';
+    const existing = acc.find((c) => c.name === catName);
     if (existing) {
       existing.value += 1;
     } else {
-      acc.push({ name: quest.category, value: 1 });
+      acc.push({ name: catName, value: 1 });
     }
     return acc;
   }, [] as { name: string; value: number }[]);
@@ -102,17 +128,17 @@ export default function StatsPage() {
   const COLORS = ['#7c3aed', '#06b6d4', '#f59e0b', '#ef4444', '#10b981', '#6366f1'];
 
   const difficultyData = [
-    { name: 'Beginner', value: allQuests.filter((q) => q.difficulty === 'Beginner').length },
-    { name: 'Intermediate', value: allQuests.filter((q) => q.difficulty === 'Intermediate').length },
-    { name: 'Advanced', value: allQuests.filter((q) => q.difficulty === 'Advanced').length },
+    { name: 'Beginner', value: allQuests.filter((q) => q?.difficulty === 'Beginner').length },
+    { name: 'Intermediate', value: allQuests.filter((q) => q?.difficulty === 'Intermediate').length },
+    { name: 'Advanced', value: allQuests.filter((q) => q?.difficulty === 'Advanced').length },
   ];
 
   const levelDistribution = [
-    { level: 'Level 9+', count: allBuilders.filter((b) => b.level >= 9).length },
-    { level: 'Level 7-8', count: allBuilders.filter((b) => b.level >= 7 && b.level < 9).length },
-    { level: 'Level 5-6', count: allBuilders.filter((b) => b.level >= 5 && b.level < 7).length },
-    { level: 'Level 3-4', count: allBuilders.filter((b) => b.level >= 3 && b.level < 5).length },
-    { level: 'Level 1-2', count: allBuilders.filter((b) => b.level >= 1 && b.level < 3).length },
+    { level: 'Level 9+', count: allBuilders.filter((b) => (b?.level || 0) >= 9).length },
+    { level: 'Level 7-8', count: allBuilders.filter((b) => (b?.level || 0) >= 7 && (b?.level || 0) < 9).length },
+    { level: 'Level 5-6', count: allBuilders.filter((b) => (b?.level || 0) >= 5 && (b?.level || 0) < 7).length },
+    { level: 'Level 3-4', count: allBuilders.filter((b) => (b?.level || 0) >= 3 && (b?.level || 0) < 5).length },
+    { level: 'Level 1-2', count: allBuilders.filter((b) => (b?.level || 0) >= 1 && (b?.level || 0) < 3).length },
   ];
 
   const tooltipStyle = {
@@ -126,8 +152,8 @@ export default function StatsPage() {
     ? Math.round(liveStats.totalXP / allBuilders.length)
     : 0;
 
-  const totalBadgesEarned = allBuilders.reduce((sum, b) => sum + (b.badges?.length || 0), 0);
-  const totalOnChainTxns = allBuilders.reduce((sum, b) => sum + (b.onChainTxCount || 0), 0);
+  const totalBadgesEarned = allBuilders.reduce((sum, b) => sum + (Array.isArray(b?.badges) ? b.badges.length : 0), 0);
+  const totalOnChainTxns = allBuilders.reduce((sum, b) => sum + (Number(b?.onChainTxCount) || 0), 0);
 
   return (
     <div className="space-y-8">
@@ -166,25 +192,29 @@ export default function StatsPage() {
             <Target className="w-4 h-4 text-purple-600" /> Quests by Category
           </h3>
           <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={categoryData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={55}
-                  outerRadius={85}
-                  paddingAngle={3}
-                  dataKey="value"
-                  label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                >
-                  {categoryData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip contentStyle={tooltipStyle} />
-              </PieChart>
-            </ResponsiveContainer>
+            {mounted && categoryData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={categoryData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={85}
+                    paddingAngle={3}
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} (${((percent || 0) * 100).toFixed(0)}%)`}
+                  >
+                    {categoryData.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip contentStyle={tooltipStyle} />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full w-full bg-gray-50 rounded-xl animate-pulse flex items-center justify-center text-gray-400 text-sm">Loading Chart...</div>
+            )}
           </div>
         </div>
 
@@ -194,15 +224,19 @@ export default function StatsPage() {
             <Zap className="w-4 h-4 text-amber-500" /> Quests by Difficulty
           </h3>
           <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={difficultyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 12 }} />
-                <YAxis stroke="#94a3b8" allowDecimals={false} tick={{ fontSize: 12 }} />
-                <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: '#111827', fontWeight: 600 }} />
-                <Bar dataKey="value" fill="#7c3aed" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {mounted ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={difficultyData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis dataKey="name" stroke="#94a3b8" tick={{ fontSize: 12 }} />
+                  <YAxis stroke="#94a3b8" allowDecimals={false} tick={{ fontSize: 12 }} />
+                  <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: '#111827', fontWeight: 600 }} />
+                  <Bar dataKey="value" fill="#7c3aed" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full w-full bg-gray-50 rounded-xl animate-pulse flex items-center justify-center text-gray-400 text-sm">Loading Chart...</div>
+            )}
           </div>
         </div>
       </div>
@@ -213,15 +247,19 @@ export default function StatsPage() {
           <Users className="w-4 h-4 text-cyan-600" /> Builder Level Distribution
         </h3>
         <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={levelDistribution} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis type="number" stroke="#94a3b8" allowDecimals={false} tick={{ fontSize: 12 }} />
-              <YAxis dataKey="level" type="category" stroke="#94a3b8" width={80} tick={{ fontSize: 12 }} />
-              <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: '#111827', fontWeight: 600 }} />
-              <Bar dataKey="count" fill="#06b6d4" radius={[0, 6, 6, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          {mounted ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={levelDistribution} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis type="number" stroke="#94a3b8" allowDecimals={false} tick={{ fontSize: 12 }} />
+                <YAxis dataKey="level" type="category" stroke="#94a3b8" width={80} tick={{ fontSize: 12 }} />
+                <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: '#111827', fontWeight: 600 }} />
+                <Bar dataKey="count" fill="#06b6d4" radius={[0, 6, 6, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-full w-full bg-gray-50 rounded-xl animate-pulse flex items-center justify-center text-gray-400 text-sm">Loading Chart...</div>
+          )}
         </div>
       </div>
 

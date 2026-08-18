@@ -54,6 +54,14 @@ export default function CreateQuestModal({ isOpen, onClose, onCreated }: CreateQ
     const existing: Quest[] = stored ? JSON.parse(stored) : [];
     localStorage.setItem('custom_quests', JSON.stringify([...existing, newQuest]));
 
+    try {
+      fetch('/api/quests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newQuest),
+      }).catch((e) => console.error('MongoDB create quest error:', e));
+    } catch {}
+
     setIsSubmitting(false);
     onCreated(newQuest);
     onClose();

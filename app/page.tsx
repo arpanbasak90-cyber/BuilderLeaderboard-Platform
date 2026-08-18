@@ -24,6 +24,7 @@ import {
 
 export default function Home() {
   const { publicKey } = useWallet();
+  const [mounted, setMounted] = useState(false);
   const [allBuilders, setAllBuilders] = useState<Builder[]>(defaultBuilders);
 
   const refreshLeaderboard = useCallback(() => {
@@ -33,21 +34,41 @@ export default function Home() {
         const key = localStorage.key(i);
         if (key && key.startsWith("builder_profile_")) {
           const raw = localStorage.getItem(key);
-          if (raw) storedBuilders.push(JSON.parse(raw));
+          if (raw) {
+            try {
+              const parsed = JSON.parse(raw);
+              if (parsed && typeof parsed === 'object' && parsed.id) storedBuilders.push(parsed);
+            } catch {}
+          }
         }
       }
     } catch (e) {
       console.error("Error reading stored builders:", e);
     }
 
-    const sorted = storedBuilders
-      .sort((a, b) => b.xp - a.xp)
+    const combinedBuildersMap = new Map<string, Builder>();
+    defaultBuilders.forEach((b) => { if (b && b.id) combinedBuildersMap.set(b.id, b); });
+    storedBuilders.forEach((b) => { if (b && b.id) combinedBuildersMap.set(b.id, b); });
+    const combined = Array.from(combinedBuildersMap.values());
+
+    const sorted = combined
+      .sort((a, b) => (b.xp || 0) - (a.xp || 0))
       .map((b, i) => ({ ...b, rank: i + 1 }));
     setAllBuilders(sorted);
   }, []);
 
   useEffect(() => {
+    setMounted(true);
     refreshLeaderboard();
+
+    const handleUpdate = () => refreshLeaderboard();
+    window.addEventListener('builder_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+
+    return () => {
+      window.removeEventListener('builder_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
   }, [refreshLeaderboard, publicKey]);
 
   const totalXP = allBuilders.reduce((sum, b) => sum + b.xp, 0);
@@ -167,7 +188,7 @@ export default function Home() {
         />
 
         {/* Top 5 Chart */}
-        {chartData.length > 0 && (
+        {chartData.length > 0 && mounted && (
           <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
             <h3 className="mb-4 text-base font-semibold text-gray-900 flex items-center gap-2">
               <Zap className="w-4 h-4 text-purple-500" /> Top 5 Builders by XP

@@ -17,9 +17,30 @@ import {
 } from 'recharts';
 import { ArrowLeft, Trophy, Target, Coins, Activity, Medal } from 'lucide-react';
 
+import { useState, useEffect } from 'react';
+import { Builder } from '@/types';
+
 export default function ProfilePage() {
   const params = useParams();
-  const builder = getBuilderById(params.id as string);
+  const builderId = params.id as string;
+  const [builder, setBuilder] = useState<Builder | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (builderId) {
+      const b = getBuilderById(builderId);
+      setBuilder(b);
+    }
+    setLoading(false);
+  }, [builderId]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <p className="text-gray-400 text-sm">Loading Builder Profile...</p>
+      </div>
+    );
+  }
 
   if (!builder) {
     return (

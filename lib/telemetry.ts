@@ -204,16 +204,15 @@ export async function logWalletInteraction(
     timestamp: new Date().toISOString(),
   };
 
-  // 1. Database Store (Supabase)
-  if (supabase) {
-    try {
-      await supabase.from("wallet_interactions").insert([newInt]);
-    } catch (e) {
-      console.error("Supabase insert error:", e);
-    }
-  }
+  try {
+    fetch('/api/telemetry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newInt),
+    }).catch((e) => console.error('MongoDB telemetry error:', e));
+  } catch {}
 
-  // 2. Local fallback
+  // Local fallback
   const ints = getLocal<WalletInteraction>("telemetry_interactions", defaultInteractions);
   saveLocal("telemetry_interactions", [newInt, ...ints]);
 
@@ -227,7 +226,6 @@ export async function logWalletInteraction(
     users[existingUserIndex].lastActive = new Date().toISOString().split("T")[0];
     users[existingUserIndex].interactionsCount += 1;
   } else {
-    // New user onboarded
     users.unshift({
       address,
       username: `Builder_${address.slice(2, 8)}`,
@@ -253,13 +251,13 @@ export async function submitFeedback(
     timestamp: new Date().toISOString(),
   };
 
-  if (supabase) {
-    try {
-      await supabase.from("user_feedback").insert([newFb]);
-    } catch (e) {
-      console.error("Supabase insert error:", e);
-    }
-  }
+  try {
+    fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newFb),
+    }).catch((e) => console.error('MongoDB feedback error:', e));
+  } catch {}
 
   const fbs = getLocal<UserFeedback>("telemetry_feedback", defaultFeedback);
   saveLocal("telemetry_feedback", [newFb, ...fbs]);

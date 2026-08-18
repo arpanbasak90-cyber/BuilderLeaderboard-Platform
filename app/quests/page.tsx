@@ -18,24 +18,49 @@ export default function QuestsPage() {
   const difficulties = ['all', 'Beginner', 'Intermediate', 'Advanced'];
   const categories = ['all', 'Smart Contract', 'DeFi', 'NFT', 'Governance', 'Community', 'Mainnet Launch'];
 
-  // Load custom quests from localStorage
-  useEffect(() => {
+  const loadCustomQuests = () => {
     try {
       const stored = localStorage.getItem('custom_quests');
-      if (stored) setCustomQuests(JSON.parse(stored));
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          const valid = parsed.filter(
+            (q) => q && typeof q === 'object' && q.id && q.title
+          );
+          setCustomQuests(valid);
+        }
+      }
     } catch { /* ignore */ }
+  };
+
+  useEffect(() => {
+    loadCustomQuests();
+    const handleUpdate = () => loadCustomQuests();
+    window.addEventListener('builder_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    return () => {
+      window.removeEventListener('builder_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
   }, []);
 
   const handleQuestCreated = (quest: Quest) => {
-    setCustomQuests((prev) => [...prev, quest]);
+    if (quest && quest.id && quest.title) {
+      setCustomQuests((prev) => [...prev, quest]);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('builder_updated'));
+      }
+    }
   };
 
-  const allQuests = [...builtInQuests, ...customQuests];
+  const safeBuiltIn = builtInQuests.filter((q) => q && typeof q === 'object' && q.id);
+  const allQuests = [...safeBuiltIn, ...customQuests];
 
   const filteredQuests = allQuests.filter((quest: Quest) => {
+    if (!quest || !quest.id) return false;
     if (difficultyFilter !== 'all' && quest.difficulty !== difficultyFilter) return false;
     if (categoryFilter !== 'all' && quest.category !== categoryFilter) return false;
-    return quest.isActive;
+    return quest.isActive !== false;
   });
 
   const difficultyButtonStyle = (active: boolean) =>
@@ -47,6 +72,9 @@ export default function QuestsPage() {
     active
       ? 'bg-purple-600 text-white shadow-sm'
       : 'bg-white text-gray-600 border border-gray-200 hover:border-purple-300 hover:text-purple-600';
+
+  const totalXP = allQuests.reduce((sum, q) => sum + (Number(q.xpReward) || 0), 0);
+  const totalXLM = allQuests.reduce((sum, q) => sum + (Number(q.xlmReward) || 0), 0);
 
   return (
     <>
@@ -83,7 +111,7 @@ export default function QuestsPage() {
             <div className="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center mx-auto mb-2">
               <Target className="w-4 h-4 text-purple-600" />
             </div>
-            <p className="text-2xl font-bold text-gray-900">{allQuests.filter(q => q.isActive).length}</p>
+            <p className="text-2xl font-bold text-gray-900">{allQuests.filter((q) => q.isActive !== false).length}</p>
             <p className="text-xs text-gray-500 mt-0.5">Active Quests</p>
           </div>
           <div className="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm">
@@ -91,7 +119,7 @@ export default function QuestsPage() {
               <Zap className="w-4 h-4 text-amber-600" />
             </div>
             <p className="text-2xl font-bold text-gray-900">
-              {allQuests.reduce((sum, q) => sum + q.xpReward, 0).toLocaleString()}
+              {totalXP.toLocaleString()}
             </p>
             <p className="text-xs text-gray-500 mt-0.5">Total XP Available</p>
           </div>
@@ -100,7 +128,7 @@ export default function QuestsPage() {
               <Trophy className="w-4 h-4 text-emerald-600" />
             </div>
             <p className="text-2xl font-bold text-gray-900">
-              {allQuests.reduce((sum, q) => sum + q.xlmReward, 0)}
+              {totalXLM.toLocaleString()}
             </p>
             <p className="text-xs text-gray-500 mt-0.5">XLM in Rewards</p>
           </div>

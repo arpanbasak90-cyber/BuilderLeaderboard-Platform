@@ -20,17 +20,30 @@ export default function QuestCard({ quest }: QuestCardProps) {
   const [showTxModal, setShowTxModal] = useState(false);
 
   useEffect(() => {
-    if (!isConnected || !publicKey) {
+    if (!quest || !quest.id || !isConnected || !publicKey) {
       setQuestStatus('not_started');
       return;
     }
-    const status = localStorage.getItem(`quest_status_${publicKey}_${quest.id}`) as QuestState;
-    if (status) {
-      setQuestStatus(status);
-    } else {
+    try {
+      const status = localStorage.getItem(`quest_status_${publicKey}_${quest.id}`) as QuestState;
+      if (status === 'completed' || status === 'in_progress' || status === 'not_started') {
+        setQuestStatus(status);
+      } else {
+        setQuestStatus('not_started');
+      }
+    } catch {
       setQuestStatus('not_started');
     }
-  }, [isConnected, publicKey, quest.id]);
+  }, [isConnected, publicKey, quest]);
+
+  if (!quest || !quest.id) return null;
+
+  const xpReward = Number(quest.xpReward) || 0;
+  const xlmReward = Number(quest.xlmReward) || 0;
+  const completedBy = Number(quest.completedBy) || 0;
+  const totalSlots = Math.max(1, Number(quest.totalSlots) || 1);
+  const difficulty = quest.difficulty || 'Beginner';
+  const category = quest.category || 'Smart Contract';
 
   const difficultyConfig: Record<string, { bg: string; text: string; border: string; dot: string }> = {
     Beginner: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-400' },
@@ -47,15 +60,44 @@ export default function QuestCard({ quest }: QuestCardProps) {
     'Mainnet Launch': { bg: 'bg-blue-50', text: 'text-blue-700' },
   };
 
-  const diff = difficultyConfig[quest.difficulty] || {
+  const diff = difficultyConfig[difficulty] || {
     bg: 'bg-gray-50',
     text: 'text-gray-700',
     border: 'border-gray-200',
     dot: 'bg-gray-400',
   };
-  const cat = categoryConfig[quest.category] || {
+  const cat = categoryConfig[category] || {
     bg: 'bg-purple-50',
     text: 'text-purple-700',
+  };
+
+  const ensureProfile = (key: string): Builder => {
+    const profileKey = `builder_profile_${key}`;
+    const stored = localStorage.getItem(profileKey);
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {}
+    }
+    const defaultProfile: Builder = {
+      id: key,
+      name: `Builder_${key.slice(0, 4)}...${key.slice(-4)}`,
+      stellarAddress: key,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${key}`,
+      xp: 0,
+      level: 1,
+      badges: [],
+      questsCompleted: 0,
+      xlmEarned: 0,
+      rank: 99,
+      onChainTxCount: 1,
+      joinedAt: new Date().toISOString().split('T')[0],
+      weeklyXPGain: 0,
+    };
+    try {
+      localStorage.setItem(profileKey, JSON.stringify(defaultProfile));
+    } catch {}
+    return defaultProfile;
   };
 
   const handleQuestAction = async () => {
@@ -68,19 +110,12 @@ export default function QuestCard({ quest }: QuestCardProps) {
       return;
     }
 
-    const profileKey = `builder_profile_${publicKey}`;
-    const storedProfile = localStorage.getItem(profileKey);
-    if (!storedProfile) {
-      toast({
-        variant: 'destructive',
-        title: 'Profile Required',
-        description: 'Go to the Home page and register your builder profile first!',
-      });
-      return;
-    }
+    ensureProfile(publicKey);
 
     if (questStatus === 'not_started') {
-      localStorage.setItem(`quest_status_${publicKey}_${quest.id}`, 'in_progress');
+      try {
+        localStorage.setItem(`quest_status_${publicKey}_${quest.id}`, 'in_progress');
+      } catch {}
       setQuestStatus('in_progress');
       toast({
         title: '🚀 Quest Started!',
@@ -88,27 +123,24 @@ export default function QuestCard({ quest }: QuestCardProps) {
       });
       logWalletInteraction(publicKey, 'contract_call', undefined, `Started quest: ${quest.title}`);
     } else if (questStatus === 'in_progress') {
-      // Open transaction modal instead of silently completing
       setShowTxModal(true);
     }
   };
 
   const handleTransactionConfirmed = (txHash: string) => {
     if (!publicKey) return;
+    const profile = ensureProfile(publicKey);
     const profileKey = `builder_profile_${publicKey}`;
-    const storedProfile = localStorage.getItem(profileKey);
-    if (!storedProfile) return;
 
     try {
-      const profile: Builder = JSON.parse(storedProfile);
-      const updatedXP = profile.xp + quest.xpReward;
-      const updatedXLMEarned = profile.xlmEarned + quest.xlmReward;
-      const updatedQuestsCompleted = profile.questsCompleted + 1;
+      const updatedXP = (profile.xp || 0) + xpReward;
+      const updatedXLMEarned = (profile.xlmEarned || 0) + xlmReward;
+      const updatedQuestsCompleted = (profile.questsCompleted || 0) + 1;
 
       const newBadge: Badge = {
         id: `badge_${quest.id}_${Date.now()}`,
         name: `${quest.title} Champion`,
-        icon: quest.category === 'Smart Contract' ? '🚀' : quest.category === 'DeFi' ? '💎' : '🔥',
+        icon: category === 'Smart Contract' ? '🚀' : category === 'DeFi' ? '💎' : '🔥',
         description: `Successfully completed the ${quest.title} quest.`,
         earnedAt: new Date().toISOString().split('T')[0],
       };
@@ -116,26 +148,46 @@ export default function QuestCard({ quest }: QuestCardProps) {
       const updatedProfile: Builder = {
         ...profile,
         xp: updatedXP,
-        level: Math.floor(updatedXP / 1000) + 1,
+        level: Math.floor(updatedXP / 500) + 1,
         xlmEarned: updatedXLMEarned,
         questsCompleted: updatedQuestsCompleted,
-        badges: [...profile.badges, newBadge],
+        onChainTxCount: (profile.onChainTxCount || 0) + 1,
+        badges: [...(profile.badges || []), newBadge],
       };
 
       localStorage.setItem(profileKey, JSON.stringify(updatedProfile));
       localStorage.setItem(`quest_status_${publicKey}_${quest.id}`, 'completed');
       setQuestStatus('completed');
 
+      try {
+        fetch('/api/quests/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            publicKey,
+            questId: quest.id,
+            xpReward,
+            xlmReward,
+            questTitle: quest.title,
+            category,
+          }),
+        }).catch((e) => console.error('MongoDB quest complete error:', e));
+      } catch {}
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('builder_updated'));
+      }
+
       toast({
         title: '🎉 Quest Completed!',
-        description: `You earned ${quest.xpReward} XP and ${quest.xlmReward} XLM! Tx: ${txHash.slice(0, 8)}...`,
+        description: `You earned ${xpReward} XP and ${xlmReward} XLM! Tx: ${txHash.slice(0, 8)}...`,
       });
 
       logWalletInteraction(
         publicKey,
         'contract_call',
         txHash,
-        `Completed quest: ${quest.title} (Earned ${quest.xpReward} XP, ${quest.xlmReward} XLM)`
+        `Completed quest: ${quest.title} (Earned ${xpReward} XP, ${xlmReward} XLM)`
       );
     } catch (e) {
       console.error('Error completing quest:', e);
@@ -145,8 +197,8 @@ export default function QuestCard({ quest }: QuestCardProps) {
 
   const progressPercentage =
     questStatus === 'completed'
-      ? ((quest.completedBy + 1) / quest.totalSlots) * 100
-      : (quest.completedBy / quest.totalSlots) * 100;
+      ? ((completedBy + 1) / totalSlots) * 100
+      : (completedBy / totalSlots) * 100;
 
   return (
     <>
@@ -154,9 +206,9 @@ export default function QuestCard({ quest }: QuestCardProps) {
         isOpen={showTxModal}
         onClose={() => setShowTxModal(false)}
         onConfirmed={handleTransactionConfirmed}
-        questTitle={quest.title}
-        xpReward={quest.xpReward}
-        xlmReward={quest.xlmReward}
+        questTitle={quest.title || 'Quest'}
+        xpReward={xpReward}
+        xlmReward={xlmReward}
       />
 
       <div className={`group flex h-full flex-col rounded-2xl border bg-white p-5 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 ${
@@ -166,10 +218,10 @@ export default function QuestCard({ quest }: QuestCardProps) {
         <div className="mb-3 flex items-start justify-between gap-2">
           <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${diff.bg} ${diff.text} ${diff.border}`}>
             <span className={`w-1.5 h-1.5 rounded-full ${diff.dot}`}></span>
-            {quest.difficulty}
+            {difficulty}
           </span>
           <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${cat.bg} ${cat.text}`}>
-            {quest.category}
+            {category}
           </span>
         </div>
 
@@ -183,17 +235,17 @@ export default function QuestCard({ quest }: QuestCardProps) {
             <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center">
               <Zap className="h-3 w-3 text-purple-600" />
             </div>
-            <span className="text-sm font-semibold text-gray-800">{quest.xpReward} XP</span>
+            <span className="text-sm font-semibold text-gray-800">{xpReward} XP</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center">
               <Coins className="h-3 w-3 text-amber-600" />
             </div>
-            <span className="text-sm font-semibold text-gray-800">{quest.xlmReward} XLM</span>
+            <span className="text-sm font-semibold text-gray-800">{xlmReward} XLM</span>
           </div>
           <div className="ml-auto flex items-center gap-1 text-xs text-gray-400">
             <Users className="h-3 w-3" />
-            <span>{questStatus === 'completed' ? quest.completedBy + 1 : quest.completedBy}/{quest.totalSlots}</span>
+            <span>{questStatus === 'completed' ? completedBy + 1 : completedBy}/{totalSlots}</span>
           </div>
         </div>
 
@@ -204,7 +256,7 @@ export default function QuestCard({ quest }: QuestCardProps) {
               className={`h-full rounded-full transition-all duration-500 ${
                 questStatus === 'completed' ? 'bg-emerald-500' : 'bg-purple-600'
               }`}
-              style={{ width: `${Math.min(progressPercentage, 100)}%` }}
+              style={{ width: `${Math.min(Math.max(0, progressPercentage), 100)}%` }}
             />
           </div>
         </div>

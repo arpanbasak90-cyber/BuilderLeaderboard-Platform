@@ -34,12 +34,14 @@ import {
 const COLORS = ["#7c3aed", "#06b6d4", "#f59e0b", "#10b981", "#ef4444"];
 
 export default function AnalyticsPage() {
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<"metrics" | "users" | "interactions" | "feedback">("metrics");
   const [interactions, setInteractions] = useState<WalletInteraction[]>([]);
   const [feedback, setFeedback] = useState<UserFeedback[]>([]);
   const [users, setUsers] = useState<OnboardedUser[]>([]);
 
   useEffect(() => {
+    setMounted(true);
     setInteractions(getWalletInteractions());
     setFeedback(getFeedbackList());
     setUsers(getOnboardedUsers());
@@ -201,7 +203,7 @@ export default function AnalyticsPage() {
               <h3 className="text-base font-bold text-gray-900">Wallet Action Types</h3>
               <p className="text-xs text-gray-500">Distribution of wallet actions logged through the telemetry platform.</p>
               <div className="h-64 flex justify-center items-center">
-                {actionChartData.length > 0 ? (
+                {actionChartData.length > 0 && mounted ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
