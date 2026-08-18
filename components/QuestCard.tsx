@@ -32,22 +32,31 @@ export default function QuestCard({ quest }: QuestCardProps) {
     }
   }, [isConnected, publicKey, quest.id]);
 
-  const difficultyConfig = {
+  const difficultyConfig: Record<string, { bg: string; text: string; border: string; dot: string }> = {
     Beginner: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-400' },
     Intermediate: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400' },
     Advanced: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200', dot: 'bg-red-400' },
   };
 
-  const categoryConfig = {
+  const categoryConfig: Record<string, { bg: string; text: string }> = {
     'Smart Contract': { bg: 'bg-violet-50', text: 'text-violet-700' },
     DeFi: { bg: 'bg-cyan-50', text: 'text-cyan-700' },
     NFT: { bg: 'bg-pink-50', text: 'text-pink-700' },
     Governance: { bg: 'bg-orange-50', text: 'text-orange-700' },
     Community: { bg: 'bg-green-50', text: 'text-green-700' },
+    'Mainnet Launch': { bg: 'bg-blue-50', text: 'text-blue-700' },
   };
 
-  const diff = difficultyConfig[quest.difficulty];
-  const cat = categoryConfig[quest.category];
+  const diff = difficultyConfig[quest.difficulty] || {
+    bg: 'bg-gray-50',
+    text: 'text-gray-700',
+    border: 'border-gray-200',
+    dot: 'bg-gray-400',
+  };
+  const cat = categoryConfig[quest.category] || {
+    bg: 'bg-purple-50',
+    text: 'text-purple-700',
+  };
 
   const handleQuestAction = async () => {
     if (!isConnected || !publicKey) {

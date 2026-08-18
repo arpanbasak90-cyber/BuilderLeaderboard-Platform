@@ -29,7 +29,7 @@ export type Quest = {
   xpReward: number;
   xlmReward: number;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  category: 'Smart Contract' | 'DeFi' | 'NFT' | 'Governance' | 'Community';
+  category: 'Smart Contract' | 'DeFi' | 'NFT' | 'Governance' | 'Community' | 'Mainnet Launch';
   completedBy: number;
   totalSlots: number;
   isActive: boolean;

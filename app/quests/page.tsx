@@ -16,7 +16,7 @@ export default function QuestsPage() {
   const [customQuests, setCustomQuests] = useState<Quest[]>([]);
 
   const difficulties = ['all', 'Beginner', 'Intermediate', 'Advanced'];
-  const categories = ['all', 'Smart Contract', 'DeFi', 'NFT', 'Governance', 'Community'];
+  const categories = ['all', 'Smart Contract', 'DeFi', 'NFT', 'Governance', 'Community', 'Mainnet Launch'];
 
   // Load custom quests from localStorage
   useEffect(() => {

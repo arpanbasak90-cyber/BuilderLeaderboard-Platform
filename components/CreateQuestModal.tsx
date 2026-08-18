@@ -11,7 +11,7 @@ interface CreateQuestModalProps {
   onCreated: (quest: Quest) => void;
 }
 
-const CATEGORIES: Quest['category'][] = ['Smart Contract', 'DeFi', 'NFT', 'Governance', 'Community'];
+const CATEGORIES: Quest['category'][] = ['Smart Contract', 'DeFi', 'NFT', 'Governance', 'Community', 'Mainnet Launch'];
 const DIFFICULTIES: Quest['difficulty'][] = ['Beginner', 'Intermediate', 'Advanced'];
 
 export default function CreateQuestModal({ isOpen, onClose, onCreated }: CreateQuestModalProps) {

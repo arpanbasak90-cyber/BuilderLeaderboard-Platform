@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Copy, Check, Download, ShieldCheck, Palette, Sparkles, Layers, Code, ArrowLeft } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 export default function BrandPage() {
   const { toast } = useToast();
