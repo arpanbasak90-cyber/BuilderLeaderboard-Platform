@@ -7,18 +7,12 @@ export async function GET() {
   try {
     const conn = await connectToDatabase();
     if (!conn) {
-      return NextResponse.json(defaultBuilders);
+      return NextResponse.json([]);
     }
 
-    let builders = await Builder.find().sort({ xp: -1 }).lean();
+    const builders = await Builder.find().sort({ xp: -1 }).lean();
 
-    if (!builders || builders.length === 0) {
-      // Auto seed default builders if database is empty
-      await Builder.insertMany(defaultBuilders);
-      builders = await Builder.find().sort({ xp: -1 }).lean();
-    }
-
-    const formatted = builders.map((b: any, index: number) => ({
+    const formatted = (builders || []).map((b: any, index: number) => ({
       ...b,
       id: b.id || b.stellarAddress,
       rank: index + 1,
@@ -27,7 +21,7 @@ export async function GET() {
     return NextResponse.json(formatted);
   } catch (error: any) {
     console.error('Error fetching builders:', error);
-    return NextResponse.json(defaultBuilders);
+    return NextResponse.json([]);
   }
 }
 

@@ -7,20 +7,15 @@ export async function GET() {
   try {
     const conn = await connectToDatabase();
     if (!conn) {
-      return NextResponse.json(defaultQuests);
+      return NextResponse.json([]);
     }
 
-    let quests = await Quest.find().sort({ createdAt: -1 }).lean();
+    const quests = await Quest.find().sort({ createdAt: -1 }).lean();
 
-    if (!quests || quests.length === 0) {
-      await Quest.insertMany(defaultQuests);
-      quests = await Quest.find().sort({ createdAt: -1 }).lean();
-    }
-
-    return NextResponse.json(quests);
+    return NextResponse.json(quests || []);
   } catch (error: any) {
     console.error('Error fetching quests:', error);
-    return NextResponse.json(defaultQuests);
+    return NextResponse.json([]);
   }
 }
 
