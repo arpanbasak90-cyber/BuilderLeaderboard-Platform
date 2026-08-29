@@ -86,15 +86,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Rust Toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         with:
+          toolchain: "1.82.0"
           targets: wasm32-unknown-unknown
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
 
       - name: Cargo Check Contracts
-        run: cargo check --manifest-path Cargo.toml
+        run: cargo check --manifest-path contracts/counter/Cargo.toml
 
       - name: Run Soroban Tests
-        run: cargo test --manifest-path Cargo.toml
+        run: cargo test --manifest-path contracts/counter/Cargo.toml
+
