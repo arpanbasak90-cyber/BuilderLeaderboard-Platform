@@ -1,5 +1,10 @@
 # 🏆 BuilderBoard — Stellar Builder Leaderboard Platform
 
+![CI Pipeline](https://github.com/stellar/builderboard/actions/workflows/ci.yml/badge.svg)
+![Deployment Verification](https://github.com/stellar/builderboard/actions/workflows/cd-deploy.yml/badge.svg)
+![Security Audit](https://github.com/stellar/builderboard/actions/workflows/security-audit.yml/badge.svg)
+![Belt Level](https://img.shields.io/badge/Belt%20Level-Level%205%20(Blue%20Belt)-3b82f6)
+
 A gamified, production-ready leaderboard platform for the Stellar ecosystem. Builders connect their Stellar wallets, complete on-chain quests, earn XP and XLM rewards, and compete for top rankings — all proven by real Stellar blockchain transactions.
 
 **🔴 Live App:** https://builder-leaderboard-platform.vercel.app  

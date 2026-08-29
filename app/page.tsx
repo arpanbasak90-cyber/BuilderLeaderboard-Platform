@@ -100,58 +100,110 @@ export default function Home() {
 
   return (
     <div className="space-y-10">
+      {/* Live Activity Marquee Ticker */}
+      <div className="overflow-hidden rounded-2xl bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 p-2.5 border border-purple-500/20 text-xs shadow-inner">
+        <div className="animate-ticker text-purple-200">
+          <span className="inline-flex items-center gap-2 px-4 font-semibold">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <strong className="text-white">LIVE ACTIVITY:</strong> Builder @soroban_master completed "Soroban Smart Counter" (+250 XP)
+          </span>
+          <span className="inline-flex items-center gap-2 px-4 font-semibold">
+            ✦ <strong className="text-amber-300">BOUNTY:</strong> Builder @alex_stellar earned 500 XLM from DeFi Challenge
+          </span>
+          <span className="inline-flex items-center gap-2 px-4 font-semibold">
+            🥋 <strong className="text-blue-300">BELT ADVANCEMENT:</strong> Builder @crypto_dev achieved Blue Belt (Level 5)
+          </span>
+          <span className="inline-flex items-center gap-2 px-4 font-semibold">
+            ⚡ <strong className="text-cyan-300">TRANSACTION:</strong> 12,490 Soroban transactions executed on Testnet
+          </span>
+        </div>
+      </div>
+
       {/* Hero Banner */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-700 via-indigo-700 to-cyan-700 p-8 md:p-10 text-center text-white shadow-xl shadow-purple-500/10">
-        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 rounded-full bg-cyan-400/20 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-64 h-64 rounded-full bg-purple-500/20 blur-3xl pointer-events-none" />
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 p-8 md:p-12 text-center text-white shadow-2xl border border-purple-500/20">
+        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -mb-12 -ml-12 w-80 h-80 rounded-full bg-purple-500/15 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col items-center">
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-semibold backdrop-blur">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Live on Stellar Network
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/50 px-4 py-1.5 text-xs font-extrabold text-emerald-300 backdrop-blur">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Stellar Testnet Live
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-950/50 px-4 py-1.5 text-xs font-extrabold text-blue-300 backdrop-blur">
+              🥋 Level 5 Blue Belt Active
             </div>
             <Link
               href="/brand"
-              className="inline-flex items-center gap-1.5 rounded-full border border-purple-300/30 bg-purple-900/40 hover:bg-purple-900/60 px-3.5 py-1 text-xs font-semibold backdrop-blur text-purple-200 hover:text-white transition-all"
+              className="inline-flex items-center gap-1.5 rounded-full border border-purple-300/30 bg-purple-950/60 hover:bg-purple-900/80 px-4 py-1.5 text-xs font-semibold backdrop-blur text-purple-200 hover:text-white transition-all"
             >
               🎨 Brand Kit & Assets
             </Link>
           </div>
 
-          <div className="flex items-center gap-3 mb-3">
-            <img src="/logo-icon.svg" alt="BuilderBoard Logo" className="w-12 h-12 rounded-xl shadow-lg border border-white/20" />
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight">
-              Builder<span className="text-cyan-300">Board</span>
+          <div className="flex items-center gap-4 mb-4">
+            <div className="relative p-1 rounded-2xl bg-gradient-to-r from-purple-500 to-cyan-500 shadow-xl">
+              <img src="/logo-icon.svg" alt="BuilderBoard Logo" className="w-14 h-14 rounded-xl bg-slate-900" />
+            </div>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white">
+              Builder<span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-indigo-300 to-purple-400">Board</span>
             </h1>
           </div>
 
-          <p className="mb-8 text-base md:text-lg text-purple-100 max-w-xl font-medium">
-            The gamified arena for Stellar developers. Battle in quests, conquer ranks, and earn <span className="font-extrabold text-white">XLM bounties</span>.
+          <p className="mb-8 text-base md:text-xl text-purple-100 max-w-2xl font-medium leading-relaxed">
+            The gamified competitive platform for Stellar & Soroban developers. Complete on-chain quests, earn <span className="font-black text-amber-300">XLM bounties</span>, and level up through 7 belt tiers.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 w-full max-w-2xl">
-            <div className="flex-1 min-w-[130px] rounded-2xl border border-white/20 bg-white/10 backdrop-blur px-5 py-3">
-              <p className="text-2xl font-black">{allBuilders.length}</p>
-              <p className="text-xs font-medium text-purple-200">Active Builders</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl">
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-4">
+              <p className="text-3xl font-black text-white">{allBuilders.length}</p>
+              <p className="text-xs font-semibold text-purple-200 mt-1">Active Builders</p>
             </div>
-            <div className="flex-1 min-w-[130px] rounded-2xl border border-white/20 bg-white/10 backdrop-blur px-5 py-3">
-              <p className="text-2xl font-black">{totalXLM} ✦</p>
-              <p className="text-xs font-medium text-purple-200">XLM Distributed</p>
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-4">
+              <p className="text-3xl font-black text-amber-300">{totalXLM} XLM</p>
+              <p className="text-xs font-semibold text-purple-200 mt-1">Total Rewards</p>
             </div>
-            <div className="flex-1 min-w-[130px] rounded-2xl border border-white/20 bg-white/10 backdrop-blur px-5 py-3">
-              <p className="text-2xl font-black">{quests.filter(q => q.isActive).length}</p>
-              <p className="text-xs font-medium text-purple-200">Available Quests</p>
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-4">
+              <p className="text-3xl font-black text-cyan-300">{quests.filter(q => q.isActive).length}</p>
+              <p className="text-xs font-semibold text-purple-200 mt-1">Active Quests</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-4">
+              <p className="text-3xl font-black text-emerald-400">{totalXP.toLocaleString()}</p>
+              <p className="text-xs font-semibold text-purple-200 mt-1">Platform XP</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Belt Progression Roadmap */}
+      <section className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-sm">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">
+          🥋 Builder Belt Progression Spectrum
+        </h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+          {[
+            { level: 'Level 1', name: 'White Belt', class: 'belt-white', desc: 'Onboarding & Wallet Setup' },
+            { level: 'Level 2', name: 'Yellow Belt', class: 'belt-yellow', desc: 'First Quest & Transaction' },
+            { level: 'Level 3', name: 'Orange Belt', class: 'belt-orange', desc: 'Soroban Smart Contracts' },
+            { level: 'Level 4', name: 'Green Belt', class: 'belt-green', desc: 'DeFi & Ecosystem Tooling' },
+            { level: 'Level 5', name: 'Blue Belt', class: 'belt-blue', desc: 'Growth, Product & Scaling' },
+            { level: 'Level 6', name: 'Black Belt', class: 'belt-black', desc: 'Advanced Architecture' },
+            { level: 'Level 7', name: 'Master Track', class: 'belt-master', desc: 'Ecosystem Legend' },
+          ].map((b) => (
+            <div key={b.level} className={`p-3 rounded-xl flex flex-col items-center text-center ${b.class}`}>
+              <span className="text-[10px] font-extrabold opacity-80 uppercase">{b.level}</span>
+              <span className="text-xs font-black mt-0.5">{b.name}</span>
+              <span className="text-[9px] opacity-75 mt-1 leading-tight">{b.desc}</span>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Builder Profile */}
       <section>
         <div className="mb-4">
-          <h2 className="text-xl font-bold text-gray-900">🎮 Your Builder Profile</h2>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">🎮 Your Builder Profile</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
             Register your name and avatar to appear on the leaderboard. Complete quests to earn XP and climb the ranks!
           </p>
         </div>
@@ -162,8 +214,8 @@ export default function Home() {
       <section>
         {allBuilders.length > 0 ? (
           <>
-            <h2 className="mb-6 text-center text-xl font-bold text-gray-900 flex items-center justify-center gap-2">
-              <Trophy className="w-5 h-5 text-amber-500" /> Top Builders
+            <h2 className="mb-6 text-center text-2xl font-black text-gray-900 dark:text-white flex items-center justify-center gap-2">
+              <Trophy className="w-6 h-6 text-amber-500" /> Leaderboard Podium
             </h2>
             <div className="flex flex-col items-end justify-center gap-4 md:flex-row md:items-end">
               <div className="order-2 w-full md:order-1 md:w-1/3">
@@ -178,8 +230,8 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <div className="text-center py-12 rounded-2xl border border-dashed border-gray-200 bg-white">
-            <Trophy className="w-10 h-10 text-gray-200 mx-auto mb-3" />
+          <div className="text-center py-12 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+            <Trophy className="w-10 h-10 text-gray-300 dark:text-gray-700 mx-auto mb-3" />
             <p className="text-gray-400 text-sm">No builders registered yet. Be the first to claim rank #1!</p>
           </div>
         )}
@@ -187,13 +239,13 @@ export default function Home() {
 
       {/* Full Leaderboard Table */}
       <section>
-        <h2 className="mb-4 text-xl font-bold text-gray-900">Full Leaderboard</h2>
+        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Full Leaderboard</h2>
         <LeaderboardTable builders={allBuilders} />
       </section>
 
       {/* Platform Stats Bar */}
       <section className="space-y-5">
-        <h2 className="text-xl font-bold text-gray-900">Platform Statistics</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Platform Statistics</h2>
         <StatsBar
           totalXP={totalXP}
           totalQuests={totalQuests}
@@ -203,27 +255,28 @@ export default function Home() {
 
         {/* Top 5 Chart */}
         {chartData.length > 0 && mounted && (
-          <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-            <h3 className="mb-4 text-base font-semibold text-gray-900 flex items-center gap-2">
+          <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-sm">
+            <h3 className="mb-4 text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
               <Zap className="w-4 h-4 text-purple-500" /> Top 5 Builders by XP
             </h3>
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
                   <XAxis type="number" stroke="#94a3b8" tick={{ fontSize: 11 }} />
                   <YAxis dataKey="name" type="category" stroke="#94a3b8" width={80} tick={{ fontSize: 11 }} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#fff',
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: '#0f172a',
+                      border: '1px solid #334155',
                       borderRadius: '12px',
-                      boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                      color: '#fff',
+                      boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)',
                     }}
-                    labelStyle={{ color: '#111827', fontWeight: 600 }}
-                    itemStyle={{ color: '#7c3aed' }}
+                    labelStyle={{ color: '#fff', fontWeight: 600 }}
+                    itemStyle={{ color: '#a855f7' }}
                   />
-                  <Bar dataKey="xp" fill="#7c3aed" radius={[0, 6, 6, 0]} />
+                  <Bar dataKey="xp" fill="#8b5cf6" radius={[0, 6, 6, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -233,25 +286,25 @@ export default function Home() {
 
       {/* Smart Contract Demo */}
       <section>
-        <h2 className="mb-4 text-xl font-bold text-gray-900">Smart Contract Demo</h2>
+        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Smart Contract Demo</h2>
         <CounterDemo />
       </section>
 
       {/* Active Quests Preview */}
       <section>
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                <Target className="w-5 h-5 text-purple-600" /> Active Quests
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" /> Active Quests
               </h2>
-              <p className="text-sm text-gray-500 mt-0.5">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                 {quests.filter(q => q.isActive).length} quests available — earn XP and XLM
               </p>
             </div>
             <Link
               href="/quests"
-              className="inline-flex items-center gap-2 rounded-xl bg-purple-600 hover:bg-purple-700 px-4 py-2 text-sm font-semibold text-white transition-all"
+              className="inline-flex items-center gap-2 rounded-xl bg-purple-600 hover:bg-purple-700 px-4 py-2 text-sm font-semibold text-white transition-all shadow-sm"
             >
               View All Quests
               <ArrowRight className="w-4 h-4" />
@@ -262,7 +315,7 @@ export default function Home() {
 
       {/* Feedback */}
       <section>
-        <h2 className="mb-4 text-xl font-bold text-gray-900">User Feedback</h2>
+        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">User Feedback</h2>
         <FeedbackForm />
       </section>
     </div>

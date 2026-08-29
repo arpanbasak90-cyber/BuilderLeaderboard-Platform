@@ -167,13 +167,13 @@ export default function AnalyticsPage() {
       {/* Stats Grid */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {statCards.map((s, i) => (
-          <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 flex items-center justify-between shadow-sm">
+          <div key={i} className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-5 flex items-center justify-between shadow-sm">
             <div>
-              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wide">{s.label}</p>
               {s.value !== null ? (
-                <h3 className="text-2xl font-bold text-gray-900 mt-1">{s.value}</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{s.value}</h3>
               ) : (
-                <h3 className="text-2xl font-bold text-gray-900 mt-1">{s.ratingVal} / 5</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{s.ratingVal} / 5</h3>
               )}
               {s.sub ? (
                 <p className={`text-xs mt-1 font-medium ${s.subColor}`}>{s.sub}</p>
@@ -183,14 +183,14 @@ export default function AnalyticsPage() {
                     <Star
                       key={star}
                       className={`h-3 w-3 ${
-                        star <= Math.round(Number(s.ratingVal)) ? "fill-amber-400 text-amber-400" : "text-gray-200"
+                        star <= Math.round(Number(s.ratingVal)) ? "fill-amber-400 text-amber-400" : "text-gray-200 dark:text-gray-700"
                       }`}
                     />
                   ))}
                 </div>
               )}
             </div>
-            <div className={`w-10 h-10 rounded-xl ${s.iconBg} flex items-center justify-center`}>
+            <div className={`w-10 h-10 rounded-xl ${s.iconBg} dark:bg-purple-950/60 flex items-center justify-center`}>
               {s.icon}
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function AnalyticsPage() {
       </section>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-gray-100 overflow-x-auto">
+      <div className="flex gap-1 border-b border-gray-100 dark:border-gray-800 overflow-x-auto">
         {(
           [
             { id: "metrics", label: "📊 System Metrics" },
@@ -212,8 +212,8 @@ export default function AnalyticsPage() {
             onClick={() => setActiveTab(t.id)}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap transition-all ${
               activeTab === t.id
-                ? "border-purple-600 text-purple-700"
-                : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-200"
+                ? "border-purple-600 text-purple-600 dark:text-purple-400 font-bold"
+                : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
             }`}
           >
             {t.label}
@@ -222,7 +222,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Tab Panels */}
-      <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+      <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6 shadow-sm">
         {/* Metrics */}
         {activeTab === "metrics" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -282,14 +282,14 @@ export default function AnalyticsPage() {
         {activeTab === "users" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-base font-bold text-gray-900">Onboarded Builders</h3>
-              <p className="text-xs text-gray-500 mt-1">
+              <h3 className="text-base font-bold text-gray-900 dark:text-white">Onboarded Builders</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Real builders tracked with wallet operation counts. Minimum 10 required.
               </p>
             </div>
-            <div className="overflow-x-auto rounded-xl border border-gray-100">
+            <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-gray-800">
               <table className="w-full text-left text-sm">
-                <thead className="bg-gray-50 text-gray-500 uppercase text-xs font-semibold border-b border-gray-100">
+                <thead className="bg-gray-50 dark:bg-gray-800/60 text-gray-500 dark:text-gray-400 uppercase text-xs font-semibold border-b border-gray-100 dark:border-gray-800">
                   <tr>
                     <th className="px-4 py-3">Builder</th>
                     <th className="px-4 py-3">Stellar Public Key</th>
@@ -298,19 +298,19 @@ export default function AnalyticsPage() {
                     <th className="px-4 py-3 text-right">Interactions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
+                <tbody className="divide-y divide-gray-50 dark:divide-gray-800/60">
                   {users.map((u, i) => (
-                    <tr key={u.address} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-4 py-3 font-medium text-gray-900 flex items-center gap-2">
-                        <span className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center text-xs text-purple-600 font-bold flex-shrink-0">
+                    <tr key={u.address} className="hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors">
+                      <td className="px-4 py-3 font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                        <span className="w-6 h-6 bg-purple-100 dark:bg-purple-950 rounded-full flex items-center justify-center text-xs text-purple-600 dark:text-purple-400 font-bold flex-shrink-0">
                           {i + 1}
                         </span>
                         {u.username}
                       </td>
-                      <td className="px-4 py-3 font-mono text-xs text-gray-500 max-w-xs truncate">{u.address}</td>
-                      <td className="px-4 py-3 text-gray-600 text-xs">{u.joinedAt}</td>
-                      <td className="px-4 py-3 text-gray-600 text-xs">{u.lastActive}</td>
-                      <td className="px-4 py-3 text-right font-mono font-semibold text-purple-600">{u.interactionsCount}</td>
+                      <td className="px-4 py-3 font-mono text-xs text-gray-500 dark:text-gray-400 max-w-xs truncate">{u.address}</td>
+                      <td className="px-4 py-3 text-gray-600 dark:text-gray-300 text-xs">{u.joinedAt}</td>
+                      <td className="px-4 py-3 text-gray-600 dark:text-gray-300 text-xs">{u.lastActive}</td>
+                      <td className="px-4 py-3 text-right font-mono font-semibold text-purple-600 dark:text-purple-400">{u.interactionsCount}</td>
                     </tr>
                   ))}
                   {users.length === 0 && (
@@ -328,14 +328,14 @@ export default function AnalyticsPage() {
         {activeTab === "interactions" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-base font-bold text-gray-900">Proof of Wallet Interactions</h3>
-              <p className="text-xs text-gray-500 mt-1">
+              <h3 className="text-base font-bold text-gray-900 dark:text-white">Proof of Wallet Interactions</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Raw logs of wallet events: connections, XLM transfers, friendbot funds, and smart contract calls.
               </p>
             </div>
-            <div className="overflow-x-auto rounded-xl border border-gray-100">
+            <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-gray-800">
               <table className="w-full text-left text-sm">
-                <thead className="bg-gray-50 text-gray-500 uppercase text-xs font-semibold border-b border-gray-100">
+                <thead className="bg-gray-50 dark:bg-gray-800/60 text-gray-500 dark:text-gray-400 uppercase text-xs font-semibold border-b border-gray-100 dark:border-gray-800">
                   <tr>
                     <th className="px-4 py-3">Account</th>
                     <th className="px-4 py-3">Action</th>
@@ -344,42 +344,42 @@ export default function AnalyticsPage() {
                     <th className="px-4 py-3 text-right">Time</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
+                <tbody className="divide-y divide-gray-50 dark:divide-gray-800/60">
                   {interactions.map((item) => (
-                    <tr key={item.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-4 py-3 font-mono text-xs text-gray-500">{truncateKey(item.address)}</td>
+                    <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors">
+                      <td className="px-4 py-3 font-mono text-xs text-gray-500 dark:text-gray-400">{truncateKey(item.address)}</td>
                       <td className="px-4 py-3">
                         <span
                           className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${
                             item.action === "contract_call"
-                              ? "bg-purple-50 text-purple-700 border-purple-200"
+                              ? "bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800"
                               : item.action === "send_xlm"
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800"
                               : item.action === "fund_wallet"
-                              ? "bg-blue-50 text-blue-700 border-blue-200"
-                              : "bg-gray-100 text-gray-600 border-gray-200"
+                              ? "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800"
+                              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700"
                           }`}
                         >
                           {item.action.replace("_", " ")}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-700 max-w-xs truncate">{item.details || "—"}</td>
+                      <td className="px-4 py-3 text-xs text-gray-700 dark:text-gray-300 max-w-xs truncate">{item.details || "—"}</td>
                       <td className="px-4 py-3">
                         {item.txHash ? (
                           <a
                             href={`https://stellar.expert/explorer/testnet/tx/${item.txHash}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-purple-600 hover:text-purple-700 text-xs font-medium"
+                            className="inline-flex items-center gap-1 text-purple-600 dark:text-purple-400 hover:text-purple-700 text-xs font-medium"
                           >
                             <span className="font-mono">{item.txHash.slice(0, 8)}…</span>
                             <ExternalLink className="h-3 w-3" />
                           </a>
                         ) : (
-                          <span className="text-gray-300 text-xs">—</span>
+                          <span className="text-gray-300 dark:text-gray-600 text-xs">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-right text-xs text-gray-500">
+                      <td className="px-4 py-3 text-right text-xs text-gray-500 dark:text-gray-400">
                         {new Date(item.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
                       </td>
                     </tr>
@@ -399,8 +399,8 @@ export default function AnalyticsPage() {
         {activeTab === "feedback" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-base font-bold text-gray-900">User Feedback Summary</h3>
-              <p className="text-xs text-gray-500 mt-1">
+              <h3 className="text-base font-bold text-gray-900 dark:text-white">User Feedback Summary</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Comments and ratings from builders. Used to measure project quality and UX.
               </p>
             </div>
@@ -408,10 +408,10 @@ export default function AnalyticsPage() {
               {feedback.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-2 hover:border-purple-200 transition-colors"
+                  className="bg-gray-50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800 rounded-xl p-4 space-y-2 hover:border-purple-200 dark:hover:border-purple-800 transition-colors"
                 >
                   <div className="flex justify-between items-start">
-                    <span className="text-xs font-mono text-gray-500 bg-white border border-gray-100 px-2.5 py-1 rounded-lg">
+                    <span className="text-xs font-mono text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 px-2.5 py-1 rounded-lg">
                       {item.address}
                     </span>
                     <div className="flex items-center gap-0.5">
@@ -419,13 +419,13 @@ export default function AnalyticsPage() {
                         <Star
                           key={s}
                           className={`h-4 w-4 ${
-                            s <= item.rating ? "fill-amber-400 text-amber-400" : "text-gray-200"
+                            s <= item.rating ? "fill-amber-400 text-amber-400" : "text-gray-200 dark:text-gray-700"
                           }`}
                         />
                       ))}
                     </div>
                   </div>
-                  <p className="text-gray-800 text-sm italic">"{item.comment}"</p>
+                  <p className="text-gray-800 dark:text-gray-200 text-sm italic">"{item.comment}"</p>
                   <p className="text-[10px] text-gray-400 text-right">
                     {new Date(item.timestamp).toLocaleString()}
                   </p>
@@ -441,3 +441,4 @@ export default function AnalyticsPage() {
     </div>
   );
 }
+

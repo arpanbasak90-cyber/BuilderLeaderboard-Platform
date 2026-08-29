@@ -211,50 +211,64 @@ export default function QuestCard({ quest }: QuestCardProps) {
         xlmReward={xlmReward}
       />
 
-      <div className={`group flex h-full flex-col rounded-2xl border bg-white p-5 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 ${
-        questStatus === 'completed' ? 'border-emerald-200 bg-emerald-50/30' : 'border-gray-100 hover:border-purple-200'
+      <div className={`group flex h-full flex-col rounded-3xl border p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+        questStatus === 'completed'
+          ? 'border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/40 dark:bg-emerald-950/20'
+          : 'border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-purple-300 dark:hover:border-purple-700'
       }`}>
         {/* Top badges */}
-        <div className="mb-3 flex items-start justify-between gap-2">
-          <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${diff.bg} ${diff.text} ${diff.border}`}>
+        <div className="mb-4 flex items-start justify-between gap-2">
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold ${diff.bg} ${diff.text} ${diff.border}`}>
             <span className={`w-1.5 h-1.5 rounded-full ${diff.dot}`}></span>
             {difficulty}
           </span>
-          <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${cat.bg} ${cat.text}`}>
+          <span className={`rounded-full px-3 py-1 text-xs font-extrabold ${cat.bg} ${cat.text}`}>
             {category}
           </span>
         </div>
 
         {/* Title & description */}
-        <h3 className="mb-1.5 text-base font-semibold text-gray-900 leading-snug">{quest.title}</h3>
-        <p className="mb-4 flex-1 text-sm text-gray-500 leading-relaxed">{quest.description}</p>
+        <h3 className="mb-2 text-lg font-black text-gray-900 dark:text-white leading-snug group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+          {quest.title}
+        </h3>
+        <p className="mb-6 flex-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{quest.description}</p>
 
         {/* Rewards */}
-        <div className="mb-4 flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center">
-              <Zap className="h-3 w-3 text-purple-600" />
+        <div className="mb-5 flex items-center gap-4 p-3 rounded-2xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-800">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950 flex items-center justify-center">
+              <Zap className="h-4 w-4 text-purple-600 dark:text-purple-400" />
             </div>
-            <span className="text-sm font-semibold text-gray-800">{xpReward} XP</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center">
-              <Coins className="h-3 w-3 text-amber-600" />
+            <div>
+              <p className="text-[10px] uppercase font-bold text-gray-400">Reward</p>
+              <p className="text-sm font-extrabold text-purple-600 dark:text-purple-400">{xpReward} XP</p>
             </div>
-            <span className="text-sm font-semibold text-gray-800">{xlmReward} XLM</span>
           </div>
-          <div className="ml-auto flex items-center gap-1 text-xs text-gray-400">
-            <Users className="h-3 w-3" />
-            <span>{questStatus === 'completed' ? completedBy + 1 : completedBy}/{totalSlots}</span>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center">
+              <Coins className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div>
+              <p className="text-[10px] uppercase font-bold text-gray-400">Bounty</p>
+              <p className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">{xlmReward} XLM</p>
+            </div>
+          </div>
+          <div className="ml-auto text-right">
+            <p className="text-[10px] uppercase font-bold text-gray-400 flex items-center gap-1 justify-end">
+              <Users className="h-3 w-3" /> Slots
+            </p>
+            <p className="text-xs font-bold text-gray-700 dark:text-gray-300">
+              {questStatus === 'completed' ? completedBy + 1 : completedBy}/{totalSlots}
+            </p>
           </div>
         </div>
 
         {/* Progress bar */}
-        <div className="mb-4">
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+        <div className="mb-5">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                questStatus === 'completed' ? 'bg-emerald-500' : 'bg-purple-600'
+                questStatus === 'completed' ? 'bg-emerald-500' : 'bg-gradient-to-r from-purple-500 to-indigo-500'
               }`}
               style={{ width: `${Math.min(Math.max(0, progressPercentage), 100)}%` }}
             />
@@ -265,19 +279,19 @@ export default function QuestCard({ quest }: QuestCardProps) {
         <button
           onClick={handleQuestAction}
           disabled={questStatus === 'completed'}
-          className={`group/btn w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all duration-200 ${
+          className={`group/btn w-full flex items-center justify-center gap-2 rounded-2xl py-3 text-sm font-black transition-all duration-200 ${
             questStatus === 'completed'
-              ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 cursor-not-allowed'
+              ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900 cursor-not-allowed'
               : questStatus === 'in_progress'
-              ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-sm hover:shadow-amber-200 hover:shadow-md'
+              ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-md shadow-amber-500/20'
               : isConnected
-              ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-sm hover:shadow-purple-200 hover:shadow-md'
-              : 'bg-gray-900 hover:bg-gray-800 text-white'
+              ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-500/20'
+              : 'bg-gray-900 dark:bg-gray-800 hover:bg-gray-800 dark:hover:bg-gray-700 text-white'
           }`}
         >
           {questStatus === 'completed' ? (
             <>
-              <CheckCircle2 className="w-4 h-4" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               Completed
             </>
           ) : questStatus === 'in_progress' ? (

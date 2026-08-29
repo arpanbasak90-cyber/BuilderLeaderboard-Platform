@@ -195,10 +195,67 @@
   box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.3);
 }
 
+.neon-glow-emerald {
+  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.3);
+}
+
 .gradient-text {
   background: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #06b6d4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* Belt Progression Badges */
+.belt-white {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+.belt-yellow {
+  background: linear-gradient(135deg, #fef08a 0%, #eab308 100%);
+  color: #854d0e;
+  border: 1px solid #fde047;
+}
+.belt-orange {
+  background: linear-gradient(135deg, #fed7aa 0%, #f97316 100%);
+  color: #7c2d12;
+  border: 1px solid #fdba74;
+}
+.belt-green {
+  background: linear-gradient(135deg, #a7f3d0 0%, #10b981 100%);
+  color: #064e3b;
+  border: 1px solid #6ee7b7;
+}
+.belt-blue {
+  background: linear-gradient(135deg, #93c5fd 0%, #3b82f6 100%);
+  color: #1e3a8a;
+  border: 1px solid #60a5fa;
+}
+.belt-black {
+  background: linear-gradient(135deg, #334155 0%, #0f172a 100%);
+  color: #f8fafc;
+  border: 1px solid #475569;
+}
+.belt-master {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+  color: #ffffff;
+  border: 1px solid #f472b6;
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  animation: ticker 35s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
 }
 
 @keyframes shimmer {
@@ -209,5 +266,15 @@
 .animate-shimmer {
   animation: shimmer 2.5s infinite;
 }
+
+.product-card-hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.18);
+}
+
 
 

@@ -1,0 +1,29 @@
+name: CD Deployment Verification
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy-check:
+    name: Verify Production Deployment Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci || npm install --legacy-peer-deps
+
+      - name: Build Next.js
+        run: npm run build
+
+      - name: Verify netlify configuration
+        run: test -f netlify.toml || exit 1

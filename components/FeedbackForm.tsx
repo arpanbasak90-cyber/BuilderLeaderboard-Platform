@@ -52,20 +52,20 @@ export default function FeedbackForm() {
   const activeRating = hoverRating ?? rating;
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-6 max-w-2xl mx-auto shadow-sm">
+    <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 max-w-2xl mx-auto shadow-sm">
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-9 h-9 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
-          <MessageSquare className="h-4 w-4 text-purple-600" />
+        <div className="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-950 flex items-center justify-center flex-shrink-0">
+          <MessageSquare className="h-4 w-4 text-purple-600 dark:text-purple-400" />
         </div>
         <div>
-          <h3 className="text-base font-bold text-gray-900">Share Your Feedback</h3>
-          <p className="text-xs text-gray-500">Tell us about your experience on BuilderBoard.</p>
+          <h3 className="text-base font-bold text-gray-900 dark:text-white">Share Your Feedback</h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400">Tell us about your experience on BuilderBoard.</p>
         </div>
       </div>
 
       {!isConnected ? (
-        <div className="text-center py-8 border border-dashed border-gray-200 rounded-xl bg-gray-50">
+        <div className="text-center py-8 border border-dashed border-gray-200 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-gray-800/40">
           <p className="text-sm text-gray-400 mb-4">Connect your wallet to leave feedback.</p>
           <button
             onClick={() => setShowPicker(true)}
@@ -78,7 +78,7 @@ export default function FeedbackForm() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Star Rating */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
               Overall Rating
             </label>
             <div className="flex items-center gap-1.5">
@@ -95,12 +95,12 @@ export default function FeedbackForm() {
                     className={`h-7 w-7 transition-colors ${
                       star <= activeRating
                         ? "fill-amber-400 text-amber-400"
-                        : "text-gray-200 hover:text-gray-300"
+                        : "text-gray-200 dark:text-gray-700 hover:text-gray-300"
                     }`}
                   />
                 </button>
               ))}
-              <span className="text-sm text-gray-500 ml-2 font-medium">
+              <span className="text-sm text-gray-500 dark:text-gray-400 ml-2 font-medium">
                 {RATING_LABELS[activeRating]} ({activeRating}/5)
               </span>
             </div>
@@ -108,7 +108,7 @@ export default function FeedbackForm() {
 
           {/* Comment */}
           <div>
-            <label htmlFor="comment" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            <label htmlFor="comment" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
               Your Comment
             </label>
             <textarea
@@ -117,7 +117,7 @@ export default function FeedbackForm() {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="What do you think of the leaderboard, wallet connection, quests, and smart contract features?"
-              className="w-full border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 rounded-xl p-3 text-gray-900 placeholder-gray-400 focus:outline-none text-sm transition-all resize-none"
+              className="w-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900/30 rounded-xl p-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none text-sm transition-all resize-none"
             />
           </div>
 
@@ -136,13 +136,13 @@ export default function FeedbackForm() {
           </div>
 
           {status === "success" && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 flex items-center gap-2">
+            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 rounded-xl text-sm text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
               🎉 Thank you! Your feedback has been recorded.
             </div>
           )}
 
           {status === "error" && errorMsg && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl text-sm text-red-600 dark:text-red-400">
               {errorMsg}
             </div>
           )}
@@ -151,3 +151,4 @@ export default function FeedbackForm() {
     </div>
   );
 }
+

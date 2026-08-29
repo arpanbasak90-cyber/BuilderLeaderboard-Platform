@@ -64,11 +64,17 @@ export default function Navbar() {
 
         {/* Right side controls */}
         <div className="flex items-center gap-3">
-          {/* Network Switcher Toggle */}
+          {/* Level 5 Blue Belt Badge */}
+          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full belt-blue text-xs font-bold shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
+            <span>Blue Belt (Level 5)</span>
+          </div>
+
+          {/* Network Switcher & Latency Indicator */}
           <div className="relative">
             <button
               onClick={() => setShowNetworkMenu(!showNetworkMenu)}
-              className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold select-none cursor-pointer transition-all duration-200 ${
+              className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold select-none cursor-pointer transition-all duration-200 ${
                 network === 'mainnet'
                   ? 'border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400'
                   : network === 'localhost'
@@ -76,41 +82,52 @@ export default function Navbar() {
                   : 'border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400'
               }`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${network === 'mainnet' ? 'bg-amber-500' : network === 'localhost' ? 'bg-blue-500' : 'bg-emerald-500'}`} />
+              <span className={`w-2 h-2 rounded-full ${network === 'mainnet' ? 'bg-amber-500' : network === 'localhost' ? 'bg-blue-500' : 'bg-emerald-500 animate-pulse'}`} />
               <span className="capitalize">{network}</span>
+              <span className="text-[10px] opacity-70 font-mono">18ms</span>
             </button>
             
             {showNetworkMenu && (
-              <div className="absolute right-0 mt-2 w-36 origin-top-right rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-1.5 shadow-lg z-50">
+              <div className="absolute right-0 mt-2 w-44 origin-top-right rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-2 shadow-xl z-50">
+                <p className="px-2 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Select Stellar Horizon</p>
                 <button
                   onClick={() => {
                     setNetwork('testnet');
                     setShowNetworkMenu(false);
                   }}
-                  className="w-full text-left px-3 py-2 text-xs font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center gap-2"
+                  className="w-full text-left px-2.5 py-1.5 text-xs font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center justify-between"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Stellar Testnet
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    Testnet
+                  </span>
+                  <span className="text-[10px] text-emerald-600 font-mono">Active</span>
                 </button>
                 <button
                   onClick={() => {
                     setNetwork('mainnet');
                     setShowNetworkMenu(false);
                   }}
-                  className="w-full text-left px-3 py-2 text-xs font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center gap-2"
+                  className="w-full text-left px-2.5 py-1.5 text-xs font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center justify-between"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                  Stellar Mainnet
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                    Mainnet
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-mono">Public</span>
                 </button>
                 <button
                   onClick={() => {
                     setNetwork('localhost');
                     setShowNetworkMenu(false);
                   }}
-                  className="w-full text-left px-3 py-2 text-xs font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center gap-2"
+                  className="w-full text-left px-2.5 py-1.5 text-xs font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center justify-between"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                  Localhost
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                    Localhost
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-mono">:8000</span>
                 </button>
               </div>
             )}
@@ -119,10 +136,10 @@ export default function Navbar() {
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-xl border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-purple-600 transition-colors"
+            className="p-2 rounded-xl border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-purple-600 transition-colors"
             aria-label="Toggle Theme"
           >
-            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-purple-600" />}
           </button>
 
           <WalletConnect />
